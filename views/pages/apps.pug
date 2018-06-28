@@ -1,0 +1,27 @@
+extends ../layouts/main
+
+block content
+    .apps
+        .apps-top
+            .title(style="color: #06d6a0") Ваши приложения
+            a.apps-top__add(href="/app/add" title="Добавить приложение")
+        .apps-table
+            if (apps.length !== 0)
+                ul.apps-table__header
+                    li.apps-table__header-col(data-col="1") название приложения
+                    li.apps-table__header-col(data-col="2") статус
+                .apps-table__content
+                    ul.apps-table__list
+                        each app in apps
+                            li.apps-table__item
+                                a.apps-table__item-link(href='/app' + '/' + app.idApp)
+                                    .apps-table__item-col(data-col="1")
+                                        .apps-table__item-col__img(style='background-image: url(' + server +'/data/' + app.hashTag + '/' + app.hash + '/icon/icon.jpg')
+                                        .apps-table__item-col__name= app.nameApp
+                                    .apps-table__item-col(data-col="2")
+                                        .apps-table__item-col__status
+                                            if (app.publish)
+                                                span опубликовано
+            else
+                .apps-table__placeholder У вас нет загруженных приложений
+

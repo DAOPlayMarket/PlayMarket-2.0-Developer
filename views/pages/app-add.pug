@@ -1,0 +1,76 @@
+extends ../layouts/main
+
+block content
+    script(src='/javascripts/app-add.js')
+    .app-add-edit
+        form
+            .app-add-edit__block
+                .app-add-edit__block--title Название приложения
+                input(name="name" type="text")
+            .app-add-edit__block
+                .app-add-edit__block--title Тип
+                input(name="type" type="text")
+            .app-add-edit__block
+                .app-add-edit__block--title Логотип
+                input#logo(type="file" name="logo")
+            .app-add-edit__block
+                .app-add-edit__block--title Фотогалерея
+                input#gallery(type="file" name="gallery" multiple)
+            .app-add-edit__block
+                .app-add-edit__block--title APK файл приложения
+                input#app(type="file" name="apk" accept=".apk")
+            .app-add-edit__block
+                .app-add-edit__block--title Слоган
+                input(type="text" name="slogan" placeholder='Например: "Мы создаем будущее"')
+            .app-add-edit__block
+                .app-add-edit__block--title Краткое описание
+                textarea(type="text" name="shortDescr" placeholder='Кратко расскажите про приложение')
+            //.app-add-edit__block
+            //    .app-add-edit__block--title Краткое описание
+            //    textarea(type="text" name="shortdescr" placeholder='Кратко расскажите про приложение')
+            input(type='submit' value='GO')
+        //form(method='post' action='/app/add' enctype="multipart/form-data")
+            //.app-add-edit__name
+            //    .app-add-edit__name--title Название приложения:
+            //    .app-add-edit__name--value
+            //        input#app-add-edit__name(name="name" type="text")
+            //.app-add-edit__type
+            //    .app-add-edit__type--title Тип:
+            //    .app-add-edit__type--value
+            //        .app-add-edit__type-box
+            //            input.app-add-edit__type#app-add-edit__type--1(type="radio" name="type" value="1")
+            //            label(for="app-add-edit__type--1") Приложение
+            //        .app-add-edit__type-box
+            //            input.app-add-edit__type#app-add-edit__type--2(type="radio" name="type" value="2")
+            //            label(for="app-add-edit__type--2") Игра
+            //.app-add-edit__category
+            //    .app-add-edit__category--title Категория:
+            //    .app-add-edit__category--value Стратегии
+            //.app-add-edit__avatar
+            //    .app-add-edit__avatar--title Аватар приложения:
+            //    .app-add-edit__avatar--value
+            //        input(type="file" name="avatar")
+            //.app-add-edit__slogan
+            //    .app-add-edit__slogan--title Слоган:
+            //    .app-add-edit__slogan--value
+            //        input#app-add-edit__slogan(name="slogan")
+            //.app-add-edit__shortdescr
+            //    .app-add-edit__shortdescr--title Краткое описание:
+            //    .app-add-edit__shortdescr--value
+            //        input#app-add-edit__shortdescr(name="shortdescr")
+            //.app-add-edit__longdescr
+            //    .app-add-edit__longdescr--title Полное описание:
+            //    .app-add-edit__longdescr--value
+            //        textarea#app-add-edit__longdescr(name="longdescr")
+            //.app-add-edit__apk
+            //    .app-add-edit__apk--title APK файл приложения:
+            //    .app-add-edit__apk--value
+            //        input(type="file" name="apk")
+            .app-add-edit__gallery
+                .app-add-edit__gallery--title Изображения для фотогалереи:
+                .app-add-edit__gallery--value
+                    input(id='gallery-input' type="file" name="gallery" multiple)
+                    input(type='text' name='test' value='TESTSTE')
+            input(type='submit' value='GO')
+
+

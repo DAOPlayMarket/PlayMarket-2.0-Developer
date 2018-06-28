@@ -1,0 +1,70 @@
+extends ../layouts/main
+
+block content
+    script(src='/javascripts/app.js')
+    .app
+        .app-top
+        .app-main
+            a#edit-btn(href="app/edit")
+            .app-main__top
+                .app-main__top-logo
+                    img(src=server + '/data/' + app.info.hashTag + '/' + app.info.hash + '/icon/icon.jpg')
+                .app-main__top-info
+                    .app-main__top-info__name= app.info.nameApp
+                    .app-main__top-info__slogan A Decentralised App Store for Android
+                    .app-main__top-info__shortdescr A Decentralized App Store for Android made with the Ethereum Blockchain
+            .app-main__middle
+                .app-main__middle--left
+                    .app-main__middle-type
+                        .app-main__middle-type__title Тип:
+                        .app-main__middle-type__name= type.name
+                    .app-main__middle-category
+                        .app-main__middle-category__title Категория:
+                        .app-main__middle-category__name= category.name
+                    ul.app-main__middle-marks
+                        if (app.info.forChildren)
+                            li.app-main__middle-marks__item Для детей
+                        if (app.info.advertising)
+                            li.app-main__middle-marks__item Есть реклама
+                    .app-main__middle-ico
+                        a.app-main__middle-ico__link.button.button-ellipse(href='/ico' + '/' + app.info.idApp) ICO
+                .app-main__middle--right
+                    input(id='longdescr' type='hidden' value=app.description)
+                    .app-main__middle__longdescr
+            .app-main__bottom
+                .app-main__bottom-warning
+                .app-main__bottom-links
+        .app-gallery
+            .gallery-slider.owl-carousel
+                each image in app.pictures.gallery
+                    .gallery-slider__item
+                        a.image-popup(href=server + '/data/' + app.info.hashTag + '/' + app.info.hash + '/pictures/' + image)
+                            img(src=server + '/data/' + app.info.hashTag + '/' + app.info.hash + '/pictures/' + image)
+        .app-info
+            .app-info__box
+                .app-info__title Контактная информация
+                ul.app-info__contacts-list
+                    if (app.info.email)
+                      li.app-info__contacts-list__item
+                        .app-info__contacts-list__item--icon(data-contact='email' title='E-MAIL')
+                        .app-info__contacts-list__item--value
+                          a(href=href='mailto:' + app.info.email)= app.info.email
+                    if (app.info.urlApp)
+                      li.app-info__contacts-list__item
+                        .app-info__contacts-list__item--icon(data-contact='site' title='Сайт')
+                        .app-info__contacts-list__item--value
+                          a(href=app.info.urlApp)= app.info.urlApp
+                if (app.info.privacyPolicy)
+                    .app-info__privacy
+                        a.app-info__privacy--link(href=app.info.privacyPolicy) Политика конфиденциальности
+
+
+
+
+
+
+
+
+
+
+

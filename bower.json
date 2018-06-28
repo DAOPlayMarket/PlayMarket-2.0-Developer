@@ -1,0 +1,44 @@
+{
+  "name": "playmarketdev",
+  "description": "PlayMarket 2.0 for developers from Crypton.Studio",
+  "main": "app.js",
+  "authors": [
+    "Crypton.Studio"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "axios": "^0.18.0",
+    "owl.carousel": "^2.3.3",
+    "mathjs": "^4.1.0",
+    "validator-js": "^9.4.1",
+    "jquery-mask-plugin": "^1.14.15",
+    "clipboard": "^2.0.0",
+    "magnific-popup": "^1.1.0",
+    "moment": "^2.22.0",
+    "jquery-smooth-scroll": "^2.2.0",
+    "web3": "^0.19.0",
+    "animate.css": "^3.5.2",
+    "lodash": "^4.17.10",
+    "select2": "^4.0.5",
+    "fine-uploader": "^5.13.0",
+    "simplemde": "^1.11.2",
+    "markdown-it": "^8.4.1",
+    "videojs-youtube": "^2.5.0"
+  },
+  "keywords": [
+    "playmarket",
+    "crypton",
+    "pm",
+    "pm2.0",
+    "crypton.studio"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

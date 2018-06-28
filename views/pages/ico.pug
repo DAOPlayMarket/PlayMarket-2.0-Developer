@@ -1,0 +1,241 @@
+extends ../layouts/main
+
+block content
+    script(src='/javascripts/ico.js')
+    .ico
+        h1.ico__title ICO
+            span &nbsp;PlayMarket 2.0
+        .ico__main
+            .ico__main-item
+                .ico__avatar
+                    img(src="/images/icons/logo.svg")
+                .ico__video
+                    a.button.button-ellipse.video-popup(href="https://www.youtube.com/watch?v=QYjyfCt6gWc") Смотреть видео
+            .ico__main-item
+                .ico__token
+                    .ico__token-group
+                        .ico__token-group__title Название токена:
+                        .ico__token-group__value PlayMarket Token
+                    .ico__token-group
+                        .ico__token-group__title Символ токена:
+                        .ico__token-group__value PMT
+                    .ico__token-group
+                        .ico__token-group__title Общее количество токенов:
+                        .ico__token-group__value 100 000 000 PMT
+                    .ico__token-group
+                        .ico__token-group__title SOFTCUP:
+                        .ico__token-group__value 1 000 000 PMT
+                    .ico__token-group
+                        .ico__token-group__title HARDCUP:
+                        .ico__token-group__value 10 000 $
+                .ico__date
+                    .ico__date-group
+                        .ico__date-group__title Дата начала ICO:
+                        .ico__date-group__value 15.06.2018
+                    .ico__date-group
+                        .ico__date-group__title Дата окончания ICO:
+                        .ico__date-group__value 13.09.2018
+                .ico__steps
+                    .ico__steps-group
+                        .ico__steps-group__title Текущий этап:
+                        .ico__steps-group__value 1
+                            span /3
+                .ico__developer
+                    .ico__developer-group
+                        .ico__developer-group__title Разработчик:
+                        .ico__developer-group__value Crypton.Studio
+                .ico__address
+                    .ico__address-group
+                        .ico__address-group__title Адрес для сбора средств:
+                        .ico__address-group__value 0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8
+        .ico__cup
+            .ico__cup-top
+                .ico__cup-top__step Этап #1
+                    span /3
+                .ico__cup-top__time 10:00:00
+            .ico__cup-middle
+                .ico__cup-middle__progress
+                    .ico__cup-middle__progress--fill(style="width: 25%;")
+            .ico__cup-bottom
+                .ico__cup-bottom__sold 25 000 000
+                    span Продано, PMT
+                .ico__cup-bottom__all 100 000 000
+                    span Всего, PMT
+        .ico__gallery
+            .ico__block-title Фотогалерея
+            include ../components/gallery
+            +data(['/images/screen.jpg', '/images/screen_hor.jpg', '/images/screen.jpg', '/images/screen_hor.jpg', '/images/screen.jpg', '/images/screen_hor.jpg'])
+        .ico__description
+            .ico__block-title Описание
+            input#ico__description__input(type="hidden" value=descr)
+            #ico__description-area
+        .ico__team
+            .ico__block-title Команда
+            ul.ico__member-list
+                li.ico__member-list__item
+                    .ico__member-list__item-left
+                        .ico__member-list__item-left__image
+                            a.image-popup(href="/images/default-avatar.png")
+                                img(src='/images/default-avatar.png')
+                        ul.ico__member-list__item-left__contacts-list
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='linkedin' href='#' title='LinkedIn')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='google-plus' href='#' title='Google+')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='facebook' href='#' title='Facebook')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='twitter' href='#' title='Twitter')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='instagram' href='#' title='Instagram')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='vk' href='#' title='VK')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='youtube' href='#' title='YouTube')
+                    .ico__member-list__item-right
+                        .ico__member-list__item-right__name Иван Иванов
+                        .ico__member-list__item-right__description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur delectus expedita facere fugit in tempora! Consequatur consequuntur, dolore dolorem doloribus iste libero molestiae natus officiis provident qui reiciendis suscipit vero. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, expedita hic? Aliquam, asperiores cum exercitationem fugiat impedit inventore ipsam nobis quam. Dolorem facere itaque iure, molestias natus quos temporibus voluptas. Lorem ipsum dolor sit amet, consectetur adipisicing elit. A cum dolore eveniet, numquam tenetur ullam.
+                li.ico__member-list__item
+                    .ico__member-list__item-left
+                        .ico__member-list__item-left__image
+                            a.image-popup(href="/images/default-avatar.png")
+                                img(src='/images/default-avatar.png')
+                        ul.ico__member-list__item-left__contacts-list
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='linkedin' href='#' title='LinkedIn')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='google-plus' href='#' title='Google+')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='facebook' href='#' title='Facebook')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='twitter' href='#' title='Twitter')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='instagram' href='#' title='Instagram')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='vk' href='#' title='VK')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='youtube' href='#' title='YouTube')
+                    .ico__member-list__item-right
+                        .ico__member-list__item-right__name Иван Иванов
+                        .ico__member-list__item-right__description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur delectus expedita facere fugit in tempora! Consequatur consequuntur, dolore dolorem doloribus iste libero molestiae natus officiis provident qui reiciendis suscipit vero. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, expedita hic? Aliquam, asperiores cum exercitationem fugiat impedit inventore ipsam nobis quam. Dolorem facere itaque iure, molestias natus quos temporibus voluptas. Lorem ipsum dolor sit amet, consectetur adipisicing elit. A cum dolore eveniet, numquam tenetur ullam.
+                li.ico__member-list__item
+                    .ico__member-list__item-left
+                        .ico__member-list__item-left__image
+                            a.image-popup(href="/images/default-avatar.png")
+                                img(src='/images/default-avatar.png')
+                        ul.ico__member-list__item-left__contacts-list
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='linkedin' href='#' title='LinkedIn')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='google-plus' href='#' title='Google+')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='facebook' href='#' title='Facebook')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='twitter' href='#' title='Twitter')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='instagram' href='#' title='Instagram')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='vk' href='#' title='VK')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='youtube' href='#' title='YouTube')
+                    .ico__member-list__item-right
+                        .ico__member-list__item-right__name Иван Иванов
+                        .ico__member-list__item-right__description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur delectus expedita facere fugit in tempora! Consequatur consequuntur, dolore dolorem doloribus iste libero molestiae natus officiis provident qui reiciendis suscipit vero. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, expedita hic? Aliquam, asperiores cum exercitationem fugiat impedit inventore ipsam nobis quam. Dolorem facere itaque iure, molestias natus quos temporibus voluptas. Lorem ipsum dolor sit amet, consectetur adipisicing elit. A cum dolore eveniet, numquam tenetur ullam.
+        .ico__advisors
+            .ico__block-title Адвизоры
+            ul.ico__member-list
+                li.ico__member-list__item
+                    .ico__member-list__item-left
+                        .ico__member-list__item-left__image
+                            a.image-popup(href="/images/default-avatar.png")
+                                img(src='/images/default-avatar.png')
+                        ul.ico__member-list__item-left__contacts-list
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='linkedin' href='#' title='LinkedIn')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='google-plus' href='#' title='Google+')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='facebook' href='#' title='Facebook')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='twitter' href='#' title='Twitter')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='instagram' href='#' title='Instagram')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='vk' href='#' title='VK')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='youtube' href='#' title='YouTube')
+                    .ico__member-list__item-right
+                        .ico__member-list__item-right__name Иван Иванов
+                        .ico__member-list__item-right__description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur delectus expedita facere fugit in tempora! Consequatur consequuntur, dolore dolorem doloribus iste libero molestiae natus officiis provident qui reiciendis suscipit vero. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, expedita hic? Aliquam, asperiores cum exercitationem fugiat impedit inventore ipsam nobis quam. Dolorem facere itaque iure, molestias natus quos temporibus voluptas. Lorem ipsum dolor sit amet, consectetur adipisicing elit. A cum dolore eveniet, numquam tenetur ullam.
+                li.ico__member-list__item
+                    .ico__member-list__item-left
+                        .ico__member-list__item-left__image
+                            a.image-popup(href="/images/default-avatar.png")
+                                img(src='/images/default-avatar.png')
+                        ul.ico__member-list__item-left__contacts-list
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='linkedin' href='#' title='LinkedIn')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='google-plus' href='#' title='Google+')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='facebook' href='#' title='Facebook')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='twitter' href='#' title='Twitter')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='instagram' href='#' title='Instagram')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='vk' href='#' title='VK')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='youtube' href='#' title='YouTube')
+                    .ico__member-list__item-right
+                        .ico__member-list__item-right__name Иван Иванов
+                        .ico__member-list__item-right__description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur delectus expedita facere fugit in tempora! Consequatur consequuntur, dolore dolorem doloribus iste libero molestiae natus officiis provident qui reiciendis suscipit vero. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, expedita hic? Aliquam, asperiores cum exercitationem fugiat impedit inventore ipsam nobis quam. Dolorem facere itaque iure, molestias natus quos temporibus voluptas. Lorem ipsum dolor sit amet, consectetur adipisicing elit. A cum dolore eveniet, numquam tenetur ullam.
+                li.ico__member-list__item
+                    .ico__member-list__item-left
+                        .ico__member-list__item-left__image
+                            a.image-popup(href="/images/default-avatar.png")
+                                img(src='/images/default-avatar.png')
+                        ul.ico__member-list__item-left__contacts-list
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='linkedin' href='#' title='LinkedIn')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='google-plus' href='#' title='Google+')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='facebook' href='#' title='Facebook')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='twitter' href='#' title='Twitter')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='instagram' href='#' title='Instagram')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='vk' href='#' title='VK')
+                            li.ico__member-list__item-left__contacts-list__item
+                                a.ico__member-list__item-left__contacts-list__item-link(data-social='youtube' href='#' title='YouTube')
+                    .ico__member-list__item-right
+                        .ico__member-list__item-right__name Иван Иванов
+                        .ico__member-list__item-right__description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur delectus expedita facere fugit in tempora! Consequatur consequuntur, dolore dolorem doloribus iste libero molestiae natus officiis provident qui reiciendis suscipit vero. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, expedita hic? Aliquam, asperiores cum exercitationem fugiat impedit inventore ipsam nobis quam. Dolorem facere itaque iure, molestias natus quos temporibus voluptas. Lorem ipsum dolor sit amet, consectetur adipisicing elit. A cum dolore eveniet, numquam tenetur ullam.
+        .ico__contacts
+            .ico__block-title Контакты
+            ul.ico__contacts-list
+                li.ico__contacts-list__item
+                    a.ico__contacts-list__item-link(data-social='linkedin' href='#' title='LinkedIn')
+                li.ico__contacts-list__item
+                    a.ico__contacts-list__item-link(data-social='google-plus' href='#' title='Google+')
+                li.ico__contacts-list__item
+                    a.ico__contacts-list__item-link(data-social='facebook' href='#' title='Facebook')
+                li.ico__contacts-list__item
+                    a.ico__contacts-list__item-link(data-social='twitter' href='#' title='Twitter')
+                li.ico__contacts-list__item
+                    a.ico__contacts-list__item-link(data-social='instagram' href='#' title='Instagram')
+                li.ico__contacts-list__item
+                    a.ico__contacts-list__item-link(data-social='vk' href='#' title='VK')
+                li.ico__contacts-list__item
+                    a.ico__contacts-list__item-link(data-social='youtube' href='#' title='YouTube')
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,91 @@
+.apps
+  &-top
+    display: flex
+    align-items: center
+    justify-content: space-between
+    &__add
+      width: 30px
+      height: 30px
+      background-image: url("../../images/icons/add.svg")
+      box-sizing: border-box
+      color: #06d6a0
+      border: 1px solid #06d6a0
+      background-color: #fff
+      background-size: 70%
+      background-position: center
+      background-repeat: no-repeat
+  &-table
+    background-color: #ffffff
+    box-sizing: border-box
+    padding-bottom: 15px
+    margin-top: 20px
+    &__placeholder
+      font-family: $FiraSans
+      font-size: 14px
+      font-weight: 400
+      color: #67777b
+      text-align: center
+      padding: 40px 0 25px
+    &__header
+      display: flex
+      align-items: center
+      padding: 15px
+      position: relative
+      margin-bottom: 15px
+      &:after
+        content: ''
+        position: absolute
+        left: 15px
+        bottom: 0
+        right: 15px
+        height: 1px
+        background-color: #54666b
+      &-col
+        font-family: $Roboto
+        font-size: 10px
+        font-weight: 700
+        color: #54666b
+        text-transform: uppercase
+        text-align: center
+        &[data-col="1"]
+          width: 500px
+          flex-shrink: 0
+        &[data-col="2"]
+          width: 100%
+    &__content
+      .apps-table__list
+        .apps-table__item
+          &-link
+            padding: 10px 15px
+            display: flex
+            align-items: center
+            &:hover
+              box-shadow: 0 0 10px 0 rgba(6,214,160,1)
+          &-col
+            font-size: 0
+            display: flex
+            align-items: center
+            &[data-col="1"]
+              width: 500px
+              flex-shrink: 0
+            &[data-col="2"]
+              width: 100%
+            &__img
+              width: 50px
+              height: 50px
+              background-repeat: no-repeat
+              background-position: center
+              background-size: contain
+            &__name
+              font-family: $Archive
+              font-size: 10px
+              margin-left: 15px
+              text-transform: uppercase
+              text-align: center
+            &__status
+              font-family: $Roboto
+              font-size: 10px
+              font-weight: 700
+              text-transform: uppercase
+              text-align: center
+              width: 100%

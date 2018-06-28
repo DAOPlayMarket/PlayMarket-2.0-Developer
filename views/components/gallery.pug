@@ -1,0 +1,6 @@
+mixin data(images)
+    .gallery-slider.owl-carousel
+        each image in images
+            .gallery-slider__item
+                a.image-popup(href=image)
+                    img(src=image)

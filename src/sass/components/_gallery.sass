@@ -1,0 +1,27 @@
+.gallery-slider
+  position: relative
+  &:hover
+    .owl-nav
+      button.owl-prev, button.owl-next
+        opacity: 1
+  .gallery-slider__item
+    height: 310px
+    a.image-popup
+      img
+        height: 100%
+        width: auto
+  .owl-nav
+    button.owl-prev, button.owl-next
+      opacity: 0
+      position: absolute
+      top: 0
+      bottom: 0
+      width: 30px
+      background-color: rgba(255,255,255,.5)
+      transition: opacity .2s ease-in-out
+      &.disabled
+        display: none
+    button.owl-prev
+      left: 0
+    button.owl-next
+      right: 0

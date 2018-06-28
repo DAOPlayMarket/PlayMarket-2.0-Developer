@@ -1,0 +1,22 @@
+extends ../layouts/auth
+
+block content
+    script(src='/javascripts/registration.js')
+    .registration
+        .registration__title Регистрация разработчика
+        form.registration__form
+            .registration__form--inputs
+                .registration__form-block
+                    .registration__form-block__title Адрес:
+                    .registration__form-block__value(title='Имя файла: ' + account.filename)= account.address
+                .registration__form-block
+                    .registration__form-block__title Имя разработчика / организации (максимум 32 символа):
+                    .registration__form-block__value
+                        input(type='text' maxlength='32' name='name')
+                .registration__form-block
+                    .registration__form-block__title Пароль:
+                    .registration__form-block__value
+                        input(type='text' name='password')
+            .registration__form--buttons
+                .registration__form-submit
+                    button.registration__form-submit__btn.button.button-ellipse Зарегистрироваться

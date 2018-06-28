@@ -1,0 +1,15 @@
+extends ../layouts/auth
+
+block content
+    script(src='/javascripts/login.js')
+    .login
+        .login__add
+            input#login__keystore(type='file' name='keystore' title='Добавить keystore')
+        .login__title Выберите адрес:
+        if (accounts.length !== 0)
+            ul.login__address-list
+                each account in accounts
+                    li.login__address-list__item
+                        span(data-address=account.address data-filename=account.filename title='Имя файла: ' + account.filename)= account.address
+        else
+            .login__address-empty Нет добавленных keystore's файлов!
