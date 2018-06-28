@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes'));
 
 /** START SERVER **/
-const host = '192.168.11.247';
+const host = '127.0.0.1';
 const port = '3000';
 
 (async () => {
@@ -55,5 +55,3 @@ const port = '3000';
         process.exit(1);
     }
 })();
-
-
