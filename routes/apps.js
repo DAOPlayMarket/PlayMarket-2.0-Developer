@@ -1,28 +1,33 @@
 const router = require('express').Router();
 const axios = require('axios');
 
-/** MODULES **/
-const modules = require('./../modules');
-
-/** CONFIG **/
-const config_info = require('./../lib/info');
-const config_abi = require('./../lib/abi');
+/** UTILS **/
+const sender = require('../utils/sender');
 
 /** ROUTES **/
 router.get('/', async(req, res, next) => {
     try {
-        let options = {
+        let result = await sender.sendRequestToNode({
             method: 'post',
-            url: config_info.nodeAddress + '/api/get-apps-by-developer',
-            data: {
+            route: 'get-apps-by-developer',
+            body: {
                 address: req.cookies.address
             }
-        };
-        let result = (await axios(options)).data;
+        });
+
+
+        let apps = [];
+        for (app of result.result) {
+            if (app.loadFile){
+                apps.push(app);
+            }
+        }
+
         res.render('pages/apps', {
             page: 'apps',
-            server: config_info.nodeAddress,
-            apps: result.result
+            title: 'Приложения',
+            server: lib.nodeAddress,
+            apps: apps
         });
     } catch(e) {
         console.log('error', modules.timeNow(), e.toString());

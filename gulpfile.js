@@ -22,7 +22,7 @@ gulp.task('clean__styles', () => {
         .pipe(clean());
 });
 gulp.task('clean__styles-light', () => {
-    return gulp.src(['./public/stylesheets/**/*', '!./public/stylesheets/vendors.css'], {read: false})
+    return gulp.src(['./public/stylesheets/**/*.css', '!./public/stylesheets/vendors.css'], {read: false})
         .pipe(clean());
 });
 
@@ -31,7 +31,7 @@ gulp.task('clean__scripts', () => {
         .pipe(clean());
 });
 gulp.task('clean__scripts-light', () => {
-    return gulp.src(['./public/javascripts/**/*', '!./public/javascripts/vendors.js'], {read: false})
+    return gulp.src(['./public/javascripts/**/*.js', '!./public/javascripts/vendors.js'], {read: false})
         .pipe(clean());
 });
 
@@ -53,7 +53,8 @@ const styles = [
     './bower_components/animate.css/animate.min.css',
     './bower_components/select2/dist/css/select2.min.css',
     './bower_components/fine-uploader/dist/fine-uploader.min.css',
-    './bower_components/simplemde/dist/simplemde.min.css'
+    './bower_components/simplemde/dist/simplemde.min.css',
+    './custom_packages/toastr/toastr.min.css'
 ];
 
 gulp.task('styles__dev', () => {
@@ -110,17 +111,23 @@ const scripts = [
     './bower_components/fine-uploader/dist/jquery.fine-uploader.min.js',
     './bower_components/simplemde/dist/simplemde.min.js',
     './bower_components/markdown-it/dist/markdown-it.min.js',
-    './custom_packages/qrcode/qrcode.min.js'
+    './custom_packages/qrcode/qrcode.min.js',
+    './custom_packages/toastr/toastr.min.js'
 ];
 
 gulp.task('scripts__dev', () => {
     let tasks = [
-        'main.js',
+        'general.js',
         'app.js',
-        'app-add.js',
+        'app-add/build.js',
+        'app-add/registration.js',
+        'ico-add/build.js',
+        'ico-add/contract.js',
+        'ico-add/registration.js',
         'ico.js',
-        'login.js',
-        'registration.js'
+        'auth/login.js',
+        'auth/registration.js',
+        'auth/verification.js'
     ].map((item) => {
         return browserify({
             entries: ['./src/js/' + item],
@@ -165,11 +172,10 @@ gulp.task('scripts-light', (done) => {
 
 /** IMAGE's **/
 gulp.task('images__dev', () => {
-    return gulp.src('src/images/**/*.*')
+    return gulp.src('src/images/**/*.{png,gif,jpg,jpeg,svg}')
         .pipe(imagemin())
         .pipe(gulp.dest('./public/images'))
 });
-
 gulp.task('images', (done) => {
     runSequence
     (
@@ -184,11 +190,10 @@ gulp.task('fonts__dev', () => {
     return gulp.src('src/fonts/**/*.*')
         .pipe(gulp.dest('./public/fonts'))
 });
-
 gulp.task('fonts', (done) => {
     runSequence
     (
-        'clean__images',
+        'clean__fonts',
         ['fonts__dev'],
         done
     );
@@ -198,8 +203,8 @@ gulp.task('fonts', (done) => {
 gulp.task('watch', ['styles', 'scripts', 'images', 'fonts'], () => {
     gulp.watch('./src/sass/**/*.sass', ['styles-light']);
     gulp.watch('./src/js/**/*.js', ['scripts-light']);
-    gulp.watch('./src/images/**/*', ['images']);
-    gulp.watch('./src/fonts/**/*', ['fonts']);
+    gulp.watch('./src/images/**/*.{png,gif,jpg,jpeg,svg}', ['images']);
+    gulp.watch('./src/fonts/**/*.{eot,svg,woff,woff2}', ['fonts']);
 });
 
 /** !!! BUILD !!! **/

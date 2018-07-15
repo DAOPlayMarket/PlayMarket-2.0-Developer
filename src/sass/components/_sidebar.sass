@@ -34,8 +34,25 @@ aside#sidebar
   .sidebar__menu
     border-top: 1px solid #d7d7d7
     &--item
-      padding: 12px 0 12px 50px
-      font-family: $FiraSans
-      font-weight: 400
-      font-size: 14px
-      color: #394649
+      position: relative
+      &__icon
+        position: absolute
+        width: 20px
+        height: 20px
+        background-position: center
+        background-repeat: no-repeat
+        background-size: contain
+        left: 0
+        top: 50%
+        transform: translateY(-50%)
+        &[data-icon='apps']
+          background-image: url("../../images/icons/app.svg")
+        &[data-icon='ico']
+          background-image: url("../../images/icons/ethereum.svg")
+      &__link
+        display: block
+        padding: 12px 0 12px 35px
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        color: #394649

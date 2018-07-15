@@ -1,0 +1,38 @@
+extends ../../templates/main
+
+block content
+    script(src='/javascripts/ico-add/contract.js')
+    .app-add
+        .app-add__contract
+            form#contract
+                p ID приложения
+                input(type="text" name="idApp" value=idApp readonly)
+                br
+                br
+                p Имя ICO
+                input(type="text" name="icoName" placeholder="Например: DAO PlayMarket 2.0")
+                br
+                br
+                p Символ токена
+                input(type="text" name="icoSymbol" placeholder="Например: PMT")
+                br
+                br
+                p Дата старта
+                input(type="text" name="icoStartDate")
+                br
+                br
+                p Адрес для сбора средств
+                input(type="text" name="address" placeholder="Например: 0x343646ed663eb595a83dc42fd407aa1b1bafacca")
+                br
+                br
+                p Hard Cup в долларах (USD)
+                input(type="text" name="icoHardCapUsd" placeholder="Например: 2000000")
+                br
+                br
+                p Пароль от keystore
+                input(type="text" name="password")
+                br
+                br
+                button.button.button-ellipse Отправить
+
+

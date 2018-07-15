@@ -1,0 +1,78 @@
+extends ../../templates/main
+
+block content
+    script(src='/javascripts/app-add/build.js')
+    .app-add
+        .app-add__build
+            form#build
+                .app-add__block
+                    .app-add__block--title Название приложения
+                    input(name="name" type="text")
+                .app-add__block
+                    .app-add__block--title Тип
+                    input(name="idCTG" type="text")
+                .app-add__block
+                    .app-add__block--title Категория
+                    input(name="subCategory" type="text")
+                .app-add__block
+                    .app-add__block--title Логотип
+                    input#logo(type="file" name="logo" accept=".png, .jpg, .jpeg")
+                .app-add__block
+                    .app-add__block--title Фотогалерея
+                    input#gallery(type="file" name="gallery" multiple accept=".png, .jpg, .jpeg")
+                .app-add__block
+                    .app-add__block--title Баннер (горизонтальное изображение)
+                    input#banner(type="file" name="banner" accept=".png, .jpg, .jpeg")
+                .app-add__block
+                    .app-add__block--title APK файл приложения
+                    input#apk(type="file" name="apk" accept=".apk")
+                .app-add__block
+                    .app-add__block--title Имя пакета
+                    input(type="text" name="packageName" placeholder="Например: com.blockchain.store.playmarket")
+                .app-add__block
+                    .app-add__block--title Версия приложения (целое число)
+                    input(type="text" name="version" placeholder="Например: 1")
+                .app-add__block
+                    .app-add__block--title Стоимость в ETH
+                    input(type="text" name="price" placeholder='Например: "0.05"' value='0')
+                .app-add__block
+                    .app-add__block--title Слоган
+                    input(type="text" name="slogan" placeholder='Например: "Мы создаем будущее"')
+                .app-add__block
+                    .app-add__block--title Краткое описание
+                    textarea(name="shortDescr" placeholder='Кратко расскажите про приложение')
+                .app-add__block
+                    .app-add__block--title Подробное описание
+                    textarea#longdescr-textarea(name="longDescr")
+                .app-add__block
+                    .app-add__block--title Ключевые слова (через пробел)
+                    input(type="text" name="keywords" placeholder='Например: "блокчейн магазин маркет децентрализованный"')
+                .app-add__block
+                    .app-add__block--title YouTube видео ID
+                    input(type="text" name="youtubeID" placeholder='Например: "QYjyfCt6gWc"')
+                .app-add__block
+                    .app-add__block--title EMAIL
+                    input(type="text" name="email" placeholder='Например: "info@playmarket.io"')
+                .app-add__block
+                    .app-add__block--title Возростное ограничение (минимальный возраст)
+                    input(type="text" name="ageRestrictions" placeholder='Например: "16"')
+                .app-add__block
+                    .app-add__block--title Опубликовать приложение
+                    input(type='checkbox' name="publish")
+                .app-add__block
+                    .app-add__block--title В приложении есть реклама
+                    input(type='checkbox' name="advertising")
+                .app-add__block
+                    .app-add__block--title Приложение предназначено для детей
+                    input(type='checkbox' name="forChildren")
+                .app-add__block
+                    .app-add__block--title Ссылка на сайт приложения
+                    input(type="text" name="urlApp" placeholder='Например: "https://playmarket.io"')
+                .app-add__block
+                    .app-add__block--title Ссылка на политику конфиденциальности
+                    input(type="text" name="privacyPolicy" placeholder='Например: "https://ico.playmarket.io/privacy-policy"')
+                .app-add__block
+                    button.button.button-ellipse Продолжить
+
+
+

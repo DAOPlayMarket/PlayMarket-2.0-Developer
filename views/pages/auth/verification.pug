@@ -1,0 +1,26 @@
+extends ../../templates/auth
+
+block content
+    script(src='/javascripts/auth/verification.js')
+    .verification
+        .auth__title Подтверждение регистрации
+        .verification-process
+            .verification-block
+                .verification-block__title Хэш транзакции:
+                .verification-block__value
+                    span.verification-block__value-block
+                        span#verification-hash= verified
+                        .verification-block__value-block__controls
+                            span.clipboard-btn.copy-btn#verification-copy(data-clipboard-target="#verification-hash" data-notifiсation="Хэш транзакции скопирован в буфер обмена" title='Копировать хэш транзакции')
+                            a#verification-link(href='https://rinkeby.etherscan.io/tx/' + verified  rel='noopener' target='_blank' title='Посмотреть на etherscan.io')
+            .verification-checking
+                .verification-checking__title Идет проверка подтверждения, пожалуйста подождите. Обычно это занимает не более одной минуты.
+                .verification-checking__spinner
+            .verification-success
+                .verification-success__title Вы успешно зарегистрированы как разработчик!
+                .verification-success__link
+                    a(href='/').button.button-ellipse Начать
+            .verification-error
+                .verification-error__title При отправке транзакции произошла ошибка.
+                .verification-error__link
+                    a(href='/registration').button.button-ellipse Назад

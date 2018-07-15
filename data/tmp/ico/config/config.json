@@ -1,0 +1,106 @@
+{
+  "files": {
+    "docs": {
+      "whitepaper": "docs/whitepaper/doc.pdf",
+      "onepage": "docs/onepage/doc.pdf"
+    },
+    "images": {
+      "team": [],
+      "advisors": [],
+      "gallery": [
+        "images/gallery/1.png",
+        "images/gallery/2.png",
+        "images/gallery/3.png",
+        "images/gallery/4.png",
+        "images/gallery/5.png"
+      ],
+      "logo": "images/logo/logo1 (2).png",
+      "banner": "images/banner/REMINDER (2).png"
+    }
+  },
+  "keywords": [
+    "самоцветы",
+    "шарики"
+  ],
+  "youtubeID": "",
+  "email": "icothreeinarow@example.com",
+  "idApp": "240",
+  "social": {
+    "googlePlus": "https://plus.google.com/",
+    "facebook": "https://www.facebook.com/",
+    "linkedin": "https://www.linkedin.com/",
+    "instagram": "https://www.instagram.com/",
+    "vk": "https://vk.com/",
+    "youtube": "https://www.youtube.com/",
+    "telegram": "https://telegram.org/",
+    "git": "https://github.com/"
+  },
+  "urlICO": "https://ico.napominalkaexample.com",
+  "privacyPolicy": "https://ico.napominalkaexample.com/privacy.pdf",
+  "description": "Знаменитая серия игр в жанре «три в ряд» пополнилась новым шедевром! Попробуйте пройти все уровни разрушения и азарта.\r\nВаша задача состоит в том, чтобы найти наиболее выгодное перемещение объектов, позволяющее достичь группировки по три или более одинаковых элементов в заданных направлениях.\r\nПреимущества данного приложения перед сотней альтернативных: \r\n* Вы можете пропустить уровни, если не можете их пройти. \r\n* В игре есть возможность покупать дополнительное время, бомбы, менять фон или аватар. \r\n* Игра очень простая, Вы можете играть абсолютно повсюду: стоя в очереди или сидя на остановке. \r\n\r\nИгра простая в установке, “лёгкая”, интересная и красочная. Она сразу наберёт множество фанатов. Присоединяйтесь к приложению, **становитесь инвестором** и получайте дополнительные возможности.",
+  "advantages": "Токен является внутренней валютой приложения. Он позволит совершать покупки: дополнительное время, бомбы, менять аватар, а также фон. Окунитесь в мир удивительных самоцветов вместе с “Три в ряд”!",
+  "team": [
+    {
+      "name": "Максим Покровский",
+      "photo": "images/team/1.png",
+      "descr": "Энтузиаст в области блокчейна, предприниматель, практикующий эксперт в криптоэкономике, профессор.",
+      "social": {
+        "googlePlus": "",
+        "facebook": "https://www.facebook.com/",
+        "linkedin": "https://www.linkedin.com/",
+        "instagram": "",
+        "vk": "https://vk.com/",
+        "youtube": "",
+        "telegram": "",
+        "git": ""
+      }
+    },
+    {
+      "name": "Евгения Алеховская",
+      "photo": "images/team/2.png",
+      "descr": "Ведущий ICO адвокат. Юрист.",
+      "social": {
+        "googlePlus": "https://plus.google.com/",
+        "facebook": "https://www.facebook.com/",
+        "linkedin": "https://www.linkedin.com/",
+        "instagram": "https://www.instagram.com/",
+        "vk": "",
+        "youtube": "",
+        "telegram": "https://telegram.org/",
+        "git": "https://github.com/"
+      }
+    }
+  ],
+  "advisors": [
+    {
+      "name": "Игорь Саруханов",
+      "photo": "images/advisors/1.png",
+      "descr": "Разработчик приложений. Иллюстратор. Более 12 лет опыта работы в сфере разработки игр",
+      "social": {
+        "googlePlus": "https://plus.google.com/",
+        "facebook": "",
+        "linkedin": "https://www.linkedin.com/",
+        "instagram": "",
+        "vk": "",
+        "youtube": "",
+        "telegram": "https://telegram.org/",
+        "git": "https://github.com/"
+      }
+    },
+    {
+      "name": "Евгения Серпухова",
+      "photo": "images/advisors/2.png",
+      "descr": "Иллюстратор. Графический дизайнер. Опыт работы - 21 год в создании иллюстраций и мультипликации",
+      "social": {
+        "googlePlus": "",
+        "facebook": "",
+        "linkedin": "https://www.linkedin.com/",
+        "instagram": "",
+        "vk": "https://vk.com/",
+        "youtube": "",
+        "telegram": "",
+        "git": ""
+      }
+    }
+  ]
+}

@@ -1,8 +1,5 @@
 const router = require('express').Router();
 
-/** MODULES **/
-const modules = require('./../modules');
-
 /** ROUTES **/
 router.get('/', async(req, res, next) => {
     try {

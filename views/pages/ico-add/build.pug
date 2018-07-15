@@ -1,0 +1,116 @@
+extends ../../templates/main
+
+block content
+    script(src='/javascripts/ico-add/build.js')
+    .ico-add
+        .ico-add__build
+            form#build
+                .ico-add__block
+                    .ico-add__block--title Логотип
+                    input#logo(type="file" name="logo" accept=".png, .jpg, .jpeg")
+                .ico-add__block
+                    .ico-add__block--title Фотогалерея
+                    input#gallery(type="file" name="gallery" multiple accept=".png, .jpg, .jpeg")
+                .ico-add__block
+                    .ico-add__block--title Баннер (горизонтальное изображение)
+                    input#banner(type="file" name="banner" accept=".png, .jpg, .jpeg")
+                .ico-add__block
+                    .ico-add__block--title Описание ICO
+                    textarea#ico-description-textarea(name="description")
+                .ico-add__block
+                    .ico-add__block--title Преимущества для инвесторов
+                    textarea#investors-advantages-textarea(name="advantages")
+                .ico-add__block
+                    .ico-add__block--title Ключевые слова (через пробел)
+                    input(type="text" name="keywords" placeholder='Например: "блокчейн магазин маркет децентрализованный"')
+                .ico-add__block
+                    .ico-add__block--title YouTube видео ID
+                    input(type="text" name="youtubeID" placeholder='Например: "QYjyfCt6gWc"')
+                .ico-add__block
+                    .ico-add__block--title EMAIL
+                    input(type="text" name="email" placeholder='Например: "info@playmarket.io"')
+                .ico-add__block
+                    .ico-add__block--title Ссылка на сайт ICO
+                    input(type="text" name="urlICO" placeholder='Например: "https://playmarket.io"')
+                .ico-add__block
+                    .ico-add__block--title Ссылка на политику конфиденциальности
+                    input(type="text" name="privacyPolicy" placeholder='Например: "https://ico.playmarket.io/privacy-policy"')
+                .ico-add__block
+                    .ico-add__block--title White Paper (pdf)
+                    input#whitepaper(type="file" name="whitepaper" accept=".pdf")
+                .ico-add__block
+                    .ico-add__block--title One Page Paper (pdf)
+                    input#onepage(type="file" name="onepage" accept=".pdf")
+                .ico-add__block
+                    .ico-add__block--title Ссылки на социальные сети:
+                    p Google+
+                    input(type="text" name="googlePlus")
+                    br
+                    p Facebook
+                    input(type="text" name="facebook")
+                    br
+                    p LinkedIn
+                    input(type="text" name="linkedin")
+                    br
+                    p Twitter
+                    input(type="text" name="twitter")
+                    br
+                    p Instagram
+                    input(type="text" name="instagram")
+                    br
+                    p VK
+                    input(type="text" name="vk")
+                    br
+                    p YouTube
+                    input(type="text" name="youtube")
+                    br
+                    p Telegram
+                    input(type="text" name="telegram")
+                    br
+                    p GIT
+                    input(type="text" name="git")
+                input(type='hidden' name='idApp' value=idApp)
+                //.ico-add__block
+                //    .ico-add__block--title Команда:
+                    //div(style="border: 1px solid black; padding: 10px;")
+                    //    p Фотография:
+                    //    input(type='file' name='team_photo')
+                    //    p Имя:
+                    //    input(type='text' name='team_name')
+                    //    p Описание:
+                    //    textarea(name='team_descr')
+                    //    p Ссылки на социальные сети:
+                    //    div(style="overflow: hidden;")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p google-plus
+                    //            input(type="text" name="team_google-plus")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p facebook
+                    //            input(type="text" name="team_facebook")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p linkedin
+                    //            input(type="text" name="team_linkedin")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p twitter
+                    //            input(type="text" name="team_twitter")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p instagram
+                    //            input(type="text" name="team_instagram")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p vk
+                    //            input(type="text" name="team_vk")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p youtube
+                    //            input(type="text" name="team_youtube")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p telegram
+                    //            input(type="text" name="team_telegram")
+                    //        div(style="float: left; margin-bottom: 10px;")
+                    //            p git
+                    //            input(type="text" name="team_git")
+                .ico-add__block
+                    button.button.button-ellipse Продолжить
+
+
+
+

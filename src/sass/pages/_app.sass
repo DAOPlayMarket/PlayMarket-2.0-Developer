@@ -1,4 +1,18 @@
 .app
+  &-top
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    margin-bottom: 20px
+    &__ico-link
+      font-family: $FiraSans
+      font-weight: 400
+      height: 36px
+      font-size: 16px
+      background-color: #06d6a0
+      box-shadow: 0 3px 10px rgba(6, 214, 160, 0.6)
+      color: #fff
+      padding: 0 15px
   &-main
     background-color: #fff
     padding: 35px 30px 50px
@@ -82,7 +96,7 @@
         &__name
           font-family: $FiraSans
           font-weight: 400
-          font-size: 16px
+          font-size: 14px
           color: #0f1914
           text-transform: uppercase
       &-ico
@@ -104,14 +118,8 @@
           margin-bottom: 5px
           &:last-child
             margin-bottom: 0
-      &__longdescr
-        font-family: $FiraSans
-        font-weight: 400
-        font-size: 14px
-        color: #67777b
-        line-height: 20px
       &--left
-        width: 144px
+        width: 150px
         flex-shrink: 0
       &--right
         width: 100%

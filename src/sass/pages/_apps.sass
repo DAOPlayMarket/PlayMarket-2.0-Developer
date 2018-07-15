@@ -51,7 +51,9 @@
           width: 500px
           flex-shrink: 0
         &[data-col="2"]
-          width: 100%
+          width: 50%
+        &[data-col="3"]
+          width: 50%
     &__content
       .apps-table__list
         .apps-table__item
@@ -69,7 +71,9 @@
               width: 500px
               flex-shrink: 0
             &[data-col="2"]
-              width: 100%
+              width: 50%
+            &[data-col="3"]
+              width: 50%
             &__img
               width: 50px
               height: 50px
@@ -77,12 +81,13 @@
               background-position: center
               background-size: contain
             &__name
-              font-family: $Archive
+              font-family: $Roboto
               font-size: 10px
+              font-weight: 700
               margin-left: 15px
               text-transform: uppercase
               text-align: center
-            &__status
+            &__status, &__ico
               font-family: $Roboto
               font-size: 10px
               font-weight: 700

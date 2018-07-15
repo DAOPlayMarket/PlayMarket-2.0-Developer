@@ -1,10 +1,10 @@
-extends ../layouts/main
+extends ../templates/main
 
 block content
     script(src='/javascripts/ico.js')
     .ico
-        h1.ico__title ICO
-            span &nbsp;PlayMarket 2.0
+        h1.ico__title ICO&nbsp;
+            span PlayMarket 2.0
         .ico__main
             .ico__main-item
                 .ico__avatar
@@ -68,7 +68,7 @@ block content
         .ico__description
             .ico__block-title Описание
             input#ico__description__input(type="hidden" value=descr)
-            #ico__description-area
+            .md-render#ico__description-area
         .ico__team
             .ico__block-title Команда
             ul.ico__member-list

@@ -1,0 +1,18 @@
+extends ../../templates/main
+
+block content
+    script(src='/javascripts/app-add/registration.js')
+    .app-add
+        .app-add__registration
+            form#registration
+                div Хэштэг
+                input(type="text" name="hashTag" value=hashTag readonly)
+                br
+                br
+                div Хэш
+                input(type="text" name="hash" value=hash readonly)
+                br
+                br
+                div Пароль от keystore
+                input(type="text" name="password")
+                button.button.button-ellipse Отправить транзакцию

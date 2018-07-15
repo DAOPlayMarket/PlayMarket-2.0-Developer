@@ -8,13 +8,34 @@
     display: flex
     height: 30px
     align-items: center
-    justify-content: flex-end
+    justify-content: space-between
+    &--left
+      display: flex
+      align-items: center
+    &--right
+      display: flex
+      align-items: center
     &__address
+      margin-right: 15px
+      font-family: $FiraSans
+      font-weight: 400
+      font-size: 12px
+      color: #67777b
+      &--copy
+        cursor: pointer
+        display: inline-block
+        width: 14px
+        height: 14px
+        background-image: url("../../images/icons/copy.svg")
+        background-repeat: no-repeat
+        background-position: center
+        background-size: contain
+    &__name
       margin-right: 50px
       font-family: $FiraSans
       font-weight: 400
       font-size: 12px
-      color: #394649
+      color: #67777b
     &__quit
       font-family: $FiraSansSemiBold
       font-weight: 600
