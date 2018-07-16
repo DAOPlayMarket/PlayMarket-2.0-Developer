@@ -6,6 +6,7 @@ const fs = require('fs');
 const expressValidator = require('express-validator');
 const i18n = require("i18n");
 const IPFS = require('ipfs');
+const makeDir = require('make-dir');
 
 /** CONFIG **/
 const CONFIG_VALIDATOR = require('./config/validator');
@@ -59,6 +60,12 @@ app.use('/', require('./routes'));
             console.log(modules.divider('\u2505', 24, ' '));
             console.log(modules.timeNow());
             console.log('\u2714 IPFS start successful');
+            await Promise.all([
+                makeDir(lib.appDir),
+                makeDir(lib.icoDir),
+                makeDir(lib.keystoreDir)
+            ]);
+            console.log('\u2714 Data folder structure will be created');
             app.listen(lib.server.port, lib.server.host, () => {
                 console.log('\u2714 Server start successful');
                 console.log(modules.divider('\u2505', 24, ' '));
