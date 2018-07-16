@@ -22,4 +22,6 @@ $(document).ready(function(){
         };
         return (await axios(options)).data;
     }
+
+
 });

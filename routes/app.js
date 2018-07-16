@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const axios = require('axios');
 
 /** UTILS **/
 const sender = require('../utils/sender');

@@ -14,11 +14,12 @@ $(document).ready(function(){
                 }
             };
             let res = (await axios(options)).data;
-            spinner.hide();
             console.log('res:', res);
             if (res.status === 200) {
+
                 // window.location.href = '/app-add/confirmation/';
             } else if (res.status === 500) {
+                spinner.hide();
                 toastr.error(res.message);
             }
         } catch(e) {

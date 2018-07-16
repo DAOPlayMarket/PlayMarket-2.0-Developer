@@ -66,8 +66,6 @@
         font-weight: 400
         font-size: 16px
         color: #0f1914
-        span
-          font-size: 12px
   &__date
     display: flex
     border-top: 1px solid #f1eeee
@@ -106,24 +104,26 @@
         color: #0f1914
         span
           font-size: 12px
-  &__developer
+  //&__developer
+  //  border-top: 1px solid #f1eeee
+  //  padding-top: 10px
+  //  margin-bottom: 10px
+  //  &-group
+  //    margin-bottom: 5px
+  //    &__title
+  //      font-family: $FiraSansSemiBold
+  //      font-weight: 600
+  //      font-size: 12px
+  //      color: #67777b
+  //      padding-bottom: 5px
+  //    &__value
+  //      font-family: $FiraSans
+  //      font-weight: 400
+  //      font-size: 16px
+  //      color: #0f1914
+  &__address
     border-top: 1px solid #f1eeee
     padding-top: 10px
-    margin-bottom: 10px
-    &-group
-      margin-bottom: 5px
-      &__title
-        font-family: $FiraSansSemiBold
-        font-weight: 600
-        font-size: 12px
-        color: #67777b
-        padding-bottom: 5px
-      &__value
-        font-family: $FiraSans
-        font-weight: 400
-        font-size: 16px
-        color: #0f1914
-  &__address
     &-group
       margin-bottom: 5px
       &__title
@@ -215,79 +215,6 @@
     margin-top: 50px
   &__advisors
     margin-top: 30px
-  &__member-list
-    &__item
-      display: flex
-      align-items: flex-start
-      margin-bottom: 40px
-      &:last-child
-        margin-bottom: 0
-      &-left
-        width: 160px
-        flex-shrink: 0
-        &__image
-          display: flex
-          align-items: center
-          justify-content: center
-          width: 100%
-          a.image-popup
-            cursor: zoom-in
-            font-size: 0
-            img
-              max-width: 100%
-              max-height: 100%
-        &__contacts-list
-          display: flex
-          align-items: center
-          justify-content: center
-          margin-top: 10px
-          &__item
-            font-size: 0
-            margin: 0 2px
-            &:first-child
-              margin-left: 0
-            &:last-child
-              margin-right: 0
-            a
-              display: inline-block
-              width: 18px
-              height: 18px
-              background-position: center
-              background-repeat: no-repeat
-              background-size: contain
-              &[data-social='linkedin']
-                background-image: url('../../images/icons/social/linkedin.svg')
-              &[data-social='google-plus']
-                background-image: url('../../images/icons/social/google-plus.svg')
-              &[data-social='facebook']
-                background-image: url('../../images/icons/social/facebook.svg')
-              &[data-social='twitter']
-                background-image: url('../../images/icons/social/twitter.svg')
-              &[data-social='instagram']
-                background-image: url('../../images/icons/social/instagram.svg')
-              &[data-social='vk']
-                background-image: url('../../images/icons/social/vk.svg')
-              &[data-social='youtube']
-                background-image: url('../../images/icons/social/youtube.svg')
-      &-right
-        width: 100%
-        padding-left: 30px
-        &__name
-          font-family: $FiraSansSemiBold
-          font-weight: 600
-          font-size: 14px
-          color: #0f1914
-          margin-bottom: 10px
-        &__description
-          font-family: $FiraSans
-          font-weight: 400
-          font-size: 14px
-          color: #67777b
-          line-height: 16px
-        &__contacts-list
-          &__item
-            &-link
-
   &__contacts
     margin-top: 50px
     &-list
@@ -310,8 +237,8 @@
           background-size: contain
           &[data-social='linkedin']
             background-image: url('../../images/icons/social/linkedin.svg')
-          &[data-social='google-plus']
-            background-image: url('../../images/icons/social/google-plus.svg')
+          &[data-social='googlePlus']
+            background-image: url('../../images/icons/social/googlePlus.svg')
           &[data-social='facebook']
             background-image: url('../../images/icons/social/facebook.svg')
           &[data-social='twitter']

@@ -1,0 +1,16 @@
+mixin data(path, members)
+    ul.ico__member-list
+        each member in members
+            li.ico__member-list__item
+                .ico__member-list__item-left
+                    .ico__member-list__item-left__image
+                        a.image-popup(href=path + member.photo)
+                            img(src=path + member.photo)
+                    ul.ico__member-list__item-left__contacts-list
+                        each item, key in member.social
+                            if (item)
+                                li.ico__member-list__item-left__contacts-list__item
+                                    a.ico__member-list__item-left__contacts-list__item-link.data-icon(data-social=key href=item)
+                .ico__member-list__item-right
+                    .ico__member-list__item-right__name= member.name
+                    .ico__member-list__item-right__description= member.descr

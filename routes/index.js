@@ -19,8 +19,7 @@ router.use('/auth', require('./auth'));
 router.use('/helpers', require('./helpers'));
 
 router.use('/app-add', isAuth, isRegistered, require('./app-add'));
-router.use('/ico-add', require('./ico-add'));
-// router.use('/ico-add', isAuth, isRegistered, require('./ico-add'));
+router.use('/ico-add', isAuth, isRegistered, require('./ico-add'));
 
 router.use('/apps', isAuth, isRegistered, require('./apps'));
 router.use('/app', isAuth, isRegistered, require('./app'));

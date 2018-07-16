@@ -4,7 +4,7 @@ block content
     script(src='/javascripts/app.js')
     .app
         .app-top
-            if (app.icoRelease !== 'true')
+            if (!app.icoRelease)
                 a.app-top__ico-link.button.button-ellipse(href='/ico-add/build?idApp='+ app.idApp) Провести ICO
         .app-main
             //a#edit-btn(href="app/edit")
@@ -25,9 +25,9 @@ block content
                         .app-main__middle-category__title Категория:
                         .app-main__middle-category__name= subCategory.name
                     ul.app-main__middle-marks
-                        if (app.forChildren === 'true')
+                        if (app.forChildren)
                             li.app-main__middle-marks__item Для детей
-                        if (app.advertising === 'true')
+                        if (app.advertising)
                             li.app-main__middle-marks__item Есть реклама
                     if (app.icoRelease)
                         .app-main__middle-ico

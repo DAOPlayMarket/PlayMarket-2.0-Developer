@@ -1,33 +1,31 @@
 const router = require('express').Router();
-const axios = require('axios');
-const path = require('path');
-const fse = require('fs-extra');
+
+/** UTILS **/
+const sender = require('../utils/sender');
 
 /** ROUTES **/
 router.get('/:id', async(req, res, next) => {
     try {
-        // let descr = await readFile(lib.appDir + '/description/description');
+        let result = await sender.sendRequestToNode({
+            method: 'post',
+            route: 'get-app',
+            body: {
+                idApp: req.params.id
+            }
+        });
+
+        console.log('result:', result);
+
         res.render('pages/ico', {
             page: 'ico',
             title: 'NAME_APP (ICO)',
-            // descr: descr
+            server: lib.nodeAddress,
+            app: result.result
         });
     } catch(e) {
         console.log('error', modules.timeNow(), e.toString());
         next(e);
     }
 });
-
-function readFile(path) {
-    return new Promise((resolve, reject) => {
-        fse.readFile(path, 'utf8', (error, result) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(result);
-            }
-        });
-    });
-}
 
 module.exports = router;
