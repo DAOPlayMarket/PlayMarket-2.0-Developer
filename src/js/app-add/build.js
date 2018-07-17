@@ -13,6 +13,32 @@ $(document).ready(function(){
         spellChecker: false
     });
 
+    $('.select2').select2({
+        width: '300px',
+        minimumResultsForSearch: -1,
+        placeholder: $(this).data('placeholder')
+    });
+
+    $('#idCTG').on('change', async function (event) {
+        event.preventDefault();
+        let options = {
+            method: 'post',
+            url: '/helpers/get-subcategories',
+            data: {
+                idCTG: $(this).val()
+            }
+        };
+        let res = (await axios(options)).data;
+        let output = "";
+        $.each(res.subcategories, function(key, val) {
+            console.log(val.name);
+            output += '<option value="' + val.id + '">' + val.name + '</option>';
+        });
+        console.log(output);
+        $("#subCategory").html(output);
+    });
+
+
     $('form#build').on('submit', async function (event) {
         event.preventDefault();
         try {
@@ -20,8 +46,8 @@ $(document).ready(function(){
             let fd = new FormData();
 
             fd.append("nameApp", $('input[name="name"]').val());
-            fd.append("idCTG", $('input[name="idCTG"]').val());
-            fd.append("subCategory", $('input[name="subCategory"]').val());
+            fd.append("idCTG", $('select[name="idCTG"]').val());
+            fd.append("subCategory", $('select[name="subCategory"]').val());
             fd.append("slogan", $('input[name="slogan"]').val());
             fd.append("shortDescr", $('textarea[name="shortDescr"]').val());
             fd.append("keywords", $('input[name="keywords"]').val());

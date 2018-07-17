@@ -11,7 +11,6 @@ router.use('*', (req, res, next) => {
     res.locals.verified = req.cookies.verified || null;
     res.locals.registered = req.cookies.registered || null;
     res.locals.name = req.cookies.name || null;
-    res.locals.categories = lib.categories;
     next();
 });
 

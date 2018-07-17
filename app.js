@@ -59,15 +59,15 @@ app.use('/', require('./routes'));
         nodeIPFS.on('start', async() => {
             console.log(modules.divider('\u2505', 24, ' '));
             console.log(modules.timeNow());
-            console.log('\u2714 IPFS start successful');
+            console.log('+ IPFS start successful');
             await Promise.all([
                 makeDir(lib.appDir),
                 makeDir(lib.icoDir),
                 makeDir(lib.keystoreDir)
             ]);
-            console.log('\u2714 Data folder structure will be created');
+            console.log('+ Data folder structure will be created');
             app.listen(lib.server.port, lib.server.host, () => {
-                console.log('\u2714 Server start successful');
+                console.log('+ Server start successful');
                 console.log(modules.divider('\u2505', 24, ' '));
             });
         });

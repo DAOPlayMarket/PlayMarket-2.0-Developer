@@ -10,7 +10,8 @@ router.get('/', async(req, res, next) => {
     try {
         res.render('pages/app-add/build', {
             page: 'build',
-            title: 'Добавление приложения'
+            title: 'Добавление приложения',
+            categories: categories.getCategories()
         });
     } catch(e) {
         console.log('error', modules.timeNow(), e.toString());

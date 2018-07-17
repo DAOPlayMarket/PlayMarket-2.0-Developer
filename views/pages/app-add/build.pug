@@ -4,16 +4,20 @@ block content
     script(src='/javascripts/app-add/build.js')
     .app-add
         .app-add__build
+            //input#categories(type="hidden" value=categories)
             form#build
                 .app-add__block
                     .app-add__block--title Название приложения
-                    input(name="name" type="text")
+                    input(name="name" type="text" placeholder="Например: PlayMarket 2.0")
                 .app-add__block
                     .app-add__block--title Тип
-                    input(name="idCTG" type="text")
+                    select#idCTG.select2(name="idCTG" data-placeholder="Выберите тип")
+                        option
+                        each item in categories
+                            option(value=item.id)= item.name
                 .app-add__block
                     .app-add__block--title Категория
-                    input(name="subCategory" type="text")
+                    select#subCategory.select2(name="subCategory" data-placeholder="Выберите категорию")
                 .app-add__block
                     .app-add__block--title Логотип
                     input#logo(type="file" name="logo" accept=".png, .jpg, .jpeg")
