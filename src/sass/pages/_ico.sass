@@ -23,16 +23,24 @@
     display: flex
     align-items: flex-start
     &-item
+      position: relative
       &:last-child
-        padding-left: 65px
+        padding-left: 35px
         width: 100%
+        margin-left: 30px
+        &:before
+          content: ''
+          position: absolute
+          left: 0
+          top: 0
+          bottom: 0
+          background-color: #f1eeee
+          width: 1px
   &__avatar
     width: 150px
     height: 150px
-    background-color: #f1eeee
     flex-shrink: 0
     display: flex
-    padding: 20px
     box-sizing: border-box
     align-items: center
     justify-content: center
@@ -61,16 +69,32 @@
         font-weight: 600
         font-size: 12px
         color: #67777b
-      &__value
+      &__value-box
+        display: flex
+        align-items: center
         font-family: $FiraSans
         font-weight: 400
-        font-size: 16px
-        color: #0f1914
+        &__value
+          font-size: 16px
+          color: #0f1914
+        &__units
+          display: inline-block
+          margin-left: 5px
+          font-size: 14px
+          color: #06d6a0
   &__date
     display: flex
-    border-top: 1px solid #f1eeee
     padding-top: 10px
     margin-bottom: 10px
+    position: relative
+    &:before
+      content: ''
+      position: absolute
+      left: -35px
+      top: 0
+      right: 0
+      height: 1px
+      background-color: #f1eeee
     &-group
       display: block
       width: 50%
@@ -80,13 +104,17 @@
         font-size: 12px
         color: #67777b
         padding-bottom: 5px
-      &__value
+      &__value-box
+        display: flex
+        align-items: center
         font-family: $FiraSans
         font-weight: 400
-        font-size: 16px
-        color: #0f1914
+        &__value
+          font-size: 16px
+          color: #0f1914
   &__steps
     margin-bottom: 10px
+    display: flex
     &-group
       display: block
       width: 50%
@@ -97,13 +125,17 @@
         font-size: 12px
         color: #67777b
         padding-bottom: 5px
-      &__value
+      &__value-box
+        display: flex
+        align-items: center
         font-family: $FiraSans
         font-weight: 400
-        font-size: 16px
-        color: #0f1914
-        span
+        &__value
+          font-size: 16px
+          color: #0f1914
+        &__count
           font-size: 12px
+
   //&__developer
   //  border-top: 1px solid #f1eeee
   //  padding-top: 10px
@@ -122,8 +154,16 @@
   //      font-size: 16px
   //      color: #0f1914
   &__address
-    border-top: 1px solid #f1eeee
+    position: relative
     padding-top: 10px
+    &:before
+      content: ''
+      position: absolute
+      left: -35px
+      top: 0
+      right: 0
+      height: 1px
+      background-color: #f1eeee
     &-group
       margin-bottom: 5px
       &__title
@@ -150,7 +190,8 @@
         font-weight: 600
         font-size: 28px
         color: #67777b
-        span
+        &__value
+        &__count
           font-size: 14px
       &__time
         font-family: $FiraSansSemiBold
@@ -186,27 +227,19 @@
       justify-content: space-between
       &__sold
         text-align: left
-        font-family: $FiraSansSemiBold
-        font-weight: 600
-        font-size: 24px
-        color: #67777b
-        span
-          display: block
-          font-family: $FiraSans
-          font-weight: 400
-          font-size: 14px
       &__all
         text-align: right
+      &__value
         font-family: $FiraSansSemiBold
         font-weight: 600
         font-size: 24px
         color: #67777b
-        span
-          display: block
-          font-family: $FiraSans
-          font-weight: 400
-          font-size: 14px
-
+      &__descr
+        display: block
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        margin-top: 3px
   &__gallery
     margin-top: 50px
   &__description

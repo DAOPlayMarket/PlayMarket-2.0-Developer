@@ -48,12 +48,14 @@
         text-transform: uppercase
         text-align: center
         &[data-col="1"]
-          width: 500px
+          width: 55%
           flex-shrink: 0
         &[data-col="2"]
-          width: 50%
+          width: 15%
         &[data-col="3"]
-          width: 50%
+          width: 15%
+        &[data-col="4"]
+          width: 15%
     &__content
       .apps-table__list
         .apps-table__item
@@ -68,12 +70,14 @@
             display: flex
             align-items: center
             &[data-col="1"]
-              width: 500px
+              width: 55%
               flex-shrink: 0
             &[data-col="2"]
-              width: 50%
+              width: 15%
             &[data-col="3"]
-              width: 50%
+              width: 15%
+            &[data-col="4"]
+              width: 15%
             &__img
               width: 50px
               height: 50px
@@ -87,7 +91,7 @@
               margin-left: 15px
               text-transform: uppercase
               text-align: center
-            &__status, &__ico
+            &__status, &__ico, &__price
               font-family: $Roboto
               font-size: 10px
               font-weight: 700

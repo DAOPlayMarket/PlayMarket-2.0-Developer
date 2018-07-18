@@ -1,7 +1,4 @@
-const Web3 = require('web3');
 const axios = require('axios');
-
-const web3 = new Web3();
 
 const sendRequestToNode = (data) => {
     return new Promise(async(resolve, reject) => {

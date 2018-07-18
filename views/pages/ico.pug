@@ -6,11 +6,21 @@ block content
         h1.ico__title ICO&nbsp;
             span= app.nameApp
         .ico__main
+            input#icoDecimals__input(type="hidden" value=ico.decimals)
+            input#icoTotalSupply__input(type="hidden" value=app.icoTotalSupply)
+            //input#icoTotalForSale__input(type="hidden" value=app.icoTotalForSale)
+            input#icoTotalForSale__input(type="hidden" value=4500000000000000)
+            input#icoHardCapUsd__input(type="hidden" value=app.icoHardCapUsd)
+            input#startDate__input(type="hidden" value=app.icoStages[0].startDate)
+            input#endDate__input(type="hidden" value=app.icoStages[2].endDate)
+            input#icoStages__input(type="hidden" value=app.icoStages)
+            input#currentPeriod__input(type="hidden" value=ico.currentPeriod)
+            input#tokensSold__input(type="hidden" value=ico.tokensSold)
             .ico__main-item
                 .ico__avatar
                     img(src=server + '/data/' + app.hashTagICO + '/' + app.hashICO + '/'+ app.infoICO.files.images.logo)
-                .ico__video
-                    if (app.infoICO.youtubeID)
+                if (app.infoICO.youtubeID)
+                    .ico__video
                         a.button.button-ellipse.video-popup(href="https://www.youtube.com/watch?v=QYjyfCt6gWc") Смотреть видео
             .ico__main-item
                 .ico__token
@@ -19,31 +29,49 @@ block content
                     //    .ico__token-group__value PlayMarket Token
                     .ico__token-group
                         .ico__token-group__title Символ токена:
-                        .ico__token-group__value= app.icoSymbol
+                        .ico__token-group__value-box
+                            .ico__token-group__value-box__value= app.icoSymbol
                     .ico__token-group
                         .ico__token-group__title Общее количество токенов:
-                        .ico__token-group__value= app.icoTotalSupply + ' '
-                            span= app.icoSymbol
+                        .ico__token-group__value-box
+                            .icoTotalSupply__FORMATTED.ico__token-group__value-box__value
+                            span.ico__token-group__value-box__units= app.icoSymbol
+                    .ico__token-group
+                        .ico__token-group__title Количество токенов на продажу:
+                        .ico__token-group__value-box
+                            .icoTotalForSale__FORMATTED.ico__token-group__value-box__value
+                            span.ico__token-group__value-box__units= app.icoSymbol
                     .ico__token-group
                         .ico__token-group__title SOFTCUP:
-                        .ico__token-group__value= app.icoTotalSupply / 100 + ' '
-                            span= app.icoSymbol
+                        .ico__token-group__value-box
+                            .icoSoftCup__FORMATTED.ico__token-group__value-box__value
+                            span.ico__token-group__value-box__units= app.icoSymbol
                     .ico__token-group
                         .ico__token-group__title HARDCUP:
-                        .ico__token-group__value= app.icoHardCapUsd / 1000000 + ' '
-                            span $
+                        .ico__token-group__value-box
+                            .icoHardCapUsd__FORMATTED.ico__token-group__value-box__value
+                            span.ico__token-group__value-box__units $
                 .ico__date
                     .ico__date-group
                         .ico__date-group__title Дата начала ICO:
-                        .ico__date-group__value= app.icoStages[0].startDate
+                        .ico__date-group__value-box
+                            #startDate.ico__date-group__value-box__value
+                        .ico__date-group__value
                     .ico__date-group
                         .ico__date-group__title Дата окончания ICO:
-                        .ico__date-group__value= app.icoStages[2].endDate
+                        .ico__date-group__value-box
+                            #endDate.ico__date-group__value-box__value
                 .ico__steps
                     .ico__steps-group
                         .ico__steps-group__title Текущий этап:
-                        .ico__steps-group__value 1
-                            span /3
+                        .ico__steps-group__value-box
+                            .currentPeriod__FORMATTED.ico__steps-group__value-box__value
+                            span.ico__steps-group__value-box__count /3
+                    .ico__steps-group
+                        .ico__steps-group__title Стоимость токена:
+                        .ico__steps-group__value-box
+                            .priceInCurrentPeriod__FORMATTED.ico__steps-group__value-box__value
+                            |&nbsp;$
                 //.ico__developer
                 //    .ico__developer-group
                 //        .ico__developer-group__title Разработчик:
@@ -54,17 +82,20 @@ block content
                         .ico__address-group__value= app.adrICO
         .ico__cup
             .ico__cup-top
-                .ico__cup-top__step Этап #1
-                    span /3
+                .ico__cup-top__step Этап #
+                    span.currentPeriod__FORMATTED.ico__cup-top__step__value
+                    span.ico__cup-top__step__count /3
                 .ico__cup-top__time 10:00:00
             .ico__cup-middle
                 .ico__cup-middle__progress
-                    .ico__cup-middle__progress--fill(style="width: 25%;")
+                    #progress-bar.ico__cup-middle__progress--fill
             .ico__cup-bottom
-                .ico__cup-bottom__sold 25 000 000
-                    span Продано, PMT
-                .ico__cup-bottom__all 100 000 000
-                    span Всего, PMT
+                .ico__cup-bottom__sold
+                    span.tokensSold__FORMATTED.ico__cup-bottom__value
+                    span.ico__cup-bottom__descr Продано, #{app.icoSymbol}
+                .ico__cup-bottom__all
+                    span.icoTotalForSale__FORMATTED.ico__cup-bottom__value
+                    span.ico__cup-bottom__descr Всего, #{app.icoSymbol}
         .ico__gallery
             .ico__block-title Фотогалерея
             include ../components/gallery

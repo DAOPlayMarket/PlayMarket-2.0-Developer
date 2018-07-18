@@ -8,9 +8,10 @@ block content
         .apps-table
             if (apps.length !== 0)
                 ul.apps-table__header
-                    li.apps-table__header-col(data-col="1") название приложения
+                    li.apps-table__header-col(data-col="1") название
                     li.apps-table__header-col(data-col="2") статус
-                    li.apps-table__header-col(data-col="3") ico
+                    li.apps-table__header-col(data-col="3") стоимость
+                    li.apps-table__header-col(data-col="4") ico
                 .apps-table__content
                     ul.apps-table__list
                         each app in apps
@@ -26,6 +27,13 @@ block content
                                             else
                                                 span не опубликовано
                                     .apps-table__item-col(data-col="3")
+                                        .apps-table__item-col__price
+                                            if (app.price == 0)
+                                                span FREE
+                                            else
+                                                span= app.price / 1000000000000000000
+                                                |&nbsp;ETH
+                                    .apps-table__item-col(data-col="4")
                                         .apps-table__item-col__ico
                                             if (app.icoRelease)
                                                 span да

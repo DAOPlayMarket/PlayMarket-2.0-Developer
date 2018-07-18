@@ -6,7 +6,7 @@ const sender = require('../utils/sender');
 /** ROUTES **/
 router.get('/:id', async(req, res, next) => {
     try {
-        let result = await sender.sendRequestToNode({
+        let app = await sender.sendRequestToNode({
             method: 'post',
             route: 'get-app',
             body: {
@@ -14,13 +14,22 @@ router.get('/:id', async(req, res, next) => {
             }
         });
 
-        console.log('result:', result);
+        let ico = await sender.sendRequestToNode({
+            method: 'post',
+            route: 'get-current-info',
+            body: {
+                address: app.result.adrICO
+            }
+        });
+
+        console.log('ico:', ico);
 
         res.render('pages/ico', {
             page: 'ico',
-            title: 'NAME_APP (ICO)',
+            title: app.result.nameApp + '(ICO)',
             server: lib.nodeAddress,
-            app: result.result
+            app: app.result,
+            ico: ico.result
         });
     } catch(e) {
         console.log('error', modules.timeNow(), e.toString());
