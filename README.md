@@ -19,7 +19,7 @@ To clone the repository you have two options
 2. Open terminal on your computer (Windows: "win+R" type "cmd" and hit return, MacOS: Press CMD + Space to open spotlight search, type "terminal" and hit return)
 3. In terminal type "cd \<PATH\>" (were "\<PATH\>" - path to source code folder) and press return
 4. On [main page](https://github.com/CryptonStudio/PlayMarket-2.0-Developer) click "Clone or download" and copy https link in buffer
-5. Type "git clone <LINK>" (were "<LINK>" - copied link from step 4) and press return
+5. Type "git clone \<LINK\>" (were "\<LINK\>" - copied link from step 4) and press return
 #### Download ZIP archive
 1. On [main page](https://github.com/CryptonStudio/PlayMarket-2.0-Developer) click "Clone or download" and click "Download ZIP", save rouce code on your computer
 
