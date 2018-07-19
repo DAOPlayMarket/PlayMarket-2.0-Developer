@@ -36,6 +36,23 @@
           bottom: 0
           background-color: #f1eeee
           width: 1px
+      &__section
+        margin-bottom: 10px
+        padding-bottom: 11px
+        position: relative
+        &:last-child
+          margin-bottom: 0
+          padding-bottom: 0
+          &:before
+            display: none
+        &:before
+          content: ''
+          position: absolute
+          left: -35px
+          bottom: 0
+          right: 0
+          height: 1px
+          background-color: #f1eeee
   &__avatar
     width: 150px
     height: 150px
@@ -58,11 +75,13 @@
       background-color: #e74b5f
       box-shadow: 0 3px 10px rgba(231, 75, 95, 0.6)
   &__token
-    margin-bottom: 10px
+    position: relative
     &-group
       display: flex
       align-items: flex-end
-      margin-bottom: 5px
+      margin-bottom: 10px
+      &:last-child
+        margin-bottom: 0
       &__title
         width: 50%
         font-family: $FiraSansSemiBold
@@ -84,17 +103,7 @@
           color: #06d6a0
   &__date
     display: flex
-    padding-top: 10px
-    margin-bottom: 10px
     position: relative
-    &:before
-      content: ''
-      position: absolute
-      left: -35px
-      top: 0
-      right: 0
-      height: 1px
-      background-color: #f1eeee
     &-group
       display: block
       width: 50%
@@ -113,7 +122,6 @@
           font-size: 16px
           color: #0f1914
   &__steps
-    margin-bottom: 10px
     display: flex
     &-group
       display: block
@@ -135,37 +143,29 @@
           color: #0f1914
         &__count
           font-size: 12px
-
-  //&__developer
-  //  border-top: 1px solid #f1eeee
-  //  padding-top: 10px
-  //  margin-bottom: 10px
-  //  &-group
-  //    margin-bottom: 5px
-  //    &__title
-  //      font-family: $FiraSansSemiBold
-  //      font-weight: 600
-  //      font-size: 12px
-  //      color: #67777b
-  //      padding-bottom: 5px
-  //    &__value
-  //      font-family: $FiraSans
-  //      font-weight: 400
-  //      font-size: 16px
-  //      color: #0f1914
+  &__developer
+    position: relative
+    &-group
+      margin-bottom: 10px
+      &:last-child
+        margin-bottom: 0
+      &__title
+        font-family: $FiraSansSemiBold
+        font-weight: 600
+        font-size: 12px
+        color: #67777b
+        padding-bottom: 5px
+      &__value
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 16px
+        color: #0f1914
   &__address
     position: relative
-    padding-top: 10px
-    &:before
-      content: ''
-      position: absolute
-      left: -35px
-      top: 0
-      right: 0
-      height: 1px
-      background-color: #f1eeee
     &-group
-      margin-bottom: 5px
+      margin-bottom: 10px
+      &:last-child
+        margin-bottom: 0
       &__title
         font-family: $FiraSansSemiBold
         font-weight: 600
@@ -185,7 +185,15 @@
       display: flex
       align-items: flex-end
       justify-content: space-between
+      &.started
+        .ico__cup-top__info
+          display: none
+        .ico__cup-top__step
+          display: block
+      &__info
+        display: block
       &__step
+        display: none
         font-family: $FiraSansSemiBold
         font-weight: 600
         font-size: 28px
@@ -194,6 +202,7 @@
         &__count
           font-size: 14px
       &__time
+        display: flex
         font-family: $FiraSansSemiBold
         font-weight: 600
         font-size: 28px
@@ -203,6 +212,13 @@
         background-position: 0 50%
         background-size: 24px
         padding-left: 34px
+        &-box
+          display: flex
+          margin-right: 10px
+          &:last-child
+            margin-right: 0
+          &__value
+            margin-right: 5px
     &-middle
       display: flex
       align-items: center

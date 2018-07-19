@@ -22,14 +22,21 @@ router.get('/:id', async(req, res, next) => {
             }
         });
 
-        console.log('ico:', ico);
+        let developer = await sender.sendRequestToNode({
+            method: 'post',
+            route: 'get-developer',
+            body: {
+                address: app.result.adrDev
+            }
+        });
 
         res.render('pages/ico', {
             page: 'ico',
             title: app.result.nameApp + '(ICO)',
             server: lib.nodeAddress,
             app: app.result,
-            ico: ico.result
+            ico: ico.result,
+            developer: developer.result
         });
     } catch(e) {
         console.log('error', modules.timeNow(), e.toString());

@@ -15,6 +15,7 @@ const getSignedTxForContract = (data) => {
 
             let keystore = (fse.readFileSync(lib.keystoreDir + '/' + filename)).toString('utf8');
             let myWallet = wallet.fromV3(keystore, password, true);
+
             let address = myWallet.getAddress();
             let privateKey = myWallet.privKey;
             let infoForTx = await getInfoForTx('0x' + address.toString('hex'));

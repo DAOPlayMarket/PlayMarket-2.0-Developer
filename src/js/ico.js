@@ -48,8 +48,16 @@ $(document).ready(function(){
 
     let endDateCurrentPeriod__val = icoStages__val[currentPeriod__val].endDate;
     let currentTime = moment().unix();
+
+    const timerDays = $('#timerDays');
+    const timerHours = $('#timerHours');
+    const timerMinutes = $('#timerMinutes');
+    const timerSeconds = $('#timerSeconds');
     timer(currentTime, endDateCurrentPeriod__val, (res) => {
-        console.log(res);
+        timerDays.html(res.days);
+        timerHours.html(res.hours);
+        timerMinutes.html(res.minutes);
+        timerSeconds.html(res.seconds);
     });
 
     let priceInCurrentPeriod__val = icoStages__val[currentPeriod__val].price;
@@ -60,8 +68,6 @@ $(document).ready(function(){
     let progressBar_width = 100 / (icoTotalForSale__val / tokensSold__val);
     let progressBar = $('#progress-bar');
     progressBar.css("width", progressBar_width + "%");
-
-    // progressBar
 
     $('.gallery-slider').owlCarousel({
         margin: 10,

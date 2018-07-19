@@ -27,12 +27,8 @@ block content
                                             else
                                                 span не опубликовано
                                     .apps-table__item-col(data-col="3")
-                                        .apps-table__item-col__price
-                                            if (app.price == 0)
-                                                span FREE
-                                            else
-                                                span= app.price / 1000000000000000000
-                                                |&nbsp;ETH
+                                        .apps-table__item-col__price= app.price / 1000000000000000000
+                                            | &nbsp;ETH
                                     .apps-table__item-col(data-col="4")
                                         .apps-table__item-col__ico
                                             if (app.icoRelease)
