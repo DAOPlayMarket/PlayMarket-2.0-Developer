@@ -1,4 +1,4 @@
-# PlayMarket 2.0
+# PlayMarket 2.0 Developer module
 
 ![PlayMarket 2.0](https://github.com/CryptonStudio/PlayMarket-2.0-App/blob/master/docs/photo/pm_logo.png)
 
