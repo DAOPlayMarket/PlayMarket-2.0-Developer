@@ -15,7 +15,6 @@ router.get('/', async(req, res, next) => {
             }
         });
 
-
         let apps = [];
         for (app of result.result) {
             if (app.loadFile){

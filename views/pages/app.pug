@@ -40,10 +40,8 @@ block content
                 .app-main__bottom-links
         .app-gallery
             .gallery-slider.owl-carousel
-                each image in app.files.images.gallery
-                    .gallery-slider__item
-                        a.image-popup(href=server + '/data/' + app.hashTag + '/' + app.hash + '/' + image)
-                            img(src=server + '/data/' + app.hashTag + '/' + app.hash + '/' + image)
+                include ../components/gallery
+                +data(server + '/data/' + app.hashTag + '/' + app.hash + '/', app.files.images.gallery)
         .app-info
             .app-info__box
                 .app-info__title Контактная информация

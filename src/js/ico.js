@@ -42,18 +42,27 @@ $(document).ready(function(){
     tokensSold.html(tokensSold__converted);
     tokensSold.mask('000 000 000 000 000 000', {reverse: true});
 
+    let startDate = $('#startDate__input').val();
+    $('#startDate').html(moment.unix(startDate).format("DD.MM.YYYY [(]HH:mm:ss[)]"));
+
+    let endDate = $('#endDate__input').val();
+    $('#endDate').html(moment.unix(endDate).format("DD.MM.YYYY [(]HH:mm:ss[)]"));
 
     let icoStages__input = $('#icoStages__input');
     let icoStages__val = JSON.parse(icoStages__input.val());
-
-    let endDateCurrentPeriod__val = icoStages__val[currentPeriod__val].endDate;
-    let currentTime = moment().unix();
 
     const timerDays = $('#timerDays');
     const timerHours = $('#timerHours');
     const timerMinutes = $('#timerMinutes');
     const timerSeconds = $('#timerSeconds');
-    timer(currentTime, endDateCurrentPeriod__val, (res) => {
+
+    let currentTime = moment().unix();
+
+
+
+    let timerEndDate = (currentTime < startDate) ? startDate : icoStages__val[currentPeriod__val].endDate;
+
+    timer(currentTime, timerEndDate, (res) => {
         timerDays.html(res.days);
         timerHours.html(res.hours);
         timerMinutes.html(res.minutes);
@@ -79,15 +88,6 @@ $(document).ready(function(){
     });
     let md_descr =  $('#ico__description__input').val();
     $('#ico__description-area').html(md.render(md_descr));
-
-    let startDate = $('#startDate__input').val();
-    $('#startDate').html(moment.unix(startDate).format("DD.MM.YYYY [(]HH:mm:ss[)]"));
-
-    let endDate = $('#endDate__input').val();
-    $('#endDate').html(moment.unix(endDate).format("DD.MM.YYYY [(]HH:mm:ss[)]"));
-
-    // let currentTime = moment().unix();
-
 
     function timer(currentTime, endTime, cb) {
         let diffTime = endTime - currentTime;

@@ -10,7 +10,7 @@ function isAuth(req, res, next) {
     let filename = req.cookies.filename || null;
 
     if (!address || !filename) {
-        return res.redirect('auth/login');
+        return res.redirect('/auth/login');
     }
     next();
 }

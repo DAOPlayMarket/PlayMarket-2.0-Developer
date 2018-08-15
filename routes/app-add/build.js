@@ -62,7 +62,6 @@ function formidablePromise(req, opts) {
                 if (err) return reject(err)
             })
             .on('field', (field, value) => {
-                // console.log(field, value, typeof value);
                 if (value !== 'undefined') {
                     if (field === 'keywords') {
                         if (value.length !== 0) {
