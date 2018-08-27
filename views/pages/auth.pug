@@ -1,0 +1,48 @@
+extends ../layout
+
+block template
+    script(src='/javascripts/auth.js')
+    #auth-window
+        .auth
+            .auth-keystore
+                .auth-keystore__text select wallet file
+                input#auth__keystore(type='file' name='keystore')
+            .auth-main
+                .auth-main__info
+                    .auth-main__info__content
+                        .auth-main__info__content__box
+                            .auth-main__info__content__box-title Address
+                            .auth-main__info__content__box-value#auth__address
+                        .auth-main__info__content__box
+                            .auth-main__info__content__box-title Registered
+                            .auth-main__info__content__box-value#auth__registered(data-lang-0='NO' data-lang-1='YES')
+
+                .auth-main__action
+                    .auth-main__action--login
+                        .auth-main__action__title You are registered as a developer, you can log in to your account
+                        .auth-main__action__content
+                            .auth-main__action__content__box
+                                .auth-main__action__content__box-title Name
+                                .auth-main__action__content__box-value#login__name
+                            //.auth-main__action__content__box
+                            //    .auth-main__action__content__box-title Info
+                            //    .auth-main__action__content__box-value#login__info
+                        .auth-main__action__button
+                            button#login__btn Log In
+                    .auth-main__action--registration
+                        .auth-main__action__title Registration developer
+                        .auth-main__action__content
+                            .auth-main__action__content__box
+                                .auth-main__action__content__box-title Name
+                                input#registration__name(type='text')
+                            //.auth-main__action__content__box
+                            //    .auth-main__action__content__box-title Info
+                            //    input#registration__info(type='text')
+                            .auth-main__action__content__box
+                                .auth-main__action__content__box-title Keystore password
+                                input#registration__password(type='password')
+                        .auth-main__action__button
+                            button#registration__btn Send transaction
+            .auth-verification
+                .auth-verification__text Please, wait. The correctness of the operation is being verified. Do not reload the page.
+                .auth-verification__preloader

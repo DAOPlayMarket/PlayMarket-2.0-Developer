@@ -20,6 +20,20 @@ $(document).ready(function(){
         type: 'iframe'
     });
 
+    $('.control-panel__content__logout').on('click', async function () {
+        let options = {
+            method: 'post',
+            url: '/auth',
+            data: {
+                method: 'logout'
+            }
+        };
+        let res = (await axios(options)).data;
+        if (res.status === 200) {
+            window.location.href = '/auth';
+        }
+    });
+
     toastr.options = {
         "closeButton": false,
         "debug": false,

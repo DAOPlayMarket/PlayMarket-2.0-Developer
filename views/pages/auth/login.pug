@@ -4,12 +4,36 @@ block content
     script(src='/javascripts/auth/login.js')
     .login
         .login__add
-            input#login__keystore(type='file' name='keystore' title='Добавить keystore')
-        .auth__title Выберите адрес:
-        if (accounts.length !== 0)
-            ul.login__address-list
-                each account in accounts
-                    li.login__address-list__item
-                        span(data-address=account.address data-filename=account.filename title='Имя файла: ' + account.filename)= account.address
-        else
-            .login__placeholder Нет добавленных keystore's файлов!
+            .login__add--btn
+                .login__add--btn__text select wallet file
+                input.login__add--btn__input#login__keystore(type='file' name='keystore')
+                input#keystore(type='hidden')
+            .login__add--accept
+                .login__add--info
+                    .login__add--info__box
+                        .login__add--info__box--title Address
+                        .login__add--info__box--value(data-type='address')
+                    .login__add--info__box
+                        .login__add--info__box--title Registered
+                        .login__add--info__box--value(data-type='registered' data-lang-1='YES' data-lang-2='NO')
+
+                    .login__add--info__box--registered
+                        .login__add--info__box
+                            .login__add--info__box--title Name
+                            .login__add--info__box--value(data-type='name')
+                        //.login__add--info__box
+                        //    .login__add--info__box--title Info
+                        //    .login__add--info__box--value(data-type='info')
+
+                    .login__add--info__box--not-registered
+                        .not-reg-title Registration developer
+                        .login__add--info__box
+                            .login__add--info__box--title Name
+                            input(type='text')
+                        .login__add--info__box
+                            .login__add--info__box--title Password
+                            input(type='password')
+
+                .login__add--btn
+                    #login__registration Registration
+                    #login__continue Continue

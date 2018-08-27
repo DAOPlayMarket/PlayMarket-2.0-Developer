@@ -15,15 +15,16 @@ router.use('*', (req, res, next) => {
 });
 
 router.use('/auth', require('./auth'));
+
 router.use('/helpers', require('./helpers'));
 
-router.use('/app-add', isAuth, isRegistered, require('./app-add'));
-router.use('/ico-add', isAuth, isRegistered, require('./ico-add'));
+router.use('/app-add', isAuth, require('./app-add'));
+router.use('/ico-add', isAuth, require('./ico-add'));
 
-router.use('/apps', isAuth, isRegistered, require('./apps'));
-router.use('/app', isAuth, isRegistered, require('./app'));
-router.use('/ico', isAuth, isRegistered, require('./ico'));
-router.use('/', isAuth, isRegistered, require('./main'));
+router.use('/apps', isAuth, require('./apps'));
+router.use('/app', isAuth, require('./app'));
+router.use('/ico', isAuth, require('./ico'));
+router.use('/', isAuth, require('./main'));
 
 router.use((req, res, next) => {
     res.status(404).render('404', {
@@ -46,10 +47,9 @@ router.use((err, req, res, next) => {
 
 function isAuth(req, res, next) {
     let address = req.cookies.address || null;
-    let filename = req.cookies.filename || null;
 
-    if (!address || !filename) {
-        return res.redirect('/auth/login');
+    if (!address) {
+        return res.redirect('/auth');
     }
     next();
 }

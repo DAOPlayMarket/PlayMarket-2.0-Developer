@@ -119,6 +119,7 @@ gulp.task('scripts__dev', () => {
     let tasks = [
         'general.js',
         'app.js',
+        'auth.js',
         'app-add/build.js',
         'app-add/registration.js',
         'ico-add/build.js',
@@ -140,9 +141,9 @@ gulp.task('scripts__dev', () => {
         .bundle()
         .pipe(source(item))
         .pipe(buffer())
-        .pipe(sourcemaps.init())
-        .pipe(uglify())
-        .pipe(sourcemaps.write('./maps'))
+        // .pipe(sourcemaps.init())
+        // .pipe(uglify())
+        // .pipe(sourcemaps.write('./maps'))
         .pipe(gulp.dest('./public/javascripts/'));
     });
     return es.merge.apply(null, tasks);

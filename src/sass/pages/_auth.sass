@@ -1,0 +1,139 @@
+#auth-window
+  width: 400px
+  height: auto
+  position: fixed
+  top: 50%
+  left: 50%
+  padding: 35px 30px
+  transform: translate3d(-50%, -50%, 0)
+  box-shadow: 0 2px 5px 0 #e6e6e6
+  background-color: #fff
+
+.auth
+  &-keystore
+    display: flex
+    width: 260px
+    height: 45px
+    border-radius: 22px
+    background-color: #00e7d5
+    box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+    align-items: center
+    justify-content: center
+    position: relative
+    margin: 0 auto
+    overflow: hidden
+    &.hidden
+      display: none
+    &__text
+      font-family: $Archive
+      font-size: 17px
+      color: #ffffff
+    input#auth__keystore
+      cursor: pointer
+      position: absolute
+      top: 0
+      right: 0
+      left: 0
+      bottom: 0
+      width: 100%
+      height: 100%
+      opacity: 0
+  &-main
+    display: none
+    margin-top: 20px
+    &.active
+      display: block
+    &__info
+      &__content
+        &__box
+          margin-bottom: 20px
+          &-title
+            font-family: $FiraSansSemiBold
+            font-size: 14px
+            font-weight: 600
+            color: #0f1914
+            margin-bottom: 5px
+          &-value
+            font-family: $FiraSans
+            font-size: 14px
+            font-weight: 400
+            color: #0f1914
+    &__action
+      padding: 15px
+      border: 1px solid #0f1914
+      &--login, &--registration
+        display: none
+        &.active
+          display: block
+      &__title
+        font-family: $FiraSansSemiBold
+        font-size: 14px
+        font-weight: 600
+        color: #0f1914
+        text-align: center
+        margin-bottom: 20px
+      &__content
+        margin-bottom: 20px
+        &__box
+          margin-bottom: 20px
+          &:last-child
+            margin-bottom: 0
+          &-title
+            font-family: $FiraSansSemiBold
+            font-size: 14px
+            font-weight: 600
+            color: #0f1914
+            margin-bottom: 5px
+          &-value
+            font-family: $FiraSans
+            font-size: 14px
+            font-weight: 400
+            color: #0f1914
+          input
+            font-family: $FiraSans
+            font-size: 14px
+            font-weight: 400
+            color: #0f1914
+            border: 0
+            padding: 0 0 5px 0
+            margin: 0
+            width: 100%
+            border-bottom: 1px solid #00e7d5
+      &__button
+        display: flex
+        align-items: center
+        justify-content: center
+        button
+          font-family: $Archive
+          font-size: 17px
+          color: #ffffff
+          bottom: 0
+          padding: 0 15px
+          height: 45px
+          display: flex
+          align-items: center
+          justify-content: center
+          background-color: #00e7d5
+          box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+          border: 0
+          border-radius: 22px
+          cursor: pointer
+  &-verification
+    display: none
+    &.active
+      display: block
+    &__text
+      font-family: $FiraSansSemiBold
+      font-size: 14px
+      font-weight: 600
+      color: #0f1914
+      text-align: center
+      margin-bottom: 30px
+    &__preloader
+      width: 100%
+      height: 30px
+      background-color: rgba(255,255,255,0.7)
+      background-image: url("../../images/icons/spinner.svg")
+      background-size: 120px
+      background-position: center
+      background-repeat: no-repeat
