@@ -20,14 +20,15 @@ router.get('/', async(req, res, next) => {
 });
 
 router.post('/', async(req, res, next) => {
+    let address = req.cookies.address;
     try {
-        await del(lib.appDir, {force: true});
+        await del(path.join(lib.tmpDirApp, address), {force: true});
         await Promise.all([
-            makeDir(lib.appDir + '/apk'),
-            makeDir(lib.appDir + '/config'),
-            makeDir(lib.appDir + '/images/logo'),
-            makeDir(lib.appDir + '/images/gallery'),
-            makeDir(lib.appDir + '/images/banner')
+            makeDir(path.join(lib.tmpDirApp, address, 'apk')),
+            makeDir(path.join(lib.tmpDirApp, address, 'config')),
+            makeDir(path.join(lib.tmpDirApp, address, 'images', 'logo')),
+            makeDir(path.join(lib.tmpDirApp, address, 'images', 'gallery')),
+            makeDir(path.join(lib.tmpDirApp, address, 'images', 'banner'))
         ]);
         let data = await formidablePromise(req, null);
         res.json({result: data, status: 200});
@@ -54,7 +55,7 @@ function formidablePromise(req, opts) {
         };
 
         form.multiples = true;
-        form.uploadDir = lib.appDir;
+        form.uploadDir = path.join(lib.tmpDirApp, req.cookies.address);
 
         form.parse(req);
         form
@@ -76,16 +77,16 @@ function formidablePromise(req, opts) {
             })
             .on('fileBegin', (field, file) => {
                 if (field === 'apk')
-                    file.path = form.uploadDir + '/apk/' + file.name;
+                    file.path = path.join(form.uploadDir, 'apk', file.name);
                 if (field === 'gallery')
-                    file.path = form.uploadDir + '/images/gallery/' + file.name;
+                    file.path = path.join(form.uploadDir, 'images' , 'gallery', file.name);
                 if (field === 'banner')
-                    file.path = form.uploadDir + '/images/banner/' + file.name;
+                    file.path = path.join(form.uploadDir, 'images', 'banner', file.name);
                 if (field === 'logo')
-                    file.path = form.uploadDir + '/images/logo/' + file.name;
+                    file.path = path.join(form.uploadDir, 'images', 'logo', file.name);
             })
             .on('file', (field, file) => {
-                let url = path.relative(lib.appDir, file.path).replace(/\\/g, "\/");
+                let url = path.relative(form.uploadDir, file.path).replace(/\\/g, "\/");
                 if (field === 'apk')
                     config.files.apk = url;
                 if (field === 'logo')
@@ -96,7 +97,7 @@ function formidablePromise(req, opts) {
                     config.files.images.banner = url;
             })
             .on('end', async() => {
-                await fse.outputJson(lib.appDir + '/config/config.json', config);
+                await fse.outputJson(form.uploadDir + '/config/config.json', config);
                 resolve(config);
             })
     })

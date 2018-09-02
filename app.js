@@ -48,7 +48,7 @@ app.use(i18n.init);
 
 /** PUBLIC FOLDER **/
 app.use(express.static(lib.publicFolder));
-app.use(express.static(lib.appDir));
+app.use(express.static(lib.tmpDirApp));
 
 /** ROUTES **/
 app.use('/', require('./routes'));
@@ -61,9 +61,8 @@ app.use('/', require('./routes'));
             console.log(modules.timeNow());
             console.log('+ IPFS start successful');
             await Promise.all([
-                makeDir(lib.appDir),
-                makeDir(lib.icoDir),
-                makeDir(lib.keystoreDir)
+                makeDir(lib.tmpDirApp),
+                makeDir(lib.tmpDirICO)
             ]);
             console.log('+ Data folder structure will be created');
             app.listen(lib.server.port, lib.server.host, () => {

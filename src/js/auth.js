@@ -5,38 +5,43 @@ import wallet from 'ethereumjs-wallet'
 $(document).ready(function(){
     const spinner = $('#spinner');
 
-    const INPUT__authKeystore = $('input#auth__keystore');
-    const INPUT__registrationName = $('input#registration__name');
-    const INPUT__registrationInfo = $('input#registration__info');
-    const INPUT__registrationPassword = $('input#registration__password');
+    const SECTION__keystore = $('.auth-entry__keystore-box');
+    const SECTION__main = $('.auth-entry__main-box');
 
-    const SECTION__keystore = $('.auth-keystore');
-    const SECTION__main = $('.auth-main');
-    const SECTION__verification = $('.auth-verification');
+    const INPUT__authKeystore = $('input#input__authKeystore');
+    const INPUT__registrationName = $('input#input__registrationName');
+    const INPUT__registrationPassword = $('input#input__registrationPassword');
 
-    const BLOCK__info = $('.auth-main__info');
-    const BLOCK__action = $('.auth-main__action');
+    const VALUE__authAddress = $('#value__authAddress');
+    const VALUE__authRegistered = $('#value__authRegistered');
 
-    const ACTION__login = $('.auth-main__action--login');
-    const ACTION__registration = $('.auth-main__action--registration');
+    const BLOCK__login = $('.auth-entry__main-box__login');
+    const BLOCK__registration = $('.auth-entry__main-box__registration');
 
-    const VALUE__authAddress = $('#auth__address');
-    const VALUE__authRegistered = $('#auth__registered');
-    const VALUE__loginName = $('#login__name');
+    const BUTTON__login = $('#button__login');
+    const BUTTON__registration = $('#button__registration');
 
-    let KEYSTORE = null;
+    const verificationSpinner = $('.auth-entry__main-box__spinner');
+
+    let keystore = null;
+    let address = null;
+    let name = null;
 
     INPUT__authKeystore.on('change', async function(e) {
         spinner.show();
+
+        keystore = null;
+        address = null;
+        name = null;
+
+        SECTION__keystore.removeClass('keystore-is-valid');
         SECTION__main.removeClass('active');
 
-        ACTION__login.removeClass('active');
-        ACTION__registration.removeClass('active');
+        BLOCK__login.removeClass('active');
+        BLOCK__registration.removeClass('active');
 
         VALUE__authAddress.text('');
         VALUE__authRegistered.text('');
-        VALUE__loginName.text('');
-        // VALUE__loginInfo.text('');
 
         INPUT__registrationName.val('');
         INPUT__registrationPassword.val('');
@@ -47,11 +52,13 @@ $(document).ready(function(){
             r.readAsText(f);
             r.onload = async function(e) {
                 let contents = e.target.result;
-                let json;
                 try {
-                    json = JSON.parse(contents);
+                    let json = JSON.parse(contents);
                     try {
-                        let address = '0x' + json.address;
+                        SECTION__keystore.addClass('keystore-is-valid');
+                        keystore = json;
+                        address = '0x' + json.address;
+
                         let options = {
                             method: 'post',
                             url: '/auth',
@@ -61,19 +68,19 @@ $(document).ready(function(){
                             }
                         };
                         let res = (await axios(options)).data;
+                        console.log(res);
+
                         spinner.hide();
                         if (res.status === 200) {
                             SECTION__main.addClass('active');
                             VALUE__authAddress.text(address);
                             if (res.registered) {
-                                ACTION__login.addClass('active');
-                                VALUE__authRegistered.text(VALUE__authRegistered.data('lang-1'));
-                                VALUE__loginName.text(res.name);
-                                // VALUE__loginInfo.text(res.info);
+                                VALUE__authRegistered.text(VALUE__authRegistered.data('lang-true'));
+                                name = res.name;
+                                BLOCK__login.addClass('active');
                             } else {
-                                ACTION__registration.addClass('active');
-                                KEYSTORE = json;
-                                VALUE__authRegistered.text(VALUE__authRegistered.data('lang-0'));
+                                VALUE__authRegistered.text(VALUE__authRegistered.data('lang-false'));
+                                BLOCK__registration.addClass('active');
                             }
                         } else if (res.status === 500){
                             return toastr.error(res.msg);
@@ -93,7 +100,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#login__btn').on('click', async function () {
+    BUTTON__login.on('click', async function () {
         spinner.show();
         try {
             let options = {
@@ -101,8 +108,8 @@ $(document).ready(function(){
                 url: '/auth',
                 data: {
                     method: 'login',
-                    address: VALUE__authAddress.text(),
-                    name: VALUE__loginName.text()
+                    address: address,
+                    name: name
                 }
             };
             let res = (await axios(options)).data;
@@ -116,19 +123,18 @@ $(document).ready(function(){
         }
     });
 
-    $('#registration__btn').on('click', async function () {
-        spinner.show();
+    BUTTON__registration.on('click', async function () {
         try {
-            let wallet = await tx.getWallet(KEYSTORE, INPUT__registrationPassword.val(), true);
-            let name = INPUT__registrationName.val();
-            // let info = INPUT__registrationInfo.val();
-            let info = '';
+            let wallet = await tx.getWallet(keystore, INPUT__registrationPassword.val(), true);
+            let regName = INPUT__registrationName.val();
+            // let regInfo = INPUT__registrationInfo.val();
+            let regInfo = '';
             let signedTx = await tx.getSignedTxForContract({
                 wallet: wallet,
                 data: {
                     contract: 'main',
                     function: 'registrationDeveloper',
-                    params: [name, info]
+                    params: [regName, regInfo]
                 }
             });
 
@@ -141,39 +147,36 @@ $(document).ready(function(){
                 }
             };
             let res = (await axios(options)).data;
-            spinner.hide();
+            console.log(res);
             if (res.status === 200) {
-                SECTION__keystore.addClass('hidden');
-                SECTION__main.removeClass('active');
-                SECTION__verification.addClass('active');
-
-                ACTION__login.removeClass('active');
-                ACTION__registration.removeClass('active');
+                verificationSpinner.addClass('active');
+                BLOCK__registration.removeClass('active');
 
                 let timer = setInterval(async () => {
                     let tx = await checkTx(res.result.hash);
+                    console.log(tx);
                     if (tx.status === 200) {
                         if (!tx.result.panding) {
-                            SECTION__verification.removeClass('active');
-                            SECTION__main.addClass('active');
                             clearTimeout(timer);
+                            verificationSpinner.removeClass('active');
                             if (tx.result.success) {
-                                ACTION__login.addClass('active');
+                                VALUE__authRegistered.text(VALUE__authRegistered.data('lang-true'));
+                                BLOCK__registration.removeClass('active');
+                                BLOCK__login.addClass('active');
                             } else {
                                 toastr.error('Transaction failed');
-                                ACTION__registration.addClass('active');
                             }
                         }
                     } else {
-                        toastr.error(tx.result.message);
+                        verificationSpinner.removeClass('active');
                         clearTimeout(timer);
+                        toastr.error(tx.result.message);
                     }
-                }, 10000);
+                }, 5000);
             } else {
                 toastr.error(res.message);
             }
         } catch (e) {
-            spinner.hide();
             return toastr.error(e.message);
         }
     });
@@ -188,44 +191,6 @@ $(document).ready(function(){
         };
         return (await axios(options)).data;
     }
-
-    // $('input#login__keystore').on('change', async function() {
-    //     let formData = new FormData();
-    //     let input = document.getElementById('login__keystore');
-    //     formData.append("keystore", input.files[0]);
-    //     let options = {
-    //         method: 'post',
-    //         url: '/auth/login/load',
-    //         data: formData
-    //     };
-    //     let res = (await axios(options)).data;
-    //     console.log('res:', res);
-    //     if (res.status === 200) {
-    //         location.reload();
-    //     }
-    // });
-    // $('.login__address-list__item span').on('click', async function() {
-    //     spinner.show();
-    //     let options = {
-    //         method: 'post',
-    //         url: '/auth/login',
-    //         data: {
-    //             address: $(this).data('address'),
-    //             filename: $(this).data('filename')
-    //         }
-    //     };
-    //     let res = (await axios(options)).data;
-    //     // console.log(res);
-    //
-    //     spinner.hide();
-    //     if (res.status === 200) {
-    //         if (res.registered) {
-    //             window.location.href = '/';
-    //         } else {
-    //             window.location.href = 'auth/registration';
-    //         }
-    //     }
-    // });
 });
 
 

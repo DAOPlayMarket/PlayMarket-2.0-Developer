@@ -12,7 +12,8 @@ router.get('/', async(req, res, next) => {
             page: 'registration',
             title: 'Регистрация приложения',
             hashTag: req.query.hashTag,
-            hash: req.query.hash
+            hash: req.query.hash,
+            publish: req.query.publish
         });
     } catch(e) {
         console.log('error', modules.timeNow(), e.toString());

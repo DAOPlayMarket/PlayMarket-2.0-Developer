@@ -7,76 +7,76 @@ block content
             //input#categories(type="hidden" value=categories)
             form#build
                 .app-add__block
-                    .app-add__block--title Название приложения
-                    input(name="name" type="text" placeholder="Например: PlayMarket 2.0")
+                    .app-add__block--title Application name
+                    input(name="name" type="text" placeholder="Example: PlayMarket 2.0")
                 .app-add__block
-                    .app-add__block--title Тип
-                    select#idCTG.select2(name="idCTG" data-placeholder="Выберите тип")
+                    .app-add__block--title Type
+                    select#idCTG.select2(name="idCTG" data-placeholder="Select the type")
                         option
                         each item in categories
                             option(value=item.id)= item.name
                 .app-add__block
-                    .app-add__block--title Категория
-                    select#subCategory.select2(name="subCategory" data-placeholder="Выберите категорию")
+                    .app-add__block--title Category
+                    select#subCategory.select2(name="subCategory" data-placeholder="Select the category")
                 .app-add__block
-                    .app-add__block--title Логотип
+                    .app-add__block--title Logo
                     input#logo(type="file" name="logo" accept=".png, .jpg, .jpeg")
                 .app-add__block
-                    .app-add__block--title Фотогалерея
+                    .app-add__block--title Gallery (multiple)
                     input#gallery(type="file" name="gallery" multiple accept=".png, .jpg, .jpeg")
                 .app-add__block
-                    .app-add__block--title Баннер (горизонтальное изображение)
+                    .app-add__block--title Banner (horizontal image)
                     input#banner(type="file" name="banner" accept=".png, .jpg, .jpeg")
                 .app-add__block
-                    .app-add__block--title APK файл приложения
+                    .app-add__block--title APK file
                     input#apk(type="file" name="apk" accept=".apk")
                 .app-add__block
-                    .app-add__block--title Имя пакета
-                    input(type="text" name="packageName" placeholder="Например: com.blockchain.store.playmarket")
+                    .app-add__block--title Package name
+                    input(type="text" name="packageName" placeholder="Example: com.blockchain.store.playmarket")
                 .app-add__block
-                    .app-add__block--title Версия приложения (целое число)
-                    input(type="text" name="version" placeholder="Например: 1")
+                    .app-add__block--title App version (integer)
+                    input(type="text" name="version" placeholder="Example: 1")
                 .app-add__block
-                    .app-add__block--title Стоимость в ETH
-                    input(type="text" name="price" placeholder='Например: "0.05"' value='0')
+                    .app-add__block--title Price (in standard unit, 0 - for free)
+                    input(type="text" name="price" placeholder='Example: "0.05"' value='0')
                 .app-add__block
-                    .app-add__block--title Слоган
-                    input(type="text" name="slogan" placeholder='Например: "Мы создаем будущее"')
+                    .app-add__block--title Slogan
+                    input(type="text" name="slogan" placeholder='Example: "We create the future"')
                 .app-add__block
-                    .app-add__block--title Краткое описание
-                    textarea(name="shortDescr" placeholder='Кратко расскажите про приложение')
+                    .app-add__block--title Brief description
+                    textarea(name="shortDescr" placeholder='Briefly tell us about the app')
                 .app-add__block
-                    .app-add__block--title Подробное описание
+                    .app-add__block--title Detailed description
                     textarea#longdescr-textarea(name="longDescr")
                 .app-add__block
-                    .app-add__block--title Ключевые слова (через пробел)
-                    input(type="text" name="keywords" placeholder='Например: "блокчейн магазин маркет децентрализованный"')
+                    .app-add__block--title Keywords (space separated)
+                    input(type="text" name="keywords" placeholder='Example: "blockchain store market decentralized"')
                 .app-add__block
-                    .app-add__block--title YouTube видео ID
-                    input(type="text" name="youtubeID" placeholder='Например: "QYjyfCt6gWc"')
+                    .app-add__block--title YouTube video ID
+                    input(type="text" name="youtubeID" placeholder='Example: "QYjyfCt6gWc"')
                 .app-add__block
                     .app-add__block--title EMAIL
-                    input(type="text" name="email" placeholder='Например: "info@playmarket.io"')
+                    input(type="text" name="email" placeholder='Example: "info@playmarket.io"')
                 .app-add__block
-                    .app-add__block--title Возростное ограничение (минимальный возраст)
-                    input(type="text" name="ageRestrictions" placeholder='Например: "16"')
+                    .app-add__block--title Age restrictions (minimum age)
+                    input(type="text" name="ageRestrictions" placeholder='Example: "16"')
                 .app-add__block
-                    .app-add__block--title Опубликовать приложение
+                    .app-add__block--title Publish app
                     input(type='checkbox' name="publish" checked)
                 .app-add__block
-                    .app-add__block--title В приложении есть реклама
+                    .app-add__block--title The app has ads
                     input(type='checkbox' name="advertising")
                 .app-add__block
-                    .app-add__block--title Приложение предназначено для детей
+                    .app-add__block--title The app is designed for children
                     input(type='checkbox' name="forChildren")
                 .app-add__block
-                    .app-add__block--title Ссылка на сайт приложения
-                    input(type="text" name="urlApp" placeholder='Например: "https://playmarket.io"')
+                    .app-add__block--title Link to application website
+                    input(type="text" name="urlApp" placeholder='Example: "https://playmarket.io"')
                 .app-add__block
-                    .app-add__block--title Ссылка на политику конфиденциальности
-                    input(type="text" name="privacyPolicy" placeholder='Например: "https://ico.playmarket.io/privacy-policy"')
+                    .app-add__block--title Link to privacy policy
+                    input(type="text" name="privacyPolicy" placeholder='Example: "https://ico.playmarket.io/privacy-policy"')
                 .app-add__block
-                    button.button.button-ellipse Продолжить
+                    button.button.button-ellipse Continue
 
 
 

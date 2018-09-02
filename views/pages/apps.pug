@@ -3,14 +3,14 @@ extends ../templates/main
 block content
     .apps
         .apps-top
-            .title(style="color: #06d6a0") Ваши приложения
-            a.apps-top__add(href="/app-add/build" title="Добавить приложение")
+            .title(style="color: #06d6a0") My apps
+            a.apps-top__add(href="/app-add/build" title="Add application")
         .apps-table
             if (apps.length !== 0)
                 ul.apps-table__header
-                    li.apps-table__header-col(data-col="1") название
-                    li.apps-table__header-col(data-col="2") статус
-                    li.apps-table__header-col(data-col="3") стоимость
+                    li.apps-table__header-col(data-col="1") name
+                    li.apps-table__header-col(data-col="2") status
+                    li.apps-table__header-col(data-col="3") price
                     li.apps-table__header-col(data-col="4") ico
                 .apps-table__content
                     ul.apps-table__list
@@ -23,18 +23,18 @@ block content
                                     .apps-table__item-col(data-col="2")
                                         .apps-table__item-col__status
                                             if (app.publish)
-                                                span опубликовано
+                                                span published
                                             else
-                                                span не опубликовано
+                                                span not published
                                     .apps-table__item-col(data-col="3")
                                         .apps-table__item-col__price= app.price / 1000000000000000000
                                             | &nbsp;ETH
                                     .apps-table__item-col(data-col="4")
                                         .apps-table__item-col__ico
                                             if (app.icoRelease)
-                                                span да
+                                                span yes
                                             else
-                                                span нет
+                                                span no
             else
-                .apps-table__placeholder У вас нет загруженных приложений
+                .apps-table__placeholder You don't have downloaded apps
 

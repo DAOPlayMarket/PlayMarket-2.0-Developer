@@ -25,7 +25,6 @@ const getSignedTxForContract = (data) => {
             let privateKey = myWallet.privKey;
 
             let infoForTx = await getInfoForTx('0x' + address.toString('hex'));
-            console.log('infoForTx:', infoForTx);
 
             let MyContract = web3.eth.contract(lib.contracts[data.data.contract].abi);
             let myContractInstance = MyContract.at(lib.contracts[data.data.contract].address);

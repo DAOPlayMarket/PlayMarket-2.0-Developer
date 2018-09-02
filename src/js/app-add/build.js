@@ -95,7 +95,7 @@ $(document).ready(function(){
                 console.log(res);
                 spinner.hide();
                 if (res.status === 200) {
-                    window.location.href = '/app-add/registration?hashTag=' + res.result.hashTag + '&hash=' + res.result.hash;
+                    window.location.href = '/app-add/registration?hashTag=' + res.result.hashTag + '&hash=' + res.result.hash + '&publish=' + res.result.publish;
                 } else if (res.status === 500) {
                     spinner.hide();
                     toastr.error(res.message);
