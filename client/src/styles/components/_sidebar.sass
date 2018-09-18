@@ -1,0 +1,61 @@
+.sidebar
+  width: 190px
+  flex-shrink: 0
+  padding-right: 15px
+  box-sizing: border-box
+  &__header
+    cursor: pointer
+    display: flex
+    align-items: center
+    height: 64px
+    position: relative
+    &--logo
+      position: absolute
+      top: 50%
+      left: 0
+      transform: translateY(-50%)
+      height: 100%
+      width: 64px
+      background-image: url("../images/icons/logo.png")
+      background-repeat: no-repeat
+      background-position: center
+    &--text
+      padding-left: 70px
+      font-family: $FiraSansSemiBold
+      font-size: 14px
+      font-weight: 600
+      color: #394649
+      text-transform: uppercase
+      span
+        display: block
+        margin-top: 3px
+        font-family: $FiraSans
+        font-weight: 400
+        text-transform: none
+  &__nav
+    border-top: 1px solid #d7d7d7
+    &--item
+      position: relative
+      margin-bottom: 5px
+      &:last-child
+        margin-bottom: 0
+      &__link
+        display: block
+        padding: 12px 30px 12px 35px
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        color: #394649
+        &:before
+          content: ''
+          position: absolute
+          width: 20px
+          height: 20px
+          background-position: center
+          background-repeat: no-repeat
+          background-size: contain
+          left: 0
+          top: 50%
+          transform: translateY(-50%)
+        &[data-nav='apps']:before
+          background-image: url("../images/icons/apps.svg")

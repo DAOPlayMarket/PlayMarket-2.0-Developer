@@ -3,10 +3,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const pull = require('pull-stream');
 
-/** MODULES **/
-const modules = require('./../modules');
-
-const load = (dir, headFolder) => {
+const upload = (dir, headFolderName) => {
     return new Promise(async(resolve, reject) => {
         try {
             let files = await readdir(dir);
@@ -14,7 +11,7 @@ const load = (dir, headFolder) => {
             for (let file of files) {
                 arr.push(
                     {
-                        path: (path.join(headFolder, path.relative(dir, file))).replace(/\\/g, "\/"),
+                        path: (path.join(headFolderName, path.relative(dir, file))).replace(/\\/g, "\/"),
                         content: fse.readFileSync(file)
                     }
                 );
@@ -22,7 +19,7 @@ const load = (dir, headFolder) => {
             const stream = nodeIPFS.files.addPullStream();
             pull(
                 pull.values(arr),
-            stream,
+                stream,
                 pull.collect((err, values) => {
                     if (err) {
                         reject(err)
@@ -40,4 +37,6 @@ const load = (dir, headFolder) => {
     });
 };
 
-module.exports.load = load;
+module.exports = {
+    upload: upload
+};

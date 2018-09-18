@@ -1,83 +1,104 @@
 const router = require('express').Router();
-const ua = require('ua-parser-js');
+const formidable = require('formidable');
+const del = require('del');
+const makeDir = require('make-dir');
+const path = require('path');
+const fse = require('fs-extra');
 
-/** ROUTES **/
-router.use('*', (req, res, next) => {
-    res.locals.agent = ua(req.headers['user-agent']) || null;
-    res.locals.language = req.getLocale() || null;
-    res.locals.languages = lib.languages;
-    res.locals.address = req.cookies.address || null;
-    res.locals.filenameKeystore = req.cookies.filename || null;
-    res.locals.verified = req.cookies.verified || null;
-    res.locals.registered = req.cookies.registered || null;
-    res.locals.name = req.cookies.name || null;
-    next();
-});
+/** UTILS **/
+const ipfs = require(path.join(__dirname, '..', 'utils', 'ipfs.js'));
 
-router.use('/auth', require('./auth'));
-
-router.use('/helpers', require('./helpers'));
-
-router.use('/app-add', isAuth, require('./app-add'));
-router.use('/ico-add', isAuth, require('./ico-add'));
-
-router.use('/apps', isAuth, require('./apps'));
-router.use('/app', isAuth, require('./app'));
-router.use('/ico', isAuth, require('./ico'));
-router.use('/', isAuth, require('./main'));
-
-router.use((req, res, next) => {
-    res.status(404).render('404', {
-        title: 'Page not found'
-    });
-});
-
-router.use((err, req, res, next) => {
-    if (err.code !== 'EBADCSRFTOKEN') {
-        return next(err);
+router.post('/app-add', async (req, res) => {
+    console.log(`/app-add [${req.method}] ${modules.time.timeNow()}`);
+    try {
+        let address = req.header('address');
+        await del(path.join(lib.dirApp, address), {force: true});
+        await Promise.all([
+            makeDir(path.join(lib.dirApp, address, 'apk')),
+            makeDir(path.join(lib.dirApp, address, 'config')),
+            makeDir(path.join(lib.dirApp, address, 'images', 'logo')),
+            makeDir(path.join(lib.dirApp, address, 'images', 'gallery')),
+            makeDir(path.join(lib.dirApp, address, 'images', 'banner'))
+        ]);
+        await formidablePromise(req, {address: address});
+        let result = await ipfs.upload(path.join(lib.dirApp, address), 'app');
+        await del(path.join(lib.dirApp, address), {force: true});
+        res.json({
+            result: result,
+            status: 200
+        });
+    } catch(err) {
+        console.error(`error ${modules.time.timeNow()}`, err);
+        res.json({result: err.toString(), status: 500});
     }
-    res.sendStatus(403);
-});
-router.use((err, req, res, next) => {
-    console.log('GLOBAL ERROR:', modules.timeNow(), err.toString());
-    res.status(500).render('error', {
-        msg: 'Looks like something wrong. Please, try again later'
-    });
 });
 
-function isAuth(req, res, next) {
-    let address = req.cookies.address || null;
+function formidablePromise(req, data) {
+    return new Promise((resolve, reject) => {
+        try {
+            let form = new formidable.IncomingForm();
 
-    if (!address) {
-        return res.redirect('/auth');
-    }
-    next();
+            let config = {
+                files: {
+                    apk: null,
+                    images: {
+                        banner: null,
+                        gallery: [],
+                        logo: null
+                    }
+                }
+            };
+
+            form.multiples = true;
+            form.uploadDir = path.join(lib.dirApp, data.address);
+
+            form.parse(req);
+            form
+                .on('error', (err) => {
+                    if (err) return reject(err)
+                })
+                .on('field', (field, value) => {
+                    if (value !== 'undefined') {
+                        if (field === 'keywords') {
+                            if (value.length !== 0) {
+                                config['keywords'] = value.split(" ");
+                            } else {
+                                config['keywords'] = [];
+                            }
+                        } else {
+                            config[field] = value;
+                        }
+                    }
+                })
+                .on('fileBegin', (field, file) => {
+                    if (field === 'apk')
+                        file.path = path.join(form.uploadDir, 'apk', file.name);
+                    if (field === 'gallery')
+                        file.path = path.join(form.uploadDir, 'images' , 'gallery', file.name);
+                    if (field === 'banner')
+                        file.path = path.join(form.uploadDir, 'images', 'banner', file.name);
+                    if (field === 'logo')
+                        file.path = path.join(form.uploadDir, 'images', 'logo', file.name);
+                })
+                .on('file', (field, file) => {
+                    let url = path.relative(form.uploadDir, file.path).replace(/\\/g, "\/");
+                    if (field === 'apk')
+                        config.files.apk = url;
+                    if (field === 'logo')
+                        config.files.images.logo = url;
+                    if (field === 'gallery')
+                        config.files.images.gallery.push(url);
+                    if (field === 'banner')
+                        config.files.images.banner = url;
+                })
+                .on('end', async() => {
+                    await fse.outputJson(path.join(form.uploadDir, 'config', 'config.json'), config);
+                    resolve(config);
+                })
+        } catch (err) {
+            reject(err)
+        }
+    })
 }
-function isRegistered(req, res, next) {
-    let registered = req.cookies.registered === 'true';
-
-    if (!registered) {
-        return res.redirect('/auth/verification');
-    }
-    next();
-}
-// function isVerified(req, res, next) {
-//     let verified = req.cookies.verified || null;
-//
-//     if (!verified) {
-//         return res.redirect('/registration');
-//     }
-//     next();
-// }
-
-// function isNotRegistered(req, res, next) {
-//     let registered = req.cookies.registered === 'true';
-//
-//     if (registered) {
-//         return res.redirect('/');
-//     }
-//     next();
-// }
-
 
 module.exports = router;

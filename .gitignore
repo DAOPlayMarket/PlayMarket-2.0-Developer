@@ -1,5 +1,4 @@
 .idea
-bower_components
 node_modules
 data
-package-lock.json
+client/node_modules

@@ -1,0 +1,121 @@
+.apps-page
+  &__add
+    display: flex
+    justify-content: flex-end
+    a
+      cursor: pointer
+      transition: .2s ease-in-out
+      display: inline-block
+      width: 20px
+      height: 20px
+      background-image: url("../images/icons/add.svg")
+      background-size: contain
+      background-position: center
+      &:hover
+        opacity: .5
+  .apps
+    box-sizing: border-box
+    &__placeholder
+      font-family: $FiraSans
+      font-weight: 400
+      text-align: center
+    &__title
+      font-family: $Archive
+      font-weight: 400
+      font-size: 14px
+      color: #06d6a0
+      margin-bottom: 15px
+    &__header
+      display: flex
+      align-items: center
+      position: relative
+      margin-bottom: 10px
+      padding-bottom: 9px
+      border-bottom: 1px solid #54666b
+      &--col
+        font-family: $FiraSansSemiBold
+        font-size: 12px
+        font-weight: 500
+        color: #54666b
+        text-transform: uppercase
+        text-align: center
+        flex-shrink: 0
+        box-sizing: border-box
+        &[data-col="name"]
+          width: 294px
+          text-align: left
+        &[data-col="publish"]
+          width: 125px
+        &[data-col="confirmation"]
+          width: 125px
+        &[data-col="price"]
+          width: 125px
+        &[data-col="ico"]
+          width: 125px
+    &__list
+      &--item
+        margin-bottom: 10px
+        &:last-child
+          margin-bottom: 0
+        a
+          display: flex
+        &__col
+          height: 60px
+          display: flex
+          justify-content: center
+          align-items: center
+          position: relative
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 12px
+          box-sizing: border-box
+          color: #394649
+          flex-shrink: 0
+          &[data-col="name"]
+            width: 294px
+            text-align: left
+            justify-content: flex-start
+            padding-left: 65px
+            font-family: $Roboto
+            font-weight: 700
+            img
+              position: absolute
+              left: 0
+              top: 50%
+              transform: translateY(-50%)
+              max-width: 50px
+              max-height: 50px
+          &[data-col="publish"]
+            width: 125px
+          &[data-col="confirmation"]
+            width: 125px
+          &[data-col="price"]
+            width: 125px
+          &[data-col="ico"]
+            width: 125px
+
+  .apps-loading
+    margin-top: 30px
+    &__title
+      font-family: $Archive
+      font-weight: 400
+      font-size: 14px
+      color: #06d6a0
+      margin-bottom: 15px
+    &__list
+      &--item
+        display: flex
+        margin-bottom: 10px
+        &:last-child
+          margin-bottom: 0
+        &__col
+          display: flex
+          align-items: center
+          flex-shrink: 0
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 14px
+          &[data-col="hashTag"]
+            width: 94px
+          &[data-col="hash"]
+            width: 700px
