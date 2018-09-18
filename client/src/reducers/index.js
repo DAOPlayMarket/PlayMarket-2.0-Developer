@@ -5,10 +5,10 @@ const initState = {
         url: 'https://n000002.playmarket.io:3000',
         address: ''
     },
-    isAuth: true,
+    isAuth: false,
     user: {
         keystore: '',
-        address: '0x5cfdffa814ad9761295d7d90aca47a3a97bcb64d',
+        address: '',
         name: '',
         info: ''
     },

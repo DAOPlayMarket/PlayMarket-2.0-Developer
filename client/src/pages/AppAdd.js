@@ -221,7 +221,7 @@ class AppAdd extends Component {
                     <form onSubmit={this.handleSubmitUpload}>
                         <section>
                             <h3>Application name</h3>
-                            <input type="text" name='nameApp' value={nameApp} onChange={this.handleChangeText}/>
+                            <input required type="text" name='nameApp' value={nameApp} onChange={this.handleChangeText}/>
                         </section>
                         <section>
                             <h3>Type</h3>
@@ -233,11 +233,11 @@ class AppAdd extends Component {
                         </section>
                         <section>
                             <h3>APK file</h3>
-                            <input type="file" name="apk" accept=".apk" onChange={this.handleChangeFile}/>
+                            <input required type="file" name="apk" accept=".apk" onChange={this.handleChangeFile}/>
                         </section>
                         <section>
                             <h3>Logo</h3>
-                            <input type="file" name="logo" accept=".png, .jpg, .jpeg" onChange={this.handleChangeFile}/>
+                            <input required type="file" name="logo" accept=".png, .jpg, .jpeg" onChange={this.handleChangeFile}/>
                         </section>
                         <section>
                             <h3>Gallery (multiple)</h3>
@@ -249,15 +249,15 @@ class AppAdd extends Component {
                         </section>
                         <section>
                             <h3>Package name</h3>
-                            <input type="text" name='packageName' value={packageName} onChange={this.handleChangeText}/>
+                            <input required type="text" name='packageName' value={packageName} onChange={this.handleChangeText}/>
                         </section>
                         <section>
                             <h3>App version (integer)</h3>
-                            <input type="text" name='version' value={version} onChange={this.handleChangeText}/>
+                            <input required type="text" name='version' value={version} onChange={this.handleChangeText}/>
                         </section>
                         <section>
                             <h3>Price (in standard unit, 0 - for free)</h3>
-                            <input type="text" name='price' value={price} onChange={this.handleChangeText}/>
+                            <input required type="text" name='price' value={price} onChange={this.handleChangeText}/>
                         </section>
                         <section>
                             <h3>Slogan</h3>
@@ -285,7 +285,7 @@ class AppAdd extends Component {
                         </section>
                         <section>
                             <h3>Age restrictions (minimum age)</h3>
-                            <input type="text" name='ageRestrictions' value={ageRestrictions} onChange={this.handleChangeText}/>
+                            <input required type="text" name='ageRestrictions' value={ageRestrictions} onChange={this.handleChangeText}/>
                         </section>
                         <section>
                             <h3>Publish app after verification</h3>

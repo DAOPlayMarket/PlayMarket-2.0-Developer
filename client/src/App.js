@@ -31,7 +31,7 @@ class _App extends Component {
               </Helmet>
               <Switch>
                 <AuthRoute isAuth={isAuth} path='/auth' component={Auth} />
-                {/*<DashboardRoute isAuth={isAuth} exact path='/' component={Apps} />*/}
+                <DashboardRoute isAuth={isAuth} exact path='/' component={Apps} />
                 <DashboardRoute isAuth={isAuth} path='/apps' component={Apps} />
                 <DashboardRoute isAuth={isAuth} path='/app/:app_id' component={App} />
                 <DashboardRoute isAuth={isAuth} path='/app-add' component={AppAdd} />
