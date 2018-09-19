@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 // import $ from "jquery";
 import axios from 'axios';
@@ -13,23 +13,29 @@ import Gallery from '../components/Gallery';
 
 class App extends Component {
     state = {
+        type: '',
+        category: '',
         app: null
     };
 
     async componentDidMount(){
         let idApp = this.props.id;
-        let { url } = this.props;
+        let { url, categories } = this.props;
         await this.props.startLoading();
         try {
             let response = (await axios({
                 method: 'post',
-                url: url + '/api/get-app-for-developer',
+                url: `${url}/api/get-app-for-developer`,
                 data: {
                     idApp: idApp
                 }
             })).data;
+            let type = categories.find(item => item.id === parseInt(response.result.idCTG, 10));
+            let category = type.subcategories.find(item => item.id === parseInt(response.result.subCategory, 10));
             this.setState({
-                app: response.result
+                app: response.result,
+                type: type,
+                category: category
             });
             await this.props.endLoading();
         } catch (err) {
@@ -38,20 +44,9 @@ class App extends Component {
         }
     }
 
-    // getType = () => {
-    //     let { idCTG } = this.state.app.idCTG;
-    //     let categories = this.props.categories;
-    //     let type = (categories.find(item => item.id === idCTG)).name;
-    //     // await this.setState(this.getInitialState());
-    // };
-
     render(){
-        let { app } = this.state;
+        let { app, type, category } = this.state;
         let { url } = this.props;
-
-        // let categories = this.props.categories;
-        // let type = (categories.find(item => item.id === app.idCTG)).name;
-        // let type = this.props.categories;
 
         return (
             <div>
@@ -60,18 +55,24 @@ class App extends Component {
                             <Helmet>
                                 <title>{app.nameApp} | Play Market 2.0 Developer Module</title>
                             </Helmet>
+                            {!app.icoRelease ? (
+                                <div className="app-menu">
+                                    <Link to={{pathname: '/ico-add', state: { app: app }}}>START ICO</Link>
+                                </div>
+                            ) : null}
+
                             <div className="app-main">
                                 <div className="app-main--left">
                                     <div className="app-main__logo">
-                                        <img src={url + '/data/' + app.hashTag + '/' + app.hash + '/'+ app.files.images.logo} alt={app.nameApp}/>
+                                        <img src={`${url}/data/${app.hashTag}/${app.hash}/${app.files.images.logo}`} alt={app.nameApp}/>
                                     </div>
                                     <div className="app-main__type">
                                         <div className="app-main__type--title">Type:</div>
-                                        <div className="app-main__type--value">{app.idCTG}</div>
+                                        <div className="app-main__type--value">{type.name}</div>
                                     </div>
                                     <div className="app-main__category">
                                         <div className="app-main__category--title">Category:</div>
-                                        <div className="app-main__category--value">{app.subCategory}</div>
+                                        <div className="app-main__category--value">{category.name}</div>
                                     </div>
                                     {app.forChildren || app.advertising ? (
                                         <ul className="app-main__marks">
@@ -81,19 +82,14 @@ class App extends Component {
                                     ) : null}
                                 </div>
                                 <div className="app-main--right">
-                                    <div>{app.nameApp}</div>
-                                    <div>{app.slogan}</div>
-                                    <div>{app.shortDescr}</div>
-                                    <div>
-                                        <ReactMarkdown className="markdown" source={app.longDescr} />
-                                    </div>
+                                    <div className="app-main__name">{app.nameApp}</div>
+                                    <div className="app-main__slogan">{app.slogan}</div>
+                                    <div className="app-main__shortDescr">{app.shortDescr}</div>
+                                    <ReactMarkdown className="app-main__longDescr" source={app.longDescr} />
                                 </div>
                             </div>
                             <div className="app-gallery">
-                                {/*<Gallery path={url + '/data/' + app.hashTag + '/' + app.hash} images={app.files.images.gallery}/>*/}
-                            </div>
-                            <div className="app-info">
-
+                                <Gallery path={`${url}/data/${app.hashTag}/${app.hash}`} images={app.files.images.gallery}/>
                             </div>
                         </div>
                 ) : null

@@ -13,6 +13,7 @@ import Apps from './pages/Apps'
 import App from './pages/App'
 import AppAdd from './pages/AppAdd'
 import Auth from './pages/Auth'
+import IcoAdd from './pages/IcoAdd'
 import NotFound from './pages/NotFound'
 
 class _App extends Component {
@@ -35,6 +36,7 @@ class _App extends Component {
                 <DashboardRoute isAuth={isAuth} path='/apps' component={Apps} />
                 <DashboardRoute isAuth={isAuth} path='/app/:app_id' component={App} />
                 <DashboardRoute isAuth={isAuth} path='/app-add' component={AppAdd} />
+                <DashboardRoute isAuth={isAuth} path='/ico-add' component={IcoAdd} />
                 <ErrorRoute path="*" component={NotFound} />
               </Switch>
               <Preloader/>

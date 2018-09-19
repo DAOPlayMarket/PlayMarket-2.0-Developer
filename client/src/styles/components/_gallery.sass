@@ -69,3 +69,39 @@
 
 .slick-arrow.slick-hidden
   display: none
+
+//CUSTOM
+.gallery
+  &-item
+    height: 310px
+    margin-right: 10px
+    img
+      max-height: 100%
+  .slick-arrow
+    font-size: 0
+    visibility: visible
+    //opacity: 1
+    opacity: 0
+    z-index: 10
+    position: absolute
+    top: 0
+    bottom: 0
+    width: 30px
+    border: 0
+    padding: 0
+    background-color: rgba(0,0,0,.5)
+    &.slick-disabled
+      opacity: 0
+      visibility: hidden
+    &.slick-prev
+      left: 0
+    &.slick-next
+      right: 0
+
+
+//.slick-slide
+//  img
+//    width: 100%
+
+
+//  display: none

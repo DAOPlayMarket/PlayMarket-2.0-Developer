@@ -21,7 +21,7 @@ class Apps extends Component {
         try {
             let response = (await axios({
                 method: 'post',
-                url: url + '/api/get-apps-by-developer',
+                url: `${url}/api/get-apps-by-developer`,
                 data: {
                     address: address
                 }
@@ -61,7 +61,7 @@ class Apps extends Component {
                             <li className="apps__list--item" key={app.idApp}>
                                 <Link to={'/app/' + app.idApp}>
                                     <div className="apps__list--item__col" data-col="name">
-                                        <img src={url + '/data/' + app.hashTag + '/' + app.hash + '/' + app.files.images.logo} alt=""/>
+                                        <img src={`${url}/data/${app.hashTag}/${app.hash}/${app.files.images.logo}`} alt=""/>
                                         {app.nameApp}
                                     </div>
                                     <div className="apps__list--item__col" data-col="publish">

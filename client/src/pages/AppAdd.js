@@ -58,7 +58,7 @@ class AppAdd extends Component {
     formatterSelectCategories = async () => {
         let { categories } = this.props;
         let arr = [];
-        categories.map(category => {
+        categories.forEach(category => {
             arr.push({value: category.id, label: category.name});
         });
         await this.setState({select: {...this.state.select, categories: arr}});
@@ -69,7 +69,7 @@ class AppAdd extends Component {
         let { idCTG } = this.state.app;
         let subCategories = (categories.find(item => item.id === idCTG)).subcategories;
         let arr = [];
-        subCategories.map(subcategory => {
+        subCategories.forEach(subcategory => {
             arr.push({value: subcategory.id, label: subcategory.name});
         });
         await this.setState({select: {...this.state.select, subCategories: []}});
@@ -215,7 +215,7 @@ class AppAdd extends Component {
         return (
             <div className="app-add">
                 <Helmet>
-                    <title>Add app | Play Market 2.0 Developer Module</title>
+                    <title>Add new application | Play Market 2.0 Developer Module</title>
                 </Helmet>
                 {!this.state.isUpload ? (
                     <form onSubmit={this.handleSubmitUpload}>
@@ -336,7 +336,6 @@ class AppAdd extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        // url: state.node.url,
         categories: state.categories,
         address: state.user.address,
         keystore: state.user.keystore

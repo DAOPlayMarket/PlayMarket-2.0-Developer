@@ -2,13 +2,12 @@ import { categories } from '../lib/categories.js'
 
 const initState = {
     node: {
-        url: 'https://n000002.playmarket.io:3000',
-        address: ''
+        url: 'https://n000002.playmarket.io:3000'
     },
-    isAuth: false,
+    isAuth: true,
     user: {
         keystore: '',
-        address: '',
+        address: '0x5cfdffa814ad9761295d7d90aca47a3a97bcb64d',
         name: '',
         info: ''
     },

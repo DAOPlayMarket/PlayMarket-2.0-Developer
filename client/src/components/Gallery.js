@@ -3,19 +3,18 @@ import Slider from "react-slick";
 
 const Gallery = (props) => {
     const options = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
+        dots: false,
+        infinite: false,
+        swipeToSlide: true,
+        variableWidth: true
     };
     let { path, images } = props;
 
     return (
-        <Slider {...options}>
+        <Slider {...options} className="gallery">
             {images.map(image => {
                 return (
-                    <div key={image}><img src={path + '/' + image} alt=""/></div>
+                    <div className="gallery-item" key={image}><img src={`${path}/${image}`} alt=""/></div>
                 )
             })}
         </Slider>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {Helmet} from "react-helmet";
 import $ from "jquery";
 import {utils as web3Utils}  from 'web3';
+import Popup from "reactjs-popup";
 
 import Notification from '../components/Notification';
 
@@ -29,11 +30,21 @@ class Auth extends Component {
             balanceETH: '',
             password: '',
             name: '',
-            info: ''
+            info: '',
+            popupOpen: false
         };
     };
     resetState = async () => {
         await this.setState(this.getInitialState());
+    };
+
+    openModal = async () => {
+        await this.setState({ popupOpen: true });
+    };
+    closeModal = async () => {
+        document.getElementById("keystore").value = '';
+        await this.resetState();
+        await this.setState({ popupOpen: false });
     };
 
     handleChangeKeystore = async e => {
@@ -64,6 +75,7 @@ class Auth extends Component {
                             balanceWEI: balance,
                             balanceETH: web3Utils.fromWei(balance, 'ether')
                         });
+                        this.openModal();
                         this.props.endLoading();
                     } catch(err) {
                         this.props.endLoading();
@@ -74,7 +86,7 @@ class Auth extends Component {
                     $(e.target).val('');
                     Notification('error', 'This is not a valid wallet file.');
                 }
-            }
+            };
             reader.onerror = (e) => {
                 switch(e.target.error.code) {
                     case e.target.error.NOT_FOUND_ERR:
@@ -198,41 +210,68 @@ class Auth extends Component {
                     </div>
                 </div>
                 <div className="auth-entry">
-                    <input type="file" onChange={this.handleChangeKeystore}/>
-                    {
-                        this.state.keystoreIsSelected ? (
-                            <div>
-                                <br/>
-                                <div>Address: {this.state.address}</div>
-                                <div>Balance: {this.state.balanceETH} ETH</div>
-                                <div>Registered: {this.state.isRegistered ? 'YES' : 'NO'}</div>
-                                <br/>
-                                <br/>
-                            </div>
-                        ) : null
-                    }
-                    {
-                        this.state.keystoreIsSelected ?
-                        (
-                            this.state.isRegistered && this.state.isConfirmed ?
-                            (
-                                <form onSubmit={this.handleSubmitLogin}>
-                                    <button>LOGIN</button>
-                                </form>
-                            ) : (
-                                <form onSubmit={this.handleSubmitRegistration}>
-                                    <title>Registration</title>
-                                    <input type="password" placeholder="Password" value={this.state.password} onChange={this.handleChangePassword}/>
-                                    <br/>
-                                    <input type="text" placeholder="Name" value={this.state.name} onChange={this.handleChangeName}/>
-                                    <br/>
-                                    <input type="text" placeholder="Info" value={this.state.info} onChange={this.handleChangeInfo}/>
-                                    <br/>
-                                    <button>REGISTRATION</button>
-                                </form>
-                            )
-                        ) : null
-                    }
+                    <div className="auth-entry__btn" data-isselect={this.state.keystoreIsSelected}>
+                        <input id="keystore" className="auth-entry__btn--input" type="file" onChange={this.handleChangeKeystore}/>
+                        <div className="auth-entry__btn--text">{this.state.keystoreIsSelected ? 'Change keystore' : 'Select keystore'}</div>
+                    </div>
+
+                    <Popup className="auth-entry__popup" open={this.state.popupOpen} onClose={this.closeModal}>
+                        <div>
+                            {
+                                this.state.keystoreIsSelected ? (
+                                    <div>
+                                        <div className="auth-entry__popup__main">
+                                            <h3 className="auth-entry__popup__main__title">Account info</h3>
+                                            <ul className="auth-entry__popup__main__list">
+                                                <li className="auth-entry__popup__main__list-item">
+                                                    <div className="auth-entry__popup__main__list-item__title">Address:</div>
+                                                    <div className="auth-entry__popup__main__list-item__value">{this.state.address}</div>
+                                                </li>
+                                                <li className="auth-entry__popup__main__list-item">
+                                                    <div className="auth-entry__popup__main__list-item__title">Balance:</div>
+                                                    <div className="auth-entry__popup__main__list-item__value">{this.state.balanceETH} <span>ETH</span></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        {
+                                            this.state.isRegistered && this.state.isConfirmed ? (
+                                                <form className="auth-entry__popup__login" onSubmit={this.handleSubmitLogin}>
+                                                    <div className="auth-entry__popup__login__title">You allready registered!</div>
+                                                    <ul className="auth-entry__popup__login__list">
+                                                        <li className="auth-entry__popup__login__list-item">
+                                                            <div className="auth-entry__popup__login__list-item__title">Name:</div>
+                                                            <div className="auth-entry__popup__login__list-item__value">{this.state.name}</div>
+                                                        </li>
+                                                    </ul>
+                                                    <div className="auth-entry__popup__btn-block">
+                                                        <button className="auth-entry__popup__btn-block__btn">login</button>
+                                                        <div className="auth-entry__popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
+                                                    </div>
+                                                </form>
+                                            ) : (
+                                                <form className="auth-entry__popup__registration" onSubmit={this.handleSubmitRegistration}>
+                                                    <div className="auth-entry__popup__registration__title">You are not registered!</div>
+                                                    <ul className="auth-entry__popup__registration__list">
+                                                        <li className="auth-entry__popup__registration__list-item">
+                                                            <div className="auth-entry__popup__registration__list-item__title">Keystore password:</div>
+                                                            <input className="auth-entry__popup__registration__list-item__input" required type="password" value={this.state.password} onChange={this.handleChangePassword}/>
+                                                        </li>
+                                                        <li className="auth-entry__popup__registration__list-item">
+                                                            <div className="auth-entry__popup__registration__list-item__title">Name:</div>
+                                                            <input className="auth-entry__popup__registration__list-item__input" required type="text" value={this.state.name} onChange={this.handleChangeName}/>
+                                                        </li>
+                                                    </ul>
+                                                    <div className="auth-entry__popup__btn-block">
+                                                        <button className="auth-entry__popup__btn-block__btn">send tx</button>
+                                                        <div className="auth-entry__popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
+                                                    </div>
+                                                </form>
+                                            )}
+                                    </div>
+                                ) : null
+                            }
+                        </div>
+                    </Popup>
                 </div>
             </div>
         )

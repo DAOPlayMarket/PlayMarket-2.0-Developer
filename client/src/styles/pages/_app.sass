@@ -1,4 +1,24 @@
 .app
+  &-menu
+    display: flex
+    justify-content: flex-end
+    margin-bottom: 20px
+    a
+      cursor: pointer
+      border: 0
+      display: flex
+      align-items: center
+      justify-content: center
+      text-transform: uppercase
+      padding: 0 20px
+      height: 44px
+      font-family: $Archive
+      font-weight: 400
+      font-size: 16px
+      color: #fff
+      border-radius: 22px
+      background-color: #00e7d5
+      box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
   &-main
     display: flex
     &--left
@@ -54,3 +74,29 @@
         margin-bottom: 5px
         &:last-child
           margin-bottom: 0
+    &__name
+      font-family: $FiraSansSemiBold
+      font-weight: 600
+      font-size: 36px
+      color: #67777b
+    &__slogan
+      font-family: $FiraSansSemiBold
+      font-weight: 600
+      font-size: 18px
+      color: #67777b
+      margin-top: 10px
+    &__shortDescr
+      font-family: $FiraSans
+      font-weight: 400
+      font-size: 14px
+      color: #67777b
+      margin-top: 30px
+    &__longDescr
+      font-family: $FiraSans
+      font-weight: 400
+      font-size: 14px
+      color: #394649
+      margin-top: 20px
+      line-height: 18px
+  &-gallery
+    margin-top: 30px
