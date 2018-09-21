@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Helmet} from "react-helmet";
 import $ from "jquery";
-import {utils as web3Utils}  from 'web3';
+import {utils as web3Utils} from 'web3';
 import Popup from "reactjs-popup";
 
 import Notification from '../components/Notification';
@@ -10,7 +10,7 @@ import Notification from '../components/Notification';
 import { startLoading, endLoading } from '../actions/preloader'
 import { authLogin } from '../actions/auth'
 
-import { getWallet, getSignedTransaction, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance } from '../utils/web3'
+import { getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction1 } from '../utils/web3'
 
 class Auth extends Component {
     constructor(props) {
@@ -23,15 +23,25 @@ class Auth extends Component {
             isRegistered: false,
             isConfirmed: false,
             keystoreIsSelected: false,
-            hashTx: '',
             keystore: '',
             address: '',
-            balanceWEI: '',
-            balanceETH: '',
-            password: '',
-            name: '',
-            info: '',
-            popupOpen: false
+            balance: '',
+            popupOpen: false,
+            user: {
+                name: '',
+                info: ''
+            },
+            registration: {
+                step: 1,
+                password: '',
+                hash: '',
+                gasLimit: '',
+                data: '',
+                params: {
+                    name: '',
+                    info: ''
+                }
+            }
         };
     };
     resetState = async () => {
@@ -70,12 +80,14 @@ class Auth extends Component {
                         await this.setState({
                             isRegistered: developer.isSet,
                             isConfirmed: developer.confirmation,
-                            name: developer.name,
-                            info: developer.info,
-                            balanceWEI: balance,
-                            balanceETH: web3Utils.fromWei(balance, 'ether')
+                            balance: balance,
+                            user: {
+                                ...this.state.user,
+                                name: developer.name,
+                                info: developer.info
+                            }
                         });
-                        this.openModal();
+                        await this.openModal();
                         this.props.endLoading();
                     } catch(err) {
                         this.props.endLoading();
@@ -95,8 +107,6 @@ class Auth extends Component {
                     case e.target.error.NOT_READABLE_ERR:
                         Notification('error', 'File is not readable');
                         break;
-                    case e.target.error.ABORT_ERR:
-                        break;
                     default:
                         Notification('An error occurred reading this file.');
                 }
@@ -104,21 +114,29 @@ class Auth extends Component {
         }
     };
 
-    handleChangePassword = async e => {
-        await this.setState({password: e.target.value});
+    handleChangeTxParams = async e => {
+        let name = e.target.getAttribute('name');
+        await this.setState({registration: {
+            ...this.state.registration,
+            [name]: e.target.value
+        }});
     };
-    handleChangeName= async e => {
-        await this.setState({name: e.target.value});
-    };
-    handleChangeInfo = async e => {
-        await this.setState({info: e.target.value});
+
+    handleChangeDataParams = async e => {
+        let name = e.target.getAttribute('name');
+        await this.setState({registration: {
+            ...this.state.registration, params: {
+                ...this.state.registration.params, [name]: e.target.value
+            }
+        }});
     };
 
     getDeveloper = async () => {
+        let { address } = this.state;
         let developer = await contractMethod({
             contract: 'dev',
             name: 'developers',
-            params: [this.state.address]
+            params: [address]
         });
         return {
             isSet: developer.isSet,
@@ -128,55 +146,10 @@ class Auth extends Component {
         };
     };
 
-    handleSubmitRegistration = async e => {
-        e.preventDefault();
-        let { keystore, password, name, info } = this.state;
-        this.props.startLoading();
-        try {
-            let wallet = await getWallet(keystore, password);
-            let signedTransaction = await getSignedTransaction({
-                wallet: wallet,
-                contract: 'main',
-                data: {
-                    method: 'registrationDeveloper',
-                    params: [web3Utils.toHex(name), web3Utils.toHex(info)]
-                }
-            });
-            let tx = await sendSignedTransaction(signedTransaction.rawTransaction);
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(this.state.address);
-            await this.setState({
-                hashTx: tx.transactionHash,
-                balanceWEI: balance,
-                balanceETH: web3Utils.fromWei(balance, 'ether')
-            });
-            if (transactionStatus) {
-                try {
-                    let developer = await this.getDeveloper();
-                    await this.setState({
-                        isRegistered: developer.isSet,
-                        isConfirmed: developer.confirmation,
-                        name: developer.name,
-                        info: developer.info
-                    });
-                    this.props.endLoading();
-                } catch(err) {
-                    this.props.endLoading();
-                    Notification('error', err.message);
-                }
-            } else {
-                this.props.endLoading();
-                Notification('error', 'Transaction failed');
-            }
-        } catch (err) {
-            this.props.endLoading();
-            Notification('error', err.message);
-        }
-    };
-
     handleSubmitLogin = async e => {
         e.preventDefault();
-        let { isRegistered, isConfirmed, keystore, address, name, info } = this.state;
+        let { isRegistered, isConfirmed, keystore, address } = this.state;
+        let { name, info } = this.state.user;
         if (isRegistered && isConfirmed) {
             this.props.authLogin({
                 keystore: keystore,
@@ -186,8 +159,110 @@ class Auth extends Component {
             });
         }
     };
+    handleSubmitConfirmation = async e => {
+        e.preventDefault();
+        await this.closeModal();
+    };
+
+    handleSubmitRegistration_1 = async e => {
+        e.preventDefault();
+        let { address } = this.state;
+        let { name, info } = this.state.registration.params;
+
+        this.props.startLoading();
+        try {
+            let data = await getData({
+                contract: 'main',
+                method: 'registrationDeveloper',
+                params: [web3Utils.toHex(name), web3Utils.toHex(info)]
+            });
+            let gasLimit = await getGasLimit({
+                from: address,
+                contract: 'main',
+                data: data,
+                reserve: 0
+            });
+            await this.setState({registration: {
+                ...this.state.registration, step: 2, data: data, gasLimit: gasLimit
+            }});
+            this.props.endLoading();
+        } catch (err) {
+            this.props.endLoading();
+            Notification('error', err.message);
+        }
+    };
+    handleSubmitRegistration_2 = async e => {
+        e.preventDefault();
+        await this.setState({registration: {
+            ...this.state.registration, step: 3
+        }});
+    };
+    handleSubmitRegistration_3 = async e => {
+        e.preventDefault();
+        this.props.startLoading();
+        let { keystore } = this.state;
+        let { password, data, gasLimit } = this.state.registration;
+        let { gasPrice } = this.props;
+        try {
+            let wallet = await getWallet(keystore, password);
+            let signedTransaction = await getSignedTransaction1({
+                wallet: wallet,
+                contract: 'main',
+                data: data,
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            });
+            let tx = await sendSignedTransaction(signedTransaction.rawTransaction);
+            let transactionStatus = await getTransactionStatus(tx.transactionHash);
+            let balance = await getBalance(this.state.address);
+            await this.setState({
+                balance: balance,
+                registration: {
+                    ...this.state.registration,
+                    hash: tx.transactionHash
+                }
+            });
+            if (transactionStatus) {
+                let developer = await this.getDeveloper();
+                await this.setState({
+                    isRegistered: developer.isSet,
+                    isConfirmed: developer.confirmation,
+                    user: {
+                        ...this.state.user,
+                        name: developer.name,
+                        info: developer.info
+                    }
+                });
+            } else {
+                Notification('error', 'Transaction failed');
+            }
+            this.props.endLoading();
+        } catch (err) {
+            this.props.endLoading();
+            Notification('error', err.message);
+        }
+    };
+
+    handleBackRegistration_1 = async () => {
+        await this.setState({registration: {
+            ...this.state.registration, step: 1
+        }});
+    };
+    handleBackRegistration_2 = async () => {
+        await this.setState({registration: {
+            ...this.state.registration,
+            step: 2,
+            password: ''
+        }});
+    };
 
     render() {
+        let { balance, popupOpen, keystoreIsSelected, isRegistered, isConfirmed } = this.state;
+        let { step, gasLimit, password } = this.state.registration;
+        let { name, info } = this.state.registration.params;
+
+        let { gasPrice } = this.props;
+
         return (
             <div className="auth">
                 <Helmet>
@@ -210,63 +285,177 @@ class Auth extends Component {
                     </div>
                 </div>
                 <div className="auth-entry">
-                    <div className="auth-entry__btn" data-isselect={this.state.keystoreIsSelected}>
+                    <div className="auth-entry__btn">
                         <input id="keystore" className="auth-entry__btn--input" type="file" onChange={this.handleChangeKeystore}/>
-                        <div className="auth-entry__btn--text">{this.state.keystoreIsSelected ? 'Change keystore' : 'Select keystore'}</div>
+                        <div className="auth-entry__btn--text">Select keystore</div>
                     </div>
-
-                    <Popup className="auth-entry__popup" open={this.state.popupOpen} onClose={this.closeModal}>
+                    <Popup className="auth-popup" open={popupOpen} onClose={this.closeModal}>
                         <div>
                             {
-                                this.state.keystoreIsSelected ? (
+                                keystoreIsSelected ? (
                                     <div>
-                                        <div className="auth-entry__popup__main">
-                                            <h3 className="auth-entry__popup__main__title">Account info</h3>
-                                            <ul className="auth-entry__popup__main__list">
-                                                <li className="auth-entry__popup__main__list-item">
-                                                    <div className="auth-entry__popup__main__list-item__title">Address:</div>
-                                                    <div className="auth-entry__popup__main__list-item__value">{this.state.address}</div>
+                                        <div className="auth-popup__main">
+                                            <h3 className="auth-popup__main__title">Account info</h3>
+                                            <ul className="auth-popup__main__list">
+                                                <li className="auth-popup__main__list-item">
+                                                    <div className="auth-popup__main__list-item__title">Address:</div>
+                                                    <div className="auth-popup__main__list-item__value">{this.state.address}</div>
                                                 </li>
-                                                <li className="auth-entry__popup__main__list-item">
-                                                    <div className="auth-entry__popup__main__list-item__title">Balance:</div>
-                                                    <div className="auth-entry__popup__main__list-item__value">{this.state.balanceETH} <span>ETH</span></div>
+                                                <li className="auth-popup__main__list-item">
+                                                    <div className="auth-popup__main__list-item__title">Balance:</div>
+                                                    <div className="auth-popup__main__list-item__value">{web3Utils.fromWei(balance, 'ether')} <span>ETH</span></div>
                                                 </li>
                                             </ul>
                                         </div>
-                                        {
-                                            this.state.isRegistered && this.state.isConfirmed ? (
-                                                <form className="auth-entry__popup__login" onSubmit={this.handleSubmitLogin}>
-                                                    <div className="auth-entry__popup__login__title">You allready registered!</div>
-                                                    <ul className="auth-entry__popup__login__list">
-                                                        <li className="auth-entry__popup__login__list-item">
-                                                            <div className="auth-entry__popup__login__list-item__title">Name:</div>
-                                                            <div className="auth-entry__popup__login__list-item__value">{this.state.name}</div>
-                                                        </li>
-                                                    </ul>
-                                                    <div className="auth-entry__popup__btn-block">
-                                                        <button className="auth-entry__popup__btn-block__btn">login</button>
-                                                        <div className="auth-entry__popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
+                                        <div className="auth-popup__action">
+                                            <div className="auth-popup__action__title">
+                                                {
+                                                    isRegistered ? (
+                                                        isConfirmed ? 'login' : 'confirmation'
+                                                    ) : 'registration'
+                                                }
+                                            </div>
+                                            {
+                                                isRegistered ? (
+                                                    <div>
+                                                        {
+                                                            isConfirmed ? (
+                                                                <form className="auth-popup__login" onSubmit={this.handleSubmitLogin}>
+                                                                    <div className="auth-popup__login__title">You already registered!</div>
+                                                                    <ul className="auth-popup__login__list">
+                                                                        <li className="auth-popup__login__list-item">
+                                                                            <div className="auth-popup__login__list-item__title">Name:</div>
+                                                                            <div className="auth-popup__login__list-item__value">{this.state.user.name}</div>
+                                                                        </li>
+                                                                        <li className="auth-popup__login__list-item">
+                                                                            <div className="auth-popup__login__list-item__title">Info:</div>
+                                                                            <div className="auth-popup__login__list-item__value">
+                                                                                {
+                                                                                    !!this.state.user.info ? this.state.user.info : (
+                                                                                        <span className="auth-popup__login__list-item__value--placeholder">Not specified</span>
+                                                                                    )
+                                                                                }
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div className="auth-popup__btn-block">
+                                                                        <button className="auth-popup__btn-block__btn">login</button>
+                                                                        <div className="auth-popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
+                                                                    </div>
+                                                                </form>
+                                                            ) : (
+                                                                <form className="auth-popup__login" onSubmit={this.handleSubmitConfirmation}>
+                                                                    <div className="auth-popup__login__title">You registered, but you are not confirmed as the developer! After verification, you will be able to use the service! Please, try again later. Thank you for you waiting!</div>
+                                                                    <ul className="auth-popup__login__list">
+                                                                        <li className="auth-popup__login__list-item">
+                                                                            <div className="auth-popup__login__list-item__title">Name:</div>
+                                                                            <div className="auth-popup__login__list-item__value">{this.state.user.name}</div>
+                                                                        </li>
+                                                                        <li className="auth-popup__login__list-item">
+                                                                            <div className="auth-popup__login__list-item__title">Info:</div>
+                                                                            <div className="auth-popup__login__list-item__value">
+                                                                                {
+                                                                                    !!this.state.user.info ? this.state.user.info : (
+                                                                                        <span className="auth-popup__login__list-item__value--placeholder">Not specified</span>
+                                                                                    )
+                                                                                }
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div className="auth-popup__btn-block auth-popup__btn-block--center">
+                                                                        <button className="auth-popup__btn-block__btn">I understand</button>
+                                                                    </div>
+                                                                </form>
+                                                            )
+                                                        }
                                                     </div>
-                                                </form>
-                                            ) : (
-                                                <form className="auth-entry__popup__registration" onSubmit={this.handleSubmitRegistration}>
-                                                    <div className="auth-entry__popup__registration__title">You are not registered!</div>
-                                                    <ul className="auth-entry__popup__registration__list">
-                                                        <li className="auth-entry__popup__registration__list-item">
-                                                            <div className="auth-entry__popup__registration__list-item__title">Keystore password:</div>
-                                                            <input className="auth-entry__popup__registration__list-item__input" required type="password" value={this.state.password} onChange={this.handleChangePassword}/>
-                                                        </li>
-                                                        <li className="auth-entry__popup__registration__list-item">
-                                                            <div className="auth-entry__popup__registration__list-item__title">Name:</div>
-                                                            <input className="auth-entry__popup__registration__list-item__input" required type="text" value={this.state.name} onChange={this.handleChangeName}/>
-                                                        </li>
-                                                    </ul>
-                                                    <div className="auth-entry__popup__btn-block">
-                                                        <button className="auth-entry__popup__btn-block__btn">send tx</button>
-                                                        <div className="auth-entry__popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
+                                                ) : (
+                                                    <div>
+                                                        {
+                                                            step === 1 ? (
+                                                                <form className="auth-popup__registration" onSubmit={this.handleSubmitRegistration_1}>
+                                                                    <div className="auth-popup__registration__title">Please, fill in a form to continue.</div>
+                                                                    <ul className="auth-popup__registration__list">
+                                                                        <li className="auth-popup__registration__list-item">
+                                                                            <div className="auth-popup__registration__list-item__title">Name:</div>
+                                                                            <input className="auth-popup__registration__list-item__input" placeholder="Matellio" required name="name" type="text" value={name} onChange={this.handleChangeDataParams}/>
+                                                                        </li>
+                                                                        <li className="auth-popup__registration__list-item">
+                                                                            <div className="auth-popup__registration__list-item__title">Info:</div>
+                                                                            <input className="auth-popup__registration__list-item__input" placeholder="Mobile & Web Apps Development Company" name="info" type="text" value={info} onChange={this.handleChangeDataParams}/>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div className="auth-popup__btn-block">
+                                                                        <button className="auth-popup__btn-block__btn">continue</button>
+                                                                        <div className="auth-popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
+                                                                    </div>
+                                                                </form>
+                                                            ) : null
+                                                        }
+                                                        {
+                                                            step === 2 ? (
+                                                                <form className="auth-popup__registration" onSubmit={this.handleSubmitRegistration_2}>
+                                                                    <div className="auth-popup__registration__title">Confirmation of the transaction data</div>
+                                                                    <ul className="auth-popup__registration__preview-list">
+                                                                        <li className="auth-popup__registration__preview-list__item">
+                                                                            <div className="auth-popup__registration__preview-list__item--title">Name:</div>
+                                                                            <div className="auth-popup__registration__preview-list__item--value">{name}</div>
+                                                                        </li>
+                                                                        <li className="auth-popup__registration__preview-list__item">
+                                                                            <div className="auth-popup__registration__preview-list__item--title">Info:</div>
+                                                                            <div className="auth-popup__registration__preview-list__item--value">
+                                                                                {
+                                                                                    !!info ? info : (
+                                                                                        <span className="auth-popup__registration__preview-list__item--value__placeholder">Not specified</span>
+                                                                                    )
+                                                                                }
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <ul className="auth-popup__registration__list">
+                                                                        <li className="auth-popup__registration__list-item">
+                                                                            <div className="auth-popup__registration__list-item__title">Gas Limit:</div>
+                                                                            <input className="auth-popup__registration__list-item__input" required name="gasLimit" type="number" value={gasLimit} onChange={this.handleChangeTxParams}/>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <ul className="auth-popup__registration__fee-list">
+                                                                        <li className="auth-popup__registration__fee-list__item">
+                                                                            <div className="auth-popup__registration__fee-list__item--title">Gas Price:</div>
+                                                                            <div className="auth-popup__registration__fee-list__item--value">{web3Utils.fromWei(gasPrice, 'gwei')} Gwei</div>
+                                                                        </li>
+                                                                        <li className="auth-popup__registration__fee-list__item">
+                                                                            <div className="auth-popup__registration__fee-list__item--title">Approximate fee:</div>
+                                                                            <div className="auth-popup__registration__fee-list__item--value">{web3Utils.fromWei((gasPrice * gasLimit).toString(), 'ether')}</div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div className="auth-popup__btn-block">
+                                                                        <button className="auth-popup__btn-block__btn">Accept</button>
+                                                                        <div className="auth-popup__btn-block__btn--cancel" onClick={this.handleBackRegistration_1}>Back</div>
+                                                                    </div>
+                                                                </form>
+                                                            ) : null
+                                                        }
+                                                        {
+                                                            step === 3 ? (
+                                                                <form className="auth-popup__registration" onSubmit={this.handleSubmitRegistration_3}>
+                                                                    <div className="auth-popup__registration__title">Sending transaction</div>
+                                                                    <ul className="auth-popup__registration__list">
+                                                                        <li className="auth-popup__registration__list-item">
+                                                                            <div className="auth-popup__registration__list-item__title">Keystore password:</div>
+                                                                            <input className="auth-popup__registration__list-item__input" required name="password" type="password" value={password} onChange={this.handleChangeTxParams}/>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div className="auth-popup__btn-block">
+                                                                        <button className="auth-popup__btn-block__btn">send tx</button>
+                                                                        <div className="auth-popup__btn-block__btn--cancel" onClick={this.handleBackRegistration_2}>Back</div>
+                                                                    </div>
+                                                                </form>
+                                                            ) : null
+                                                        }
                                                     </div>
-                                                </form>
-                                            )}
+                                                )
+                                            }
+                                        </div>
                                     </div>
                                 ) : null
                             }
@@ -279,7 +468,9 @@ class Auth extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        gasPrice: state.gasPrice
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {

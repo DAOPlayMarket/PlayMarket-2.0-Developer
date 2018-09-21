@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import axios from 'axios';
+// import axios from 'axios';
 import {Helmet} from "react-helmet";
 
 import { startLoading, endLoading } from '../actions/preloader'
 
-import { getWallet, getSignedTransaction, sendSignedTransaction, getTransactionStatus } from '../utils/web3'
+// import { getWallet, getSignedTransaction, sendSignedTransaction, getTransactionStatus } from '../utils/web3'
 
 import Notification from '../components/Notification';
 

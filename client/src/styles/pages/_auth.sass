@@ -104,16 +104,11 @@
         left: 20px
         top: 50%
         transform: translateY(-50%)
+        background-image: url('../images/icons/load.svg')
         background-repeat: no-repeat
         background-position: center
         background-size: contain
         z-index: 3
-      &[data-isselect="true"]
-        &:before
-          background-image: url('../images/icons/change.svg')
-      &[data-isselect="false"]
-        &:before
-          background-image: url('../images/icons/load.svg')
       &--input
         cursor: pointer
         opacity: 0
@@ -130,115 +125,162 @@
         font-weight: 400
         font-size: 16px
         color: #fff
-    &__popup
-      width: 490px !important
-      padding: 60px 50px 50px !important
-      box-sizing: border-box !important
-      border: 0 !important
-      background-color: #ffffff !important
-      box-shadow: 0 2px 5px 0 #e6e6e6 !important
-      &__main
-        margin-bottom: 30px
-        &__title
-          font-family: $Archive
-          font-size: 28px
-          text-align: center
-          color: #67777b
-        &__list
-          margin-top: 15px
-          &-item
-            margin-bottom: 10px
-            &:last-child
-              margin-bottom: 0
-            &__title
-              font-family: $FiraSansSemiBold
-              font-weight: 500
-              font-size: 14px
-              padding-bottom: 5px
-            &__value
-              font-family: $FiraSans
-              font-weight: 400
-              font-size: 16px
-              span
-                color: #00e7d5
-      &__login
-        &__title
-          font-family: $Archive
-          font-size: 14px
-          text-align: center
-          color: #67777b
+  &-popup
+    width: 490px !important
+    padding: 60px 50px 50px !important
+    box-sizing: border-box !important
+    border: 0 !important
+    background-color: #ffffff !important
+    box-shadow: 0 2px 5px 0 #e6e6e6 !important
+    &__main
+      margin-bottom: 30px
+      &__title
+        font-family: $Archive
+        font-size: 28px
+        text-align: center
+        color: #67777b
+      &__list
+        margin-top: 15px
+        &-item
           margin-bottom: 15px
-        &__list
-          &-item
-            margin-bottom: 10px
-            &:last-child
-              margin-bottom: 0
-            &__title
-              font-family: $FiraSansSemiBold
-              font-weight: 500
-              font-size: 14px
-              padding-bottom: 5px
-            &__value
-              font-family: $FiraSans
-              font-weight: 400
-              font-size: 16px
-      &__registration
-        &__title
-          font-family: $Archive
-          font-size: 14px
-          text-align: center
-          color: #67777b
-          margin-bottom: 15px
-        &__list
-          &-item
-            margin-bottom: 10px
-            &:last-child
-              margin-bottom: 0
-            &__title
-              font-family: $FiraSansSemiBold
-              font-weight: 500
-              font-size: 14px
-              padding-bottom: 5px
-            &__input
-              font-family: $FiraSans
-              font-weight: 400
-              font-size: 16px
-              height: 35px
-              border-radius: 2px
-              background-color: #e8e8e8
-              width: 100%
-              border: 0
-              padding: 0 10px
-              box-sizing: border-box
-      &__btn-block
-        display: flex
-        justify-content: flex-start
-        align-items: center
-        margin-top: 20px
-        &__btn
-          cursor: pointer
-          border: 0
-          display: flex
-          align-items: center
-          justify-content: center
-          text-transform: uppercase
-          padding: 0 20px
-          height: 44px
-          font-family: $Archive
-          font-weight: 400
-          font-size: 16px
-          color: #fff
-          border-radius: 22px
-          background-color: #00e7d5
-          box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
-          &--cancel
-            cursor: pointer
-            margin-left: 40px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &__value
             font-family: $FiraSans
             font-weight: 400
             font-size: 16px
-            color: #006f9e
-            border-bottom: 1px solid #006f9e
+            span
+              color: #00e7d5
+    &__action
+      &__title
+        font-family: $Archive
+        font-size: 28px
+        text-align: center
+        color: #67777b
+        margin-bottom: 10px
+    &__btn-block
+      display: flex
+      justify-content: flex-start
+      align-items: center
+      margin-top: 20px
+      &--center
+        justify-content: center
+      &__btn
+        cursor: pointer
+        border: 0
+        display: flex
+        align-items: center
+        justify-content: center
+        text-transform: uppercase
+        padding: 0 20px
+        height: 44px
+        font-family: $Archive
+        font-weight: 400
+        font-size: 16px
+        color: #fff
+        border-radius: 22px
+        background-color: #00e7d5
+        box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+        &--cancel
+          cursor: pointer
+          margin-left: 40px
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 16px
+          color: #006f9e
+          border-bottom: 1px solid #006f9e
+    &__login
+      &__title
+        font-family: $Archive
+        font-size: 14px
+        text-align: center
+        color: #67777b
+        margin-bottom: 15px
+      &__list
+        &-item
+          margin-bottom: 15px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &__value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+            &--placeholder
+              color: #d3d3d3
+
+    &__registration
+      &__title
+        font-family: $Archive
+        font-size: 14px
+        text-align: center
+        color: #67777b
+        margin-bottom: 15px
+      &__preview-list
+        margin-bottom: 15px
+        padding: 10px
+        box-shadow: 0 2px 5px 0 #e6e6e6
+        &__item
+          margin-bottom: 10px
+          &:last-child
+            margin-bottom: 0
+          &--title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 12px
+            padding-bottom: 5px
+          &--value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 14px
+            &__placeholder
+              color: #d3d3d3
+      &__fee-list
+        margin: 15px 0
+        &__item
+          margin-bottom: 10px
+          &:last-child
+            margin-bottom: 0
+          &--title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &--value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+      &__list
+        &-item
+          margin-bottom: 15px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &__input
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+            height: 35px
+            border-radius: 2px
+            background-color: #e8e8e8
+            width: 100%
+            border: 0
+            padding: 0 10px
+            box-sizing: border-box
+
 @keyframes Gradient
   0%
     background-position: 0 50%

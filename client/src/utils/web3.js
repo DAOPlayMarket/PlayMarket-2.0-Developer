@@ -42,23 +42,71 @@ export async function getBalance(address) {
     }
 }
 
+export async function getData(obj) {
+    try {
+        let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
+        return await Contract.methods[obj.method].apply(this, obj.params).encodeABI();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function getGasPrice() {
+    try {
+        return await web3.eth.getGasPrice();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function getGasLimit(obj) {
+    try {
+        return await web3.eth.estimateGas({
+            from: obj.from,
+            to: lib.contracts[obj.contract].address,
+            data: obj.data
+        }) + obj.reserve;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export async function getSignedTransaction1(obj) {
+    try {
+        // let nonce = await web3.eth.getTransactionCount(obj.wallet.address);
+        let params = {
+            // nonce: web3.utils.toHex(nonce),
+            gasPrice: web3.utils.toHex(obj.gasPrice),
+            gasLimit: web3.utils.toHex(obj.gasLimit),
+            to: lib.contracts[obj.contract].address,
+            data: obj.data,
+            chainId: 4
+        };
+        return await web3.eth.accounts.signTransaction(params, obj.wallet.privateKey);
+    } catch (err) {
+        throw err;
+    }
+}
+
 export async function getSignedTransaction(obj) {
     try {
         let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
 
         let data = await Contract.methods[obj.data.method].apply(this, obj.data.params).encodeABI();
+
         let gasPrice = await web3.eth.getGasPrice();
         let gasLimit = await web3.eth.estimateGas({
             from: obj.wallet.address,
             to: lib.contracts[obj.contract].address,
             data: data
-        });
-        let nonce = await web3.eth.getTransactionCount(obj.wallet.address);
+        }) + 100000;
+
+        // let nonce = await web3.eth.getTransactionCount(obj.wallet.address);
 
         let params = {
-            nonce: web3.utils.toHex(nonce),
+            // nonce: web3.utils.toHex(nonce),
             gasPrice: web3.utils.toHex(gasPrice),
-            gasLimit: web3.utils.toHex(gasLimit + 50000),
+            gasLimit: web3.utils.toHex(gasLimit),
             to: lib.contracts[obj.contract].address,
             data: data,
             chainId: 4
@@ -92,7 +140,7 @@ export async function getTransactionStatus(hash) {
                 } catch (err) {
                     throw err;
                 }
-            }, 3000);
+            }, 2000);
         } catch (err) {
             reject(err);
         }
@@ -100,7 +148,6 @@ export async function getTransactionStatus(hash) {
 }
 
 export async function contractMethod(obj) {
-    console.log('obj:', obj);
     try {
         let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
         return await Contract.methods[obj.name].apply(this, obj.params).call();

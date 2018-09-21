@@ -1,18 +1,35 @@
-#preloader
+.preloader
   position: fixed
   top: 0
   bottom: 0
   left: 0
   right: 0
-  z-index: 1000
+  z-index: 10000
   width: 100%
   height: 100%
-  background-color: rgba(255,255,255,0.7)
-  background-image: url("../images/icons/preloader.svg")
-  background-size: 280px
-  background-position: center
-  background-repeat: no-repeat
+  background-color: rgba(255,255,255,0.9)
   &.show
     display: block
   &.hidden
     display: none
+  &-box
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate3d(-50%, -50%, 0)
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    &__text
+      font-family: $FiraSans
+      font-weight: 400
+      font-size: 16px
+      margin-bottom: 15px
+    &__image
+      background-image: url("../images/icons/preloader.svg")
+      width: 320px
+      height: 60px
+      background-position: center
+      background-repeat: no-repeat
+      background-size: 100%

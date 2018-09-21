@@ -122,7 +122,7 @@ class AppAdd extends Component {
         e.preventDefault();
         this.props.startLoading();
         try {
-            let {address} = this.props;
+            let { address } = this.props;
             let { nameApp, idCTG, subCategory } = this.state.app;
             let { apk, logo, banner, gallery, slogan, shortDescr, keywords, youtubeID, email, packageName, version, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
 

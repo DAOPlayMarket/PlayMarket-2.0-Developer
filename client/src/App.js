@@ -8,6 +8,11 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import {AuthRoute, DashboardRoute, ErrorRoute} from './routes'
 
 import Preloader from './components/Preloader'
+import Control from './components/Control'
+
+import { setGasPrice } from './actions/tx'
+
+import { getGasPrice } from './utils/web3'
 
 import Apps from './pages/Apps'
 import App from './pages/App'
@@ -17,6 +22,13 @@ import IcoAdd from './pages/IcoAdd'
 import NotFound from './pages/NotFound'
 
 class _App extends Component {
+    async componentDidMount(){
+        let gasPrice = await getGasPrice();
+        await this.props.setGasPrice({
+            gasPrice: gasPrice
+        })
+    }
+
     render() {
         let { isAuth } = this.props;
 
@@ -39,8 +51,9 @@ class _App extends Component {
                 <DashboardRoute isAuth={isAuth} path='/ico-add' component={IcoAdd} />
                 <ErrorRoute path="*" component={NotFound} />
               </Switch>
-              <Preloader/>
-              <ToastContainer/>
+                <Control/>
+                <Preloader/>
+                <ToastContainer/>
             </div>
           </BrowserRouter>
         );
@@ -53,4 +66,10 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(_App)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setGasPrice: (payload) => dispatch(setGasPrice(payload))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(_App)

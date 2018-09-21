@@ -5,7 +5,12 @@ class Preloader extends Component {
     render() {
         let { isLoading } = this.props;
         return (
-            <div id="preloader" className={isLoading ? 'show' : 'hidden'}></div>
+            <div className={'preloader ' + (isLoading ? 'show' : 'hidden')}>
+                <div className="preloader-box">
+                    <div className="preloader-box__text">Processing... Please, wait.</div>
+                    <div className="preloader-box__image"></div>
+                </div>
+            </div>
         )
     }
 }

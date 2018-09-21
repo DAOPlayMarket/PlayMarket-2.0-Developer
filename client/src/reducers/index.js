@@ -4,14 +4,15 @@ const initState = {
     node: {
         url: 'https://n000002.playmarket.io:3000'
     },
-    isAuth: true,
+    isAuth: false,
     user: {
         keystore: '',
-        address: '0x5cfdffa814ad9761295d7d90aca47a3a97bcb64d',
+        address: '',
         name: '',
         info: ''
     },
     isLoading: false,
+    gasPrice: '',
     categories: categories
 };
 
@@ -51,6 +52,12 @@ const rootReducer = (state = initState, action) => {
             state = {
                 ...state,
                 isLoading: false
+            };
+            break;
+        case 'SET_GAS_PRICE':
+            state = {
+                ...state,
+                gasPrice: action.gasPrice
             };
             break;
         default:

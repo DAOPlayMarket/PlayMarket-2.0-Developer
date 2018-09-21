@@ -1,8 +1,8 @@
 {
   "main.css": "static/css/main.ed9adb29.css",
   "main.css.map": "static/css/main.ed9adb29.css.map",
-  "main.js": "static/js/main.52155fd1.js",
-  "main.js.map": "static/js/main.52155fd1.js.map",
+  "main.js": "static/js/main.9449fdcb.js",
+  "main.js.map": "static/js/main.9449fdcb.js.map",
   "static\\media\\Archive.eot": "static/media/Archive.77b3dab5.eot",
   "static\\media\\Archive.svg": "static/media/Archive.4a5e408e.svg",
   "static\\media\\Archive.woff": "static/media/Archive.f869dd12.woff",
@@ -87,7 +87,6 @@
   "static\\media\\Open Sans SemiBold.woff2": "static/media/Open Sans SemiBold.8d36496b.woff2",
   "static\\media\\add.svg": "static/media/add.bd7589ef.svg",
   "static\\media\\apps.svg": "static/media/apps.4b4a9d3f.svg",
-  "static\\media\\change.svg": "static/media/change.2b0405e5.svg",
   "static\\media\\load.svg": "static/media/load.9cbe0377.svg",
   "static\\media\\logoshape.png": "static/media/logoshape.ec9c2d81.png",
   "static\\media\\logout.svg": "static/media/logout.1e4ff7c7.svg",
