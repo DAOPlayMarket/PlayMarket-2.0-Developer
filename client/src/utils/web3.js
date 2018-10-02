@@ -19,11 +19,11 @@ provider.on('close', e => {
 });
 provider.on('end', e => {
     Notification('warn', 'Web3 WSS connection end:', e.message);
-    provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
-    web3 = new Web3(provider);
-    provider.on('connect', function () {
-        Notification('success', 'Web3 WSS reconnection successful!');
-    });
+    // provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
+    // web3 = new Web3(provider);
+    // provider.on('connect', function () {
+    //     Notification('success', 'Web3 WSS reconnection successful!');
+    // });
 });
 
 export async function getWallet(keystore, password) {
@@ -71,44 +71,13 @@ export async function getGasLimit(obj) {
     }
 }
 
-export async function getSignedTransaction1(obj) {
+export async function getSignedTransaction(obj) {
     try {
-        // let nonce = await web3.eth.getTransactionCount(obj.wallet.address);
         let params = {
-            // nonce: web3.utils.toHex(nonce),
             gasPrice: web3.utils.toHex(obj.gasPrice),
             gasLimit: web3.utils.toHex(obj.gasLimit),
             to: lib.contracts[obj.contract].address,
             data: obj.data,
-            chainId: 4
-        };
-        return await web3.eth.accounts.signTransaction(params, obj.wallet.privateKey);
-    } catch (err) {
-        throw err;
-    }
-}
-
-export async function getSignedTransaction(obj) {
-    try {
-        let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
-
-        let data = await Contract.methods[obj.data.method].apply(this, obj.data.params).encodeABI();
-
-        let gasPrice = await web3.eth.getGasPrice();
-        let gasLimit = await web3.eth.estimateGas({
-            from: obj.wallet.address,
-            to: lib.contracts[obj.contract].address,
-            data: data
-        }) + 100000;
-
-        // let nonce = await web3.eth.getTransactionCount(obj.wallet.address);
-
-        let params = {
-            // nonce: web3.utils.toHex(nonce),
-            gasPrice: web3.utils.toHex(gasPrice),
-            gasLimit: web3.utils.toHex(gasLimit),
-            to: lib.contracts[obj.contract].address,
-            data: data,
             chainId: 4
         };
         return await web3.eth.accounts.signTransaction(params, obj.wallet.privateKey);
@@ -132,7 +101,6 @@ export async function getTransactionStatus(hash) {
                 try {
                     let tx = await web3.eth.getTransactionReceipt(hash);
                     let result = tx ? {pending: false, status: tx.status} : {pending: true};
-                    console.log('result:', result);
                     if (!result.pending) {
                         clearTimeout(timer);
                         resolve(result.status);
@@ -140,7 +108,7 @@ export async function getTransactionStatus(hash) {
                 } catch (err) {
                     throw err;
                 }
-            }, 2000);
+            }, 1000);
         } catch (err) {
             reject(err);
         }

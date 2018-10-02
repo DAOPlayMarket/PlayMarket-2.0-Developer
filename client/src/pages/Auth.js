@@ -8,9 +8,9 @@ import Popup from "reactjs-popup";
 import Notification from '../components/Notification';
 
 import { startLoading, endLoading } from '../actions/preloader'
-import { authLogin } from '../actions/auth'
+import { userLogin } from '../actions/user'
 
-import { getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction1 } from '../utils/web3'
+import { getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 class Auth extends Component {
     constructor(props) {
@@ -21,7 +21,6 @@ class Auth extends Component {
     getInitialState = () => {
         return {
             isRegistered: false,
-            isConfirmed: false,
             keystoreIsSelected: false,
             keystore: '',
             address: '',
@@ -78,8 +77,7 @@ class Auth extends Component {
                         let developer = await this.getDeveloper();
                         let balance = await getBalance(this.state.address);
                         await this.setState({
-                            isRegistered: developer.isSet,
-                            isConfirmed: developer.confirmation,
+                            isRegistered: developer.state,
                             balance: balance,
                             user: {
                                 ...this.state.user,
@@ -133,25 +131,34 @@ class Auth extends Component {
 
     getDeveloper = async () => {
         let { address } = this.state;
-        let developer = await contractMethod({
-            contract: 'dev',
-            name: 'developers',
+        let state = await contractMethod({
+            contract: 'PlayMarket',
+            name: 'getStateDev',
+            params: [address]
+        });
+        let name = await contractMethod({
+            contract: 'PlayMarket',
+            name: 'getNameDev',
+            params: [address]
+        });
+        let info = await contractMethod({
+            contract: 'PlayMarket',
+            name: 'getInfoDev',
             params: [address]
         });
         return {
-            isSet: developer.isSet,
-            confirmation: developer.confirmation,
-            name: web3Utils.hexToAscii(developer.name).replace(/\u0000/g, ''),
-            info: web3Utils.hexToAscii(developer.info).replace(/\u0000/g, '')
+            state: state,
+            name: web3Utils.hexToAscii(name).replace(/\u0000/g, ''),
+            info: web3Utils.hexToAscii(info).replace(/\u0000/g, '')
         };
     };
 
     handleSubmitLogin = async e => {
         e.preventDefault();
-        let { isRegistered, isConfirmed, keystore, address } = this.state;
+        let { isRegistered, keystore, address } = this.state;
         let { name, info } = this.state.user;
-        if (isRegistered && isConfirmed) {
-            this.props.authLogin({
+        if (isRegistered) {
+            this.props.userLogin({
                 keystore: keystore,
                 address: address,
                 name: name,
@@ -172,13 +179,13 @@ class Auth extends Component {
         this.props.startLoading();
         try {
             let data = await getData({
-                contract: 'main',
-                method: 'registrationDeveloper',
+                contract: 'PlayMarket',
+                method: 'addDev',
                 params: [web3Utils.toHex(name), web3Utils.toHex(info)]
             });
             let gasLimit = await getGasLimit({
                 from: address,
-                contract: 'main',
+                contract: 'PlayMarket',
                 data: data,
                 reserve: 0
             });
@@ -205,9 +212,9 @@ class Auth extends Component {
         let { gasPrice } = this.props;
         try {
             let wallet = await getWallet(keystore, password);
-            let signedTransaction = await getSignedTransaction1({
+            let signedTransaction = await getSignedTransaction({
                 wallet: wallet,
-                contract: 'main',
+                contract: 'PlayMarket',
                 data: data,
                 gasLimit: gasLimit,
                 gasPrice: gasPrice
@@ -225,8 +232,7 @@ class Auth extends Component {
             if (transactionStatus) {
                 let developer = await this.getDeveloper();
                 await this.setState({
-                    isRegistered: developer.isSet,
-                    isConfirmed: developer.confirmation,
+                    isRegistered: developer.state,
                     user: {
                         ...this.state.user,
                         name: developer.name,
@@ -257,7 +263,7 @@ class Auth extends Component {
     };
 
     render() {
-        let { balance, popupOpen, keystoreIsSelected, isRegistered, isConfirmed } = this.state;
+        let { balance, popupOpen, keystoreIsSelected, isRegistered } = this.state;
         let { step, gasLimit, password } = this.state.registration;
         let { name, info } = this.state.registration.params;
 
@@ -310,65 +316,34 @@ class Auth extends Component {
                                         <div className="auth-popup__action">
                                             <div className="auth-popup__action__title">
                                                 {
-                                                    isRegistered ? (
-                                                        isConfirmed ? 'login' : 'confirmation'
-                                                    ) : 'registration'
+                                                    isRegistered ? 'login' : 'registration'
                                                 }
                                             </div>
                                             {
                                                 isRegistered ? (
-                                                    <div>
-                                                        {
-                                                            isConfirmed ? (
-                                                                <form className="auth-popup__login" onSubmit={this.handleSubmitLogin}>
-                                                                    <div className="auth-popup__login__title">You already registered!</div>
-                                                                    <ul className="auth-popup__login__list">
-                                                                        <li className="auth-popup__login__list-item">
-                                                                            <div className="auth-popup__login__list-item__title">Name:</div>
-                                                                            <div className="auth-popup__login__list-item__value">{this.state.user.name}</div>
-                                                                        </li>
-                                                                        <li className="auth-popup__login__list-item">
-                                                                            <div className="auth-popup__login__list-item__title">Info:</div>
-                                                                            <div className="auth-popup__login__list-item__value">
-                                                                                {
-                                                                                    !!this.state.user.info ? this.state.user.info : (
-                                                                                        <span className="auth-popup__login__list-item__value--placeholder">Not specified</span>
-                                                                                    )
-                                                                                }
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <div className="auth-popup__btn-block">
-                                                                        <button className="auth-popup__btn-block__btn">login</button>
-                                                                        <div className="auth-popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
-                                                                    </div>
-                                                                </form>
-                                                            ) : (
-                                                                <form className="auth-popup__login" onSubmit={this.handleSubmitConfirmation}>
-                                                                    <div className="auth-popup__login__title">You registered, but you are not confirmed as the developer! After verification, you will be able to use the service! Please, try again later. Thank you for you waiting!</div>
-                                                                    <ul className="auth-popup__login__list">
-                                                                        <li className="auth-popup__login__list-item">
-                                                                            <div className="auth-popup__login__list-item__title">Name:</div>
-                                                                            <div className="auth-popup__login__list-item__value">{this.state.user.name}</div>
-                                                                        </li>
-                                                                        <li className="auth-popup__login__list-item">
-                                                                            <div className="auth-popup__login__list-item__title">Info:</div>
-                                                                            <div className="auth-popup__login__list-item__value">
-                                                                                {
-                                                                                    !!this.state.user.info ? this.state.user.info : (
-                                                                                        <span className="auth-popup__login__list-item__value--placeholder">Not specified</span>
-                                                                                    )
-                                                                                }
-                                                                            </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <div className="auth-popup__btn-block auth-popup__btn-block--center">
-                                                                        <button className="auth-popup__btn-block__btn">I understand</button>
-                                                                    </div>
-                                                                </form>
-                                                            )
-                                                        }
-                                                    </div>
+                                                    <form className="auth-popup__login" onSubmit={this.handleSubmitLogin}>
+                                                        <div className="auth-popup__login__title">You already registered!</div>
+                                                        <ul className="auth-popup__login__list">
+                                                            <li className="auth-popup__login__list-item">
+                                                                <div className="auth-popup__login__list-item__title">Name:</div>
+                                                                <div className="auth-popup__login__list-item__value">{this.state.user.name}</div>
+                                                            </li>
+                                                            <li className="auth-popup__login__list-item">
+                                                                <div className="auth-popup__login__list-item__title">Info:</div>
+                                                                <div className="auth-popup__login__list-item__value">
+                                                                    {
+                                                                        !!this.state.user.info ? this.state.user.info : (
+                                                                            <span className="auth-popup__login__list-item__value--placeholder">Not specified</span>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <div className="auth-popup__btn-block">
+                                                            <button className="auth-popup__btn-block__btn">login</button>
+                                                            <div className="auth-popup__btn-block__btn--cancel" onClick={this.closeModal}>Cancel</div>
+                                                        </div>
+                                                    </form>
                                                 ) : (
                                                     <div>
                                                         {
@@ -477,7 +452,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         startLoading: () => dispatch(startLoading()),
         endLoading: () => dispatch(endLoading()),
-        authLogin: (payload) => dispatch(authLogin(payload))
+        userLogin: (payload) => dispatch(userLogin(payload))
     }
 };
 

@@ -25,7 +25,7 @@ const upload = (dir, headFolderName) => {
                         reject(err)
                     }
                     resolve({
-                        hashTag: 'IPFS',
+                        hashType: 1,
                         hash: values[values.length-1].hash
                     });
                 })

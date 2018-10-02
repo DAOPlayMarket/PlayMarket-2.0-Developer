@@ -16,6 +16,10 @@ class Apps extends Component {
     };
 
     async componentDidMount(){
+        await this.getApps();
+    }
+
+    getApps = async () => {
         let { address, url } = this.props;
         this.props.startLoading();
         try {
@@ -27,8 +31,15 @@ class Apps extends Component {
                 }
             })).data;
             let apps = response.result;
+
             let loadedApps = apps.filter(app => app.loadFile === true);
+            loadedApps.forEach(item=> {
+                item.SERVICE = {
+                    isExtend: false
+                }
+            });
             let notLoadedApps = apps.filter(app => app.loadFile === false);
+
             await this.setState({
                 apps: apps,
                 loadedApps: loadedApps,
@@ -39,80 +50,116 @@ class Apps extends Component {
             this.props.endLoading();
             Notification('error', err.message);
         }
-    }
+    };
+
+    handleClickToggleExtend = index => async e => {
+        e.preventDefault();
+        let { loadedApps } = this.state;
+        loadedApps[index].SERVICE.isExtend = !loadedApps[index].SERVICE.isExtend;
+        await this.setState({
+            loadedApps: loadedApps
+        });
+    };
+
+    handleClickRefresh = async e => {
+        e.preventDefault();
+        await this.getApps();
+    };
 
     render(){
-        let { loadedApps, notLoadedApps } = this.state;
+        let { loadedApps } = this.state;
         let { url } = this.props;
-
-        const apps1 = loadedApps.length ? (
-            <div className="apps">
-                <div className="apps__title">Your applications</div>
-                <ul className="apps__header">
-                    <li className="apps__header--col" data-col="name">name</li>
-                    <li className="apps__header--col" data-col="publish">publish</li>
-                    <li className="apps__header--col" data-col="confirmation">confirmation</li>
-                    <li className="apps__header--col" data-col="price">price</li>
-                    <li className="apps__header--col" data-col="ico">ico</li>
-                </ul>
-                <ul className="apps__list">
-                    {loadedApps.map(app => {
-                        return (
-                            <li className="apps__list--item" key={app.idApp}>
-                                <Link to={'/app/' + app.idApp}>
-                                    <div className="apps__list--item__col" data-col="name">
-                                        <img src={`${url}/data/${app.hashTag}/${app.hash}/${app.files.images.logo}`} alt=""/>
-                                        {app.nameApp}
-                                    </div>
-                                    <div className="apps__list--item__col" data-col="publish">
-                                        {app.publish ? 'YES' : 'NO'}
-                                    </div>
-                                    <div className="apps__list--item__col" data-col="confirmation">YES</div>
-                                    <div className="apps__list--item__col" data-col="price">
-                                        {app.price}
-                                    </div>
-                                    <div className="apps__list--item__col" data-col="ico">
-                                        {app.icoRelease ? 'YES' : 'NO'}
-                                    </div>
-                                </Link>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
-        ) : (
-            <div className="apps">
-                <div className="apps__placeholder">You don't have downloaded apps</div>
-            </div>
-        );
-
-        const apps2 = notLoadedApps.length ? (
-            <div className="apps-loading">
-                <div className="apps-loading__title">Applications now loading on node</div>
-                <ul className="apps-loading__list">
-                    {notLoadedApps.map(app => {
-                        return (
-                            <li className="apps-loading__list--item" key={app.idApp}>
-                                <div className="apps-loading__list--item__col" data-col="hashTag">{app.hashTag}</div>
-                                <div className="apps-loading__list--item__col" data-col="hash">{app.hash}</div>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
-        ) : null;
-
 
         return (
             <div className="apps-page">
                 <Helmet>
                     <title>Apps | Play Market 2.0 Developer Module</title>
                 </Helmet>
-                <div className="apps-page__add">
-                    <Link to='/app-add' title="Add new application"></Link>
+                <div className="apps-page__header">
+                    <div className="apps-page__header--left">
+                        <div className="apps-page__header__title">Your applications</div>
+                        <div className="apps-page__header__refresh" onClick={this.handleClickRefresh}></div>
+                    </div>
+                    <div className="apps-page__header--right">
+                        <Link className="apps-page__header__add" to='/app-add' title="Add new application"></Link>
+                    </div>
                 </div>
-                {apps1}
-                {apps2}
+                <div className="apps-page__body">
+                    {
+                        loadedApps.length ? (
+                            <ul className="apps-page__body__list">
+                                {
+                                    loadedApps.map((app, index) => {
+                                        return (
+                                            <li className="apps-page__body__list-item" key={app.idApp}>
+                                                <ul className="apps-page__body__list-item__head">
+                                                    <li className="apps-page__body__list-item__head-item" data-section="logo"></li>
+                                                    <li className="apps-page__body__list-item__head-item" data-section="name">name</li>
+                                                    <li className="apps-page__body__list-item__head-item" data-section="status">status</li>
+                                                    <li className="apps-page__body__list-item__head-item" data-section="more"></li>
+                                                </ul>
+                                                <ul className="apps-page__body__list-item__main">
+                                                    <li className="apps-page__body__list-item__main-item" data-section="logo">
+                                                        <img src={`${url}/data/${app.hashTag}/${app.hash}/${app.files.images.logo}`} alt="LOGO"/>
+                                                    </li>
+                                                    <li className="apps-page__body__list-item__main-item" data-section="name">
+                                                        {app.nameApp.length ? app.nameApp : <span>Not specified</span>}
+                                                    </li>
+                                                    <li className="apps-page__body__list-item__main-item" data-section="status">
+                                                        <span className={app.publish ? 'active' : null}>{app.publish ? 'ACTIVE' : 'NOT ACTIVE'}</span>
+                                                    </li>
+                                                    <li className="apps-page__body__list-item__main-item" data-section="more">
+                                                        <button onClick={this.handleClickToggleExtend(index)} title="More"></button>
+                                                    </li>
+                                                </ul>
+                                                <div className={'apps-page__body__list-item__dropdown ' + (app.SERVICE.isExtend ? 'visible' : '')}>
+                                                    <ul className="apps-page__body__list-item__dropdown__table">
+                                                       <li className="apps-page__body__list-item__dropdown__table-item">
+                                                           <div className="apps-page__body__list-item__dropdown__table-item__title">publish</div>
+                                                           <div className="apps-page__body__list-item__dropdown__table-item__value">
+                                                               {app.publish ? 'YES' : 'NO'}
+                                                           </div>
+                                                       </li>
+                                                        <li className="apps-page__body__list-item__dropdown__table-item">
+                                                            <div className="apps-page__body__list-item__dropdown__table-item__title">confirmation</div>
+                                                            <div className="apps-page__body__list-item__dropdown__table-item__value">
+                                                                YES
+                                                            </div>
+                                                        </li>
+                                                        <li className="apps-page__body__list-item__dropdown__table-item">
+                                                            <div className="apps-page__body__list-item__dropdown__table-item__title">price</div>
+                                                            <div className="apps-page__body__list-item__dropdown__table-item__value">
+                                                                {app.price}
+                                                            </div>
+                                                        </li>
+                                                        <li className="apps-page__body__list-item__dropdown__table-item">
+                                                            <div className="apps-page__body__list-item__dropdown__table-item__title">ico</div>
+                                                            <div className="apps-page__body__list-item__dropdown__table-item__value">
+                                                                {app.icoRelease ? 'YES' : 'NO'}
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <ul className="apps-page__body__list-item__dropdown__links">
+                                                        <li className="apps-page__body__list-item__dropdown__links-item">
+                                                            <Link to={`/app/${app.idApp}`}>app</Link>
+                                                        </li>
+                                                        {
+                                                            !app.icoRelease ? (
+                                                                <li className="apps-page__body__list-item__dropdown__links-item">
+                                                                    <Link to={`/ico-add/${app.idApp}`}>start ico</Link>
+                                                                </li>
+                                                            ) : null
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                        ) : null
+                    }
+                </div>
             </div>
 
         )

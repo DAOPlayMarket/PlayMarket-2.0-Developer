@@ -20,6 +20,7 @@ class Control extends Component {
         return (
             !!gasPrice ? (
                 <div className="control">
+                    <div className="control__network">Network: <span>Rinkeby</span></div>
                     <div className="control__price">Gas Price: <span>{value}</span> Gwei</div>
                     <div className="control__input">
                         <input type="range" min="1" max="99" step="1" value={value} onChange={this.handleChangeGasPrice}/>

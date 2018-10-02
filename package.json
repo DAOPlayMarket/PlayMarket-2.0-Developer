@@ -27,7 +27,7 @@
     "ignore": [
       "client/*",
       "node_modules/*",
-      "static/*"
+      "data/*"
     ]
   }
 }

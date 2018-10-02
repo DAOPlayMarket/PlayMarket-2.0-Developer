@@ -10,7 +10,7 @@ const Sidebar = () => {
             </Link>
             <ul className="sidebar__nav">
                 <li className="sidebar__nav--item">
-                    <NavLink to='/apps' className="sidebar__nav--item__link" data-nav="apps">My apps</NavLink>
+                    <NavLink to='/apps' className="sidebar__nav--item__link" data-nav="apps">My applications</NavLink>
                 </li>
             </ul>
         </aside>

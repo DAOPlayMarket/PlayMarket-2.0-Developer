@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-// import $ from "jquery";
 import axios from 'axios';
 import {Helmet} from "react-helmet";
 
@@ -55,11 +53,11 @@ class App extends Component {
                             <Helmet>
                                 <title>{app.nameApp} | Play Market 2.0 Developer Module</title>
                             </Helmet>
-                            {!app.icoRelease ? (
-                                <div className="app-menu">
-                                    <Link to={{pathname: '/ico-add', state: { app: app }}}>START ICO</Link>
-                                </div>
-                            ) : null}
+                            {/*{!app.icoRelease ? (*/}
+                                {/*<div className="app-menu">*/}
+                                    {/*<Link to={{pathname: '/ico-add', state: { app: app }}}>START ICO</Link>*/}
+                                {/*</div>*/}
+                            {/*) : null}*/}
 
                             <div className="app-main">
                                 <div className="app-main--left">

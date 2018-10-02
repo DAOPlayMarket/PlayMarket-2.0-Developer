@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-// import axios from 'axios';
+import { Link } from 'react-router-dom'
+import axios from 'axios';
 import {Helmet} from "react-helmet";
+import $ from "jquery";
+import moment from 'moment';
+import TextareaAutosize from 'react-textarea-autosize';
+import { DatetimePickerTrigger } from 'rc-datetime-picker';
+import 'rc-datetime-picker/dist/picker.css'
 
 import { startLoading, endLoading } from '../actions/preloader'
 
@@ -10,20 +15,49 @@ import { startLoading, endLoading } from '../actions/preloader'
 
 import Notification from '../components/Notification';
 
+// moment.tz.setDefault('UTC');
+
 class IcoAdd extends Component {
     state = {
-        // hashTx: '',
-        // isUpload: false,
-        // isRegistered: false,
-        // password: '',
-        // select: {
-        //     categories: [],
-        //     subCategories: [],
-        //     selectedOptionCategory: null,
-        //     selectedOptionSubCategory: null
-        // },
-        // hash: '',
-        // hashTag: '',
+        app: null,
+        SERVICE: {
+            gallery: [],
+            logo: null,
+            banner: null,
+            keyword: '',
+            minDate: moment().add(1, 'day').startOf('day'),
+            members: {
+                temp : {
+                    team: {
+                        name: '',
+                        photo: null,
+                        photoPreview: null,
+                        description: '',
+                        social: {
+                            googlePlus: '',
+                            facebook: '',
+                            linkedin: '',
+                            instagram: '',
+                            vk: '',
+                            youtube: '',
+                            telegram: '',
+                            git: ''
+                        }
+                    },
+                    advisor: {
+
+                    }
+                },
+                team: [],
+                advisors: [],
+            }
+        },
+        settings: {
+            tokenName: '',
+            tokenSymbol: '',
+            startDate: moment().add(1, 'day').startOf('day'),
+            hardCapUSD: ''
+        },
         ico: {
             keywords: '',
             youtubeID: '',
@@ -57,203 +91,420 @@ class IcoAdd extends Component {
     };
 
     async componentDidMount(){
-        // console.log(this.props);
+        // console.log(moment.utc().add(1, 'day').startOf('day').toDate());
+
+        let idApp = this.props.id;
+        let { url } = this.props;
+        await this.props.startLoading();
+        try {
+            let response = (await axios({
+                method: 'post',
+                url: `${url}/api/get-app-for-developer`,
+                data: {
+                    idApp: idApp
+                }
+            })).data;
+            this.setState({
+                app: response.result
+            });
+            await this.props.endLoading();
+        } catch (err) {
+            await this.props.endLoading();
+            Notification('error', err.message);
+        }
     }
 
-    handleChangeText = async e => {
-        let name = e.target.getAttribute('name');
-        await this.setState({app: {...this.state.app, [name]: e.target.value}});
+    // handleChangeLogo = async e => {
+    //     e.persist();
+    //     let file = e.target.files.length ? e.target.files[0] : null;
+    //     if (file) {
+    //         if (file.type.includes('image')) {
+    //             let reader = new FileReader();
+    //             reader.onload = async () => {
+    //                 await this.setState({
+    //                     ico: {...this.state.ico, files: {...this.state.ico.files, logo: file}},
+    //                     service: {...this.state.service, logo: {imageBase64: reader.result, name: file.name}}
+    //                 });
+    //             };
+    //             reader.readAsDataURL(file);
+    //         } else {
+    //             await this.setState({
+    //                 ico: {...this.state.ico, files: {...this.state.ico.files, logo: null}},
+    //                 service: {...this.state.service, logo: null}
+    //             });
+    //             Notification('error', 'Invalid image file');
+    //         }
+    //     } else {
+    //         await this.setState({
+    //             ico: {...this.state.ico, files: {...this.state.ico.files, logo: null}},
+    //             service: {...this.state.service, logo: null}
+    //         });
+    //     }
+    // };
+
+    handleChangeTokenName = async e => {
+        e.preventDefault();
+        await this.setState({settings: {...this.state.settings, tokenName: e.target.value}});
     };
-    handleChangePassword = async e => {
-        await this.setState({password: e.target.value});
+    handleChangeTokenSymbol = async e => {
+        e.preventDefault();
+        await this.setState({settings: {...this.state.settings, tokenSymbol: e.target.value}});
     };
-    handleChangeFile = async e => {
-        let multiple = e.target.getAttribute('multiple');
-        let name = e.target.getAttribute('name');
-        if (typeof multiple === 'string') {
-            let files = e.target.files.length ? e.target.files : [];
-            this.setState({ico: {...this.state.ico, [name]: files}});
+    handleChangeHardCapUSD = async e => {
+        e.preventDefault();
+        await this.setState({settings: {...this.state.settings, hardCapUSD: e.target.value}});
+    };
+    handleChangeStartDate = async date => {
+        await this.setState({
+            settings: {
+                ...this.state.settings,
+                startDate: date
+            }
+        });
+    };
+
+    handleChangeMemberPhoto = param => async e => {
+        e.preventDefault();
+        let file = e.target.files.length ? e.target.files[0] : null;
+        if (file) {
+            if (file.type.includes('image')) {
+                let reader = new FileReader();
+                reader.onload = async () => {
+                    await this.setState({
+                        SERVICE: {
+                            ...this.state.SERVICE,
+                            members: {
+                                ...this.state.SERVICE.members,
+                                temp: {
+                                    ...this.state.SERVICE.members.temp,
+                                    [param]: {
+                                        ...this.state.SERVICE.members.temp[param],
+                                        photo: file,
+                                        photoPreview: {
+                                            imageBase64: reader.result,
+                                            name: file.name
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $(e.target).val('');
+                await this.setState({
+                    SERVICE: {
+                        ...this.state.SERVICE,
+                        members: {
+                            ...this.state.SERVICE.members,
+                            temp: {
+                                ...this.state.SERVICE.members.temp,
+                                [param]: {
+                                    ...this.state.SERVICE.members.temp[param],
+                                    photo: null,
+                                    photoPreview: null
+                                }
+                            }
+                        }
+                    }
+                });
+                Notification('error', 'Invalid image file');
+            }
         } else {
-            let file = e.target.files.length ? e.target.files[0] : null;
-            this.setState({app: {...this.state.app, [name]: file}});
+            await this.setState({
+                SERVICE: {
+                    ...this.state.SERVICE,
+                    members: {
+                        ...this.state.SERVICE.members,
+                        temp: {
+                            ...this.state.SERVICE.members.temp,
+                            [param]: {
+                                ...this.state.SERVICE.members.temp[param],
+                                photo: null,
+                                photoPreview: null
+                            }
+                        }
+                    }
+                }
+            });
         }
+    };
+    handleChangeMemberName = param => async e => {
+        e.preventDefault();
+        await this.setState({
+            SERVICE: {
+                ...this.state.SERVICE,
+                members: {
+                    ...this.state.SERVICE.members,
+                    temp: {
+                        ...this.state.SERVICE.members.temp,
+                        [param]: {
+                            ...this.state.SERVICE.members.temp[param],
+                            name: e.target.value
+                        }
+                    }
+                }
+            }
+        });
+    };
+    handleChangeMemberDescription = param => async e => {
+        e.preventDefault();
+        await this.setState({
+            SERVICE: {
+                ...this.state.SERVICE,
+                members: {
+                    ...this.state.SERVICE.members,
+                    temp: {
+                        ...this.state.SERVICE.members.temp,
+                        [param]: {
+                            ...this.state.SERVICE.members.temp[param],
+                            description: e.target.value
+                        }
+                    }
+                }
+            }
+        });
+    };
+    handleChangeMemberSocial = param => async e => {
+        let name = e.target.getAttribute('name');
+        e.preventDefault();
+        await this.setState({
+            SERVICE: {
+                ...this.state.SERVICE,
+                members: {
+                    ...this.state.SERVICE.members,
+                    temp: {
+                        ...this.state.SERVICE.members.temp,
+                        [param]: {
+                            ...this.state.SERVICE.members.temp[param],
+                            social: {
+                                ...this.state.SERVICE.members.temp[param].social,
+                                [name]: e.target.value
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    };
+    handleSubmitAddMember = param => async e => {
+        e.preventDefault();
+        let {members} = this.state.SERVICE;
+        await this.setState({
+            SERVICE: {
+                ...this.state.SERVICE,
+                members: {
+                    ...this.state.SERVICE.members,
+                    [param]: [
+                        ...this.state.SERVICE.members[param],
+                        {
+                            name: members.temp[param].name,
+                            photo: members.temp[param].photo,
+                            description: members.temp[param].description,
+                            social: members.temp[param].social,
+                        }
+                    ],
+                    temp: {
+                        ...this.state.SERVICE.members.temp,
+                        [param]: {
+                            name: '',
+                            photo: null,
+                            photoPreview: null,
+                            description: '',
+                            social: {
+                                googlePlus: '',
+                                facebook: '',
+                                linkedin: '',
+                                instagram: '',
+                                vk: '',
+                                youtube: '',
+                                telegram: '',
+                                git: ''
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        $('#' + [param] + '_logo').val('');
     };
 
     handleSubmitUpload = async e => {
         e.preventDefault();
-        this.props.startLoading();
-        try {
-            // let {address} = this.props;
-            // let { nameApp, idCTG, subCategory } = this.state.app;
-            // let { apk, logo, banner, gallery, slogan, shortDescr, keywords, youtubeID, email, packageName, version, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
-            //
-            // let fd = new FormData();
-            //
-            // fd.append("nameApp", nameApp);
-            // fd.append("idCTG", idCTG);
-            // fd.append("subCategory", subCategory);
-            // fd.append("slogan", slogan);
-            // fd.append("shortDescr", shortDescr);
-            // fd.append("keywords", keywords);
-            // fd.append("youtubeID", youtubeID);
-            // fd.append("email", email);
-            // fd.append("packageName", packageName);
-            // fd.append("version", version);
-            // fd.append("ageRestrictions", ageRestrictions);
-            // fd.append("price", parseInt(price, 10) * 10000);
-            // fd.append("publish", publish);
-            // fd.append("advertising", advertising);
-            // fd.append("forChildren", forChildren);
-            // fd.append("urlApp", urlApp);
-            // fd.append("privacyPolicy", privacyPolicy);
-            // fd.append("longDescr", longDescr);
-            //
-            // fd.append("apk", apk);
-            // fd.append("logo", logo);
-            // fd.append("banner", banner);
-            // for (let i = 0; i < gallery.length; i++) {
-            //     fd.append("gallery", gallery[i]);
-            // }
-            //
-            // let response = (await axios({
-            //     method: 'post',
-            //     url: 'api/app-add',
-            //     headers: {'address': address},
-            //     data: fd
-            // })).data;
-            // this.props.endLoading();
-            //
-            // if (response.status === 200) {
-            //     this.setState({isUpload: true, hashTag: response.result.hashTag, hash: response.result.hash});
-            // } else {
-            //     Notification('error', response.result);
-            // }
-        } catch (err) {
-            this.props.endLoading();
-            Notification('error', err.message);
-        }
-    };
-    handleSubmitRegistration = async e => {
-        e.preventDefault();
-        // this.props.startLoading();
-        // let { keystore } = this.props;
-        // let { password, hash, hashTag } = this.state;
-        // let { price, publish } = this.state.app;
-        //
-        // try {
-        //     let wallet = await getWallet(keystore, password);
-        //
-        //     let signedTransaction = await getSignedTransaction({
-        //         wallet: wallet,
-        //         contract: 'main',
-        //         data: {
-        //             method: 'registrationApplication',
-        //             params: [hash, hashTag, publish, (parseInt(price, 10) * 10000)]
-        //         }
-        //     });
-        //     let tx = await sendSignedTransaction(signedTransaction.rawTransaction);
-        //     let transactionStatus = await getTransactionStatus(tx.transactionHash);
-        //     await this.setState({
-        //         hashTx: tx.transactionHash
-        //     });
-        //     if (transactionStatus) {
-        //         await this.setState({
-        //             isRegistered: true
-        //         });
-        //     } else {
-        //         Notification('error', 'Transaction failed');
-        //     }
-        // } catch (err) {
-        //     Notification('error', err.message);
-        // }
-        // this.props.endLoading();
     };
 
     render(){
-        let { app } = this.props.location.state;
+        let { app } = this.state;
 
-        let { keywords, youtubeID, email, urlICO, privacyPolicy, description, advantages } = this.state.ico;
+        let { minDate, members } = this.state.SERVICE;
+        // let { gallery, logo, banner, keyword } = this.state.SERVICE;
+        let { tokenName, tokenSymbol, startDate, hardCapUSD } = this.state.settings;
+
         return (
-            <div className="app-add">
-                <Helmet>
-                    <title>Start ICO for "{app.nameApp}" | Play Market 2.0 Developer Module</title>
-                </Helmet>
-                <div>
-                    <p>idApp: {app.idApp}</p>
-                    <p>nameApp: {app.nameApp}</p>
-                </div>
-                {!this.state.isUpload ? (
-                    <form onSubmit={this.handleSubmitUpload}>
-                        <section>
-                            <h3>Logo</h3>
-                            <input type="file" name="logo" accept=".png, .jpg, .jpeg" onChange={this.handleChangeFile}/>
-                        </section>
-                        <section>
-                            <h3>Gallery (multiple)</h3>
-                            <input type="file" name="gallery" multiple accept=".png, .jpg, .jpeg" onChange={this.handleChangeFile}/>
-                        </section>
-                        <section>
-                            <h3>Banner (horizontal image)</h3>
-                            <input type="file" name="banner" accept=".png, .jpg, .jpeg" onChange={this.handleChangeFile}/>
-                        </section>
-                        <section>
-                            <h3>Description</h3>
-                            <textarea type="text" name='description' value={description} onChange={this.handleChangeText}/>
-                        </section>
-                        <section>
-                            <h3>Investor advantages</h3>
-                            <input type="text" name='advantages' value={advantages} onChange={this.handleChangeText}/>
-                        </section>
-                        <section>
-                            <h3>Keywords (space separated)</h3>
-                            <input type="text" name='keywords' value={keywords} onChange={this.handleChangeText}/>
-                        </section>
-                        <section>
-                            <h3>YouTube video ID</h3>
-                            <input type="text" name='youtubeID' value={youtubeID} onChange={this.handleChangeText}/>
-                        </section>
-                        <section>
-                            <h3>EMAIL</h3>
-                            <input type="text" name='email' value={email} onChange={this.handleChangeText}/>
-                        </section>
-                        <section>
-                            <h3>Link to ICO website</h3>
-                            <input type="text" name='urlICO' value={urlICO} onChange={this.handleChangeText}/>
-                        </section>
-                        <section>
-                            <h3>Link to privacy policy</h3>
-                            <input type="text" name='privacyPolicy' value={privacyPolicy} onChange={this.handleChangeText}/>
-                        </section>
-                        <section>
-                            <h3>White Paper (pdf)</h3>
-                            <input type="file" name="whitepaper" accept=".pdf" onChange={this.handleChangeFile}/>
-                        </section>
-                        <section>
-                            <h3>One Page Paper (pdf)</h3>
-                            <input type="file" name="onepage" accept=".pdf" onChange={this.handleChangeFile}/>
-                        </section>
-                        <button>Upload</button>
-                    </form>
-                ) : (!this.state.isRegistered ? (
-                        <div>
-                            <h2>Files successful uploaded to store!</h2>
-                            <div>
-                                <h3>Hash: {this.state.hash}</h3>
-                                <h3>Hash Tag: {this.state.hashTag}</h3>
+            <div>
+                {
+                    app ? (
+                        <div className="ico-add">
+                            <Helmet>
+                                <title>Start ICO for {app.nameApp} | Play Market 2.0 Developer Module</title>
+                            </Helmet>
+                            <div className="ico-add__control">
+                                <Link className="ico-add__control__back" to="/apps">Applications</Link>
                             </div>
-                            <form onSubmit={this.handleSubmitRegistration}>
-                                <h2>Now, you can registration you app in smart contract</h2>
-                                <input type="password" value={this.state.password} onChange={this.handleChangePassword} placeholder="Keystore password"/>
-                                <button>Registration app</button>
+                            <div className="ico-add__title">Start ICO for <span>"{app.nameApp}"</span></div>
+                            <form onSubmit={this.handleSubmitUpload}>
+                                <section className="ico-add__section ico-add__section-1">
+                                    <div className="ico-add__section__title">ICO settings</div>
+                                    <div className="ico-add__section-1__content">
+                                        <div className="ico-add__section-1__content--left">
+                                            <ul className="ico-add__section-1__content__list">
+                                                <li className="ico-add__section-1__content__list-item">
+                                                    <div className="ico-add__section-1__content__list-item__title">Token name:</div>
+                                                    <div className="ico-add__section-1__content__list-item__input">
+                                                        <input required placeholder="Play Market Token" type="text" value={tokenName} onChange={this.handleChangeTokenName}/>
+                                                    </div>
+                                                </li>
+                                                <li className="ico-add__section-1__content__list-item">
+                                                    <div className="ico-add__section-1__content__list-item__title">Token symbol:</div>
+                                                    <div className="ico-add__section-1__content__list-item__input">
+                                                        <input required placeholder="PMT" type="text" value={tokenSymbol} onChange={this.handleChangeTokenSymbol}/>
+                                                    </div>
+                                                </li>
+                                                <li className="ico-add__section-1__content__list-item">
+                                                    <div className="ico-add__section-1__content__list-item__title">Hard cup USD:</div>
+                                                    <div className="ico-add__section-1__content__list-item__input">
+                                                        <input required placeholder="1500000" min="1" type="number" value={hardCapUSD} onChange={this.handleChangeHardCapUSD}/>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className="ico-add__section-1__content--right">
+                                            <div className="ico-add__section-1__content__date">
+                                                <div className="ico-add__section-1__content__date__title">Start time:</div>
+                                                <div className="ico-add__section-1__content__date-box">
+                                                    <div className="ico-add__section-1__content__date-box__picker">
+                                                        <DatetimePickerTrigger moment={startDate} minDate={minDate} onChange={this.handleChangeStartDate}>
+                                                            <div className="ico-add__section-1__content__date-box__picker-btn">Select date</div>
+                                                        </DatetimePickerTrigger>
+                                                    </div>
+                                                    <ul className="ico-add__section-1__content__date-box__list">
+                                                        <li className="ico-add__section-1__content__date-box__list-item">
+                                                            <div className="ico-add__section-1__content__date-box__list-item__title">Your time zone:</div>
+                                                            <div className="ico-add__section-1__content__date__list-item__value">{startDate.format('MMMM Do YYYY, HH:mm:ss')}</div>
+                                                        </li>
+                                                        <li className="ico-add__section-1__content__date-box__list-item">
+                                                            <div className="ico-add__section-1__content__date-box__list-item__title">GMT:</div>
+                                                            <div className="ico-add__section-1__content__date-box__list-item__value">{moment.utc(startDate).format('MMMM Do YYYY, HH:mm:ss')}</div>
+                                                        </li>
+                                                        <li className="ico-add__section-1__content__date-box__list-item">
+                                                            <div className="ico-add__section-1__content__date-box__list-item__title">Timestamp:</div>
+                                                            <div className="ico-add__section-1__content__date-box__list-item__value">{startDate.unix()}</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="ico-add__section-1__content__warning">
+                                                The system will automatically issue a token and will place the app in exchange ICO, stop or significantly change the settings of ICO will not be possible until its completion.
+                                            </div>
+                                        </div>
+                                        {/*<div className="app-add__section-1__logo">*/}
+                                        {/*{logo ? (<img src={logo.imageBase64} alt="PREVIEW"/>) : null}*/}
+                                        {/*<div className={"app-add__section-1__logo__placeholder " + (logo ? '' : 'visible')}>no image available</div>*/}
+                                        {/*<input type="file" name="logo" accept=".png, .jpg, .jpeg" onChange={this.handleChangeLogo}/>*/}
+                                        {/*</div>*/}
+                                    </div>
+                                </section>
+                                <section className="ico-add__section ico-add__section-2">
+                                    <div className="ico-add__section__title">ICO information</div>
+                                    <div className="ico-add__section-2__content">
+                                        <div className="ico-add__section-2__content__box">
+                                            <div className="ico-add__section-2__content__box__title">members</div>
+                                            <div className="ico-add__section-2__content__box__members">
+                                                <ul className="ico-add__section-2__content__box__members__list">
+                                                    <li className="ico-add__section-2__content__box__members__list-item">
+
+                                                    </li>
+                                                </ul>
+                                                <div className="ico-add__section-2__content__box__members__add">
+                                                    <div className="ico-add__section-2__content__box__members__add__main">
+                                                        <div className="ico-add__section-2__content__box__members__add__main__photo">
+                                                            {members.temp.team.photoPreview ? (<img src={members.temp.team.photoPreview.imageBase64} alt="PREVIEW"/>) : null}
+                                                            {/*<div className={"app-add__section-1__logo__placeholder " + (logo ? '' : 'visible')}>no image available</div>*/}
+                                                            <input id="team_logo" type="file" accept=".png, .jpg, .jpeg" onChange={this.handleChangeMemberPhoto('team')}/>
+                                                        </div>
+                                                        <div className="ico-add__section-2__content__box__members__add__main__description">
+                                                            <div className="ico-add__section-2__content__box__members__add__main__description__name">
+                                                                <input type="text" value={members.temp.team.name} onChange={this.handleChangeMemberName('team')}/>
+                                                            </div>
+                                                            <TextareaAutosize className="ico-add__section-2__content__box__members__add__main__description__text" placeholder="Very big member" minRows={1} name='description' value={members.temp.team.description} onChange={this.handleChangeMemberDescription('team')}/>
+                                                        </div>
+                                                    </div>
+                                                    <ul className="ico-add__section-2__content__box__members__add__social">
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">Google+</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="googlePlus" value={members.temp.team.social.googlePlus} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">Facebook</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="facebook" value={members.temp.team.social.facebook} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">LinkedIn</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="linkedin" value={members.temp.team.social.linkedin} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">Instagram</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="instagram" value={members.temp.team.social.instagram} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">vk</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="vk" value={members.temp.team.social.vk} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">youtube</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="youtube" value={members.temp.team.social.youtube} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">telegram</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="telegram" value={members.temp.team.social.telegram} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                        <li className="ico-add__section-2__content__box__members__add__social-item">
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__title">git</div>
+                                                            <div className="ico-add__section-2__content__box__members__add__social-item__input">
+                                                                <input type="text" name="git" value={members.temp.team.social.git} onChange={this.handleChangeMemberSocial('team')}/>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <div className="ico-add__section-2__content__box__members__add__btn-block">
+                                                        <button className="ico-add__section-2__content__box__members__add__btn-block__btn" onClick={this.handleSubmitAddMember('team')}>Add team member</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div className="ico-add__load-block">
+                                    <button className="app-add__load-block__btn">Upload</button>
+                                </div>
                             </form>
                         </div>
-                    ) : (
-                        <div>
-                            <h2>Your application is successfully registered!</h2>
-                            <div>After moderation it will appear in your list of applications</div>
-                        </div>
-                    )
-                )}
+                    ) : null
+                }
             </div>
         )
     }
@@ -261,7 +512,8 @@ class IcoAdd extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        // id: ownProps.match.params.app_id
+        id: ownProps.match.params.app_id,
+        url: state.node.url,
     }
 };
 

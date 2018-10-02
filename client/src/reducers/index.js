@@ -18,7 +18,7 @@ const initState = {
 
 const rootReducer = (state = initState, action) => {
     switch (action.type) {
-        case 'AUTH_LOGIN':
+        case 'USER_LOGIN':
             state = {
                 ...state,
                 isAuth: true,
@@ -30,7 +30,7 @@ const rootReducer = (state = initState, action) => {
                 }
             };
             break;
-        case 'AUTH_LOGOUT':
+        case 'USER_LOGOUT':
             state = {
                 ...state,
                 isAuth: false,
@@ -39,6 +39,16 @@ const rootReducer = (state = initState, action) => {
                     address: '',
                     name: '',
                     info: ''
+                }
+            };
+            break;
+        case 'USER_CHANGE_INFO':
+            state = {
+                ...state,
+                user: {
+                    ...state.user,
+                    name: action.name,
+                    info: action.info
                 }
             };
             break;

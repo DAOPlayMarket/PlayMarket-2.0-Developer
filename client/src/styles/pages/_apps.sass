@@ -1,8 +1,23 @@
 .apps-page
-  &__add
+  &__header
     display: flex
-    justify-content: flex-end
-    a
+    justify-content: space-between
+    margin-bottom: 15px
+    padding: 0 10px
+    &--left
+      display: flex
+      align-items: center
+    &--right
+      display: flex
+      align-items: center
+    &__title
+      font-family: $Archive
+      font-weight: 400
+      font-size: 14px
+      color: #06d6a0
+      display: flex
+      align-items: center
+    &__add
       cursor: pointer
       transition: .2s ease-in-out
       display: inline-block
@@ -13,109 +28,247 @@
       background-position: center
       &:hover
         opacity: .5
-  .apps
-    box-sizing: border-box
-    &__placeholder
-      font-family: $FiraSans
-      font-weight: 400
-      text-align: center
-    &__title
-      font-family: $Archive
-      font-weight: 400
-      font-size: 14px
-      color: #06d6a0
-      margin-bottom: 15px
-    &__header
-      display: flex
-      align-items: center
-      position: relative
-      margin-bottom: 10px
-      padding-bottom: 9px
-      border-bottom: 1px solid #54666b
-      &--col
-        font-family: $FiraSansSemiBold
-        font-size: 12px
-        font-weight: 500
-        color: #54666b
-        text-transform: uppercase
-        text-align: center
-        flex-shrink: 0
+    &__refresh
+      cursor: pointer
+      width: 26px
+      height: 26px
+      margin-left: 5px
+      background-image: url("../images/icons/refresh.svg")
+      background-position: center
+      background-size: 60%
+      background-repeat: no-repeat
+  &__body
+    &__list
+      &-item
         box-sizing: border-box
-        &[data-col="name"]
-          width: 294px
-          text-align: left
-        &[data-col="publish"]
-          width: 125px
-        &[data-col="confirmation"]
-          width: 125px
-        &[data-col="price"]
-          width: 125px
-        &[data-col="ico"]
-          width: 125px
-    &__list
-      &--item
+        width: 100%
+        background-color: #fff
         margin-bottom: 10px
+        border-radius: 10px
+        box-shadow: 0 2px 5px 0 #e6e6e6
+        transition: .2s box-shadow ease-in-out
+        overflow: hidden
+        &:hover
+          box-shadow: 0 2px 5px 0 #06d6a0
         &:last-child
           margin-bottom: 0
-        a
+        &__head
           display: flex
-        &__col
-          height: 60px
+          padding: 5px 10px
+          background: #fff
+          border-radius: 10px 10px 0 0
+          box-shadow: 0 2px 5px 0 #e6e6e6
+          &-item
+            display: flex
+            font-family: $Archive
+            font-size: 10px
+            color: #394649
+            &[data-section='logo']
+              width: 50px
+            &[data-section='name']
+              width: 470px
+              padding-left: 20px
+              box-sizing: border-box
+              justify-content: flex-start
+            &[data-section='status']
+              width: 100px
+              justify-content: center
+            &[data-section='more']
+              width: 144px
+              justify-content: flex-end
+        &__main
           display: flex
-          justify-content: center
-          align-items: center
+          height: 50px
+          padding: 10px
+          &-item
+            &[data-section='logo']
+              width: 50px
+              img
+                max-width: 100%
+                max-height: 100%
+            &[data-section='name']
+              width: 470px
+              padding-left: 20px
+              box-sizing: border-box
+              display: flex
+              align-items: center
+              font-family: $FiraSans
+              font-weight: 400
+              font-size: 14px
+              color: #394649
+              span
+                color: #d3d3d3
+            &[data-section='status']
+              width: 100px
+              display: flex
+              align-items: center
+              justify-content: center
+              span
+                font-family: $FiraSansSemiBold
+                font-weight: 500
+                font-size: 14px
+                color: #ff4661
+                &.active
+                  color: #06d6a0
+            &[data-section='more']
+              width: 144px
+              display: flex
+              align-items: center
+              justify-content: flex-end
+              button
+                cursor: pointer
+                border: 0
+                padding: 0
+                margin: 0
+                width: 30px
+                height: 30px
+                background-color: transparent
+                background-image: url("../images/icons/more.svg")
+                background-repeat: no-repeat
+                background-position: center
+                background-size: 70%
+                transition: .2s opacity ease-in-out
+                &:hover
+                  opacity: .5
+        &__dropdown
+          display: none
+          padding: 10px
+          justify-content: space-between
           position: relative
-          font-family: $FiraSans
-          font-weight: 400
-          font-size: 12px
-          box-sizing: border-box
-          color: #394649
-          flex-shrink: 0
-          &[data-col="name"]
-            width: 294px
-            text-align: left
-            justify-content: flex-start
-            padding-left: 65px
-            font-family: $Roboto
-            font-weight: 700
-            img
-              position: absolute
-              left: 0
-              top: 50%
-              transform: translateY(-50%)
-              max-width: 50px
-              max-height: 50px
-          &[data-col="publish"]
-            width: 125px
-          &[data-col="confirmation"]
-            width: 125px
-          &[data-col="price"]
-            width: 125px
-          &[data-col="ico"]
-            width: 125px
+          &.visible
+            display: flex
+          &:before
+            content: ''
+            position: absolute
+            left: 10px
+            right: 10px
+            top: 0
+            height: 1px
+            background-color: #394649
+          &__table
+            display: flex
+            &-item
+              padding-right: 20px
+              &:last-child
+                padding-right: 0
+              &__title
+                font-family: $FiraSansSemiBold
+                font-weight: 500
+                font-size: 12px
+                color: #394649
+                text-transform: uppercase
+                padding-bottom: 5px
+              &__value
+                font-family: $FiraSans
+                font-weight: 400
+                font-size: 12px
+                color: #394649
+                text-align: center
+          &__links
+            display: flex
+            align-items: center
+            &-item
+              display: flex
+              align-items: center
+              margin-right: 10px
+              &:last-child
+                margin-right: 0
+              a
+                cursor: pointer
+                border: 0
+                display: flex
+                align-items: center
+                justify-content: center
+                text-transform: uppercase
+                padding: 0 10px
+                height: 26px
+                font-family: $Archive
+                font-weight: 400
+                font-size: 12px
+                color: #fff
+                border-radius: 22px
+                background-color: #00e7d5
+                box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
 
-  .apps-loading
-    margin-top: 30px
-    &__title
-      font-family: $Archive
-      font-weight: 400
-      font-size: 14px
-      color: #06d6a0
-      margin-bottom: 15px
-    &__list
-      &--item
-        display: flex
-        margin-bottom: 10px
-        &:last-child
-          margin-bottom: 0
-        &__col
-          display: flex
-          align-items: center
-          flex-shrink: 0
-          font-family: $FiraSans
-          font-weight: 400
-          font-size: 14px
-          &[data-col="hashTag"]
-            width: 94px
-          &[data-col="hash"]
-            width: 700px
+  //.apps
+  //  box-sizing: border-box
+  //  background-color: #fff
+  //  padding: 15px
+  //  &__placeholder
+  //    font-family: $FiraSans
+  //    font-weight: 400
+  //    text-align: center
+  //  &__title
+  //    font-family: $Archive
+  //    font-weight: 400
+  //    font-size: 14px
+  //    color: #06d6a0
+  //    margin-bottom: 15px
+  //  &__header
+  //    display: flex
+  //    align-items: center
+  //    position: relative
+  //    margin-bottom: 10px
+  //    padding-bottom: 9px
+  //    border-bottom: 1px solid #54666b
+  //    &--col
+  //      font-family: $FiraSansSemiBold
+  //      font-size: 12px
+  //      font-weight: 500
+  //      color: #54666b
+  //      text-transform: uppercase
+  //      text-align: center
+  //      flex-shrink: 0
+  //      box-sizing: border-box
+  //      &[data-col="name"]
+  //        width: 294px
+  //        text-align: left
+  //      &[data-col="publish"]
+  //        width: 125px
+  //      &[data-col="confirmation"]
+  //        width: 125px
+  //      &[data-col="price"]
+  //        width: 125px
+  //      &[data-col="ico"]
+  //        width: 125px
+  //  &__list
+  //    &--item
+  //      margin-bottom: 10px
+  //      &:last-child
+  //        margin-bottom: 0
+  //      a
+  //        display: flex
+  //      &__col
+  //        height: 60px
+  //        display: flex
+  //        justify-content: center
+  //        align-items: center
+  //        position: relative
+  //        font-family: $FiraSans
+  //        font-weight: 400
+  //        font-size: 12px
+  //        box-sizing: border-box
+  //        color: #394649
+  //        flex-shrink: 0
+  //        &[data-col="name"]
+  //          width: 294px
+  //          text-align: left
+  //          justify-content: flex-start
+  //          padding-left: 65px
+  //          font-family: $Roboto
+  //          font-weight: 700
+  //          img
+  //            position: absolute
+  //            left: 0
+  //            top: 50%
+  //            transform: translateY(-50%)
+  //            max-width: 50px
+  //            max-height: 50px
+  //        &[data-col="publish"]
+  //          width: 125px
+  //        &[data-col="confirmation"]
+  //          width: 125px
+  //        &[data-col="price"]
+  //          width: 125px
+  //        &[data-col="ico"]
+  //          width: 125px
