@@ -4,7 +4,6 @@ import lib from '../lib';
 
 import Notification from '../components/Notification';
 
-
 let provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
 let web3 = new Web3(provider);
 

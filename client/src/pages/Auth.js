@@ -28,7 +28,7 @@ class Auth extends Component {
             popupOpen: false,
             user: {
                 name: '',
-                info: ''
+                desc: ''
             },
             registration: {
                 step: 1,
@@ -38,13 +38,28 @@ class Auth extends Component {
                 data: '',
                 params: {
                     name: '',
-                    info: ''
+                    desc: ''
                 }
             }
         };
     };
     resetState = async () => {
         await this.setState(this.getInitialState());
+    };
+
+    getDeveloper = async () => {
+        let { address } = this.state;
+        let info = await contractMethod({
+            contract: 'PlayMarket',
+            name: 'getInfoDev',
+            params: [address]
+        });
+        return {
+            name: web3Utils.hexToAscii(info.name).replace(/\u0000/g, ''),
+            desc: web3Utils.hexToAscii(info.desc).replace(/\u0000/g, ''),
+            state: info.state,
+            store: info.store
+        };
     };
 
     openModal = async () => {
@@ -82,7 +97,7 @@ class Auth extends Component {
                             user: {
                                 ...this.state.user,
                                 name: developer.name,
-                                info: developer.info
+                                desc: developer.desc
                             }
                         });
                         await this.openModal();
@@ -129,59 +144,31 @@ class Auth extends Component {
         }});
     };
 
-    getDeveloper = async () => {
-        let { address } = this.state;
-        let state = await contractMethod({
-            contract: 'PlayMarket',
-            name: 'getStateDev',
-            params: [address]
-        });
-        let name = await contractMethod({
-            contract: 'PlayMarket',
-            name: 'getNameDev',
-            params: [address]
-        });
-        let info = await contractMethod({
-            contract: 'PlayMarket',
-            name: 'getInfoDev',
-            params: [address]
-        });
-        return {
-            state: state,
-            name: web3Utils.hexToAscii(name).replace(/\u0000/g, ''),
-            info: web3Utils.hexToAscii(info).replace(/\u0000/g, '')
-        };
-    };
-
     handleSubmitLogin = async e => {
         e.preventDefault();
         let { isRegistered, keystore, address } = this.state;
-        let { name, info } = this.state.user;
+        let { name, desc } = this.state.user;
         if (isRegistered) {
             this.props.userLogin({
                 keystore: keystore,
                 address: address,
                 name: name,
-                info: info
+                desc: desc
             });
         }
-    };
-    handleSubmitConfirmation = async e => {
-        e.preventDefault();
-        await this.closeModal();
     };
 
     handleSubmitRegistration_1 = async e => {
         e.preventDefault();
         let { address } = this.state;
-        let { name, info } = this.state.registration.params;
+        let { name, desc } = this.state.registration.params;
 
         this.props.startLoading();
         try {
             let data = await getData({
                 contract: 'PlayMarket',
                 method: 'addDev',
-                params: [web3Utils.toHex(name), web3Utils.toHex(info)]
+                params: [web3Utils.toHex(name), web3Utils.toHex(desc)]
             });
             let gasLimit = await getGasLimit({
                 from: address,
@@ -236,7 +223,7 @@ class Auth extends Component {
                     user: {
                         ...this.state.user,
                         name: developer.name,
-                        info: developer.info
+                        desc: developer.desc
                     }
                 });
             } else {
@@ -265,7 +252,7 @@ class Auth extends Component {
     render() {
         let { balance, popupOpen, keystoreIsSelected, isRegistered } = this.state;
         let { step, gasLimit, password } = this.state.registration;
-        let { name, info } = this.state.registration.params;
+        let { name, desc } = this.state.registration.params;
 
         let { gasPrice } = this.props;
 
@@ -329,10 +316,10 @@ class Auth extends Component {
                                                                 <div className="auth-popup__login__list-item__value">{this.state.user.name}</div>
                                                             </li>
                                                             <li className="auth-popup__login__list-item">
-                                                                <div className="auth-popup__login__list-item__title">Info:</div>
+                                                                <div className="auth-popup__login__list-item__title">Description:</div>
                                                                 <div className="auth-popup__login__list-item__value">
                                                                     {
-                                                                        !!this.state.user.info ? this.state.user.info : (
+                                                                        !!this.state.user.desc ? this.state.user.desc : (
                                                                             <span className="auth-popup__login__list-item__value--placeholder">Not specified</span>
                                                                         )
                                                                     }
@@ -356,8 +343,8 @@ class Auth extends Component {
                                                                             <input className="auth-popup__registration__list-item__input" placeholder="Matellio" required name="name" type="text" value={name} onChange={this.handleChangeDataParams}/>
                                                                         </li>
                                                                         <li className="auth-popup__registration__list-item">
-                                                                            <div className="auth-popup__registration__list-item__title">Info:</div>
-                                                                            <input className="auth-popup__registration__list-item__input" placeholder="Mobile & Web Apps Development Company" name="info" type="text" value={info} onChange={this.handleChangeDataParams}/>
+                                                                            <div className="auth-popup__registration__list-item__title">Description:</div>
+                                                                            <input className="auth-popup__registration__list-item__input" placeholder="Mobile & Web Apps Development Company" name="desc" type="text" value={desc} onChange={this.handleChangeDataParams}/>
                                                                         </li>
                                                                     </ul>
                                                                     <div className="auth-popup__btn-block">
@@ -377,10 +364,10 @@ class Auth extends Component {
                                                                             <div className="auth-popup__registration__preview-list__item--value">{name}</div>
                                                                         </li>
                                                                         <li className="auth-popup__registration__preview-list__item">
-                                                                            <div className="auth-popup__registration__preview-list__item--title">Info:</div>
+                                                                            <div className="auth-popup__registration__preview-list__item--title">Description:</div>
                                                                             <div className="auth-popup__registration__preview-list__item--value">
                                                                                 {
-                                                                                    !!info ? info : (
+                                                                                    !!desc ? desc : (
                                                                                         <span className="auth-popup__registration__preview-list__item--value__placeholder">Not specified</span>
                                                                                     )
                                                                                 }

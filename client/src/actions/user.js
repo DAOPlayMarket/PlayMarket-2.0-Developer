@@ -9,7 +9,7 @@ export const userLogin = payload => {
         keystore: payload.keystore,
         address: payload.address,
         name: payload.name,
-        info: payload.info
+        desc: payload.desc
     }
 };
 
@@ -17,7 +17,7 @@ export const userChangeInfo = payload => {
     return {
         type: 'USER_CHANGE_INFO',
         name: payload.name,
-        info: payload.info
+        desc: payload.desc
     }
 };
 

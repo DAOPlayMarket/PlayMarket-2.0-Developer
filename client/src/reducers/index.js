@@ -9,7 +9,7 @@ const initState = {
         keystore: '',
         address: '',
         name: '',
-        info: ''
+        desc: ''
     },
     isLoading: false,
     gasPrice: '',
@@ -26,7 +26,7 @@ const rootReducer = (state = initState, action) => {
                     keystore: action.keystore,
                     address: action.address,
                     name: action.name,
-                    info: action.info
+                    desc: action.desc
                 }
             };
             break;
@@ -48,7 +48,7 @@ const rootReducer = (state = initState, action) => {
                 user: {
                     ...state.user,
                     name: action.name,
-                    info: action.info
+                    desc: action.desc
                 }
             };
             break;

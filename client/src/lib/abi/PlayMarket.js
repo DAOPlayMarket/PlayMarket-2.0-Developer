@@ -7,7 +7,7 @@ module.exports = [
                 "type": "bytes32"
             },
             {
-                "name": "_info",
+                "name": "_desc",
                 "type": "bytes32"
             }
         ],
@@ -211,7 +211,7 @@ module.exports = [
                 "type": "bytes32"
             },
             {
-                "name": "_info",
+                "name": "_desc",
                 "type": "bytes32"
             }
         ],
@@ -232,27 +232,27 @@ module.exports = [
         "name": "getInfoApp",
         "outputs": [
             {
-                "name": "",
+                "name": "hashType",
                 "type": "uint32"
             },
             {
-                "name": "",
+                "name": "appType",
                 "type": "uint32"
             },
             {
-                "name": "",
+                "name": "publish",
                 "type": "bool"
             },
             {
-                "name": "",
+                "name": "confirmation",
                 "type": "bool"
             },
             {
-                "name": "",
-                "type": "address"
+                "name": "price",
+                "type": "uint256"
             },
             {
-                "name": "",
+                "name": "hash",
                 "type": "string"
             }
         ],
@@ -402,7 +402,7 @@ module.exports = [
         "name": "getBuyObject",
         "outputs": [
             {
-                "name": "success",
+                "name": "",
                 "type": "bool"
             }
         ],
@@ -421,15 +421,15 @@ module.exports = [
         "name": "getInfoAppICO",
         "outputs": [
             {
-                "name": "",
+                "name": "hashType",
                 "type": "uint32"
             },
             {
-                "name": "",
+                "name": "confirmation",
                 "type": "bool"
             },
             {
-                "name": "",
+                "name": "hash",
                 "type": "string"
             }
         ],
@@ -666,25 +666,6 @@ module.exports = [
         "type": "function"
     },
     {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_dev",
-                "type": "address"
-            }
-        ],
-        "name": "getStateDev",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "constant": false,
         "inputs": [
             {
@@ -834,27 +815,27 @@ module.exports = [
         "name": "getDepositNode",
         "outputs": [
             {
-                "name": "",
+                "name": "ETH",
                 "type": "uint256"
             },
             {
-                "name": "",
+                "name": "PMT",
                 "type": "uint256"
             },
             {
-                "name": "",
+                "name": "minETH",
                 "type": "uint256"
             },
             {
-                "name": "",
+                "name": "minPMT",
                 "type": "uint256"
             },
             {
-                "name": "",
+                "name": "refundTime",
                 "type": "uint256"
             },
             {
-                "name": "",
+                "name": "refundState",
                 "type": "bool"
             }
         ],
@@ -999,8 +980,20 @@ module.exports = [
         "name": "getInfoDev",
         "outputs": [
             {
-                "name": "",
+                "name": "name",
                 "type": "bytes32"
+            },
+            {
+                "name": "desc",
+                "type": "bytes32"
+            },
+            {
+                "name": "state",
+                "type": "bool"
+            },
+            {
+                "name": "store",
+                "type": "uint32"
             }
         ],
         "payable": false,
@@ -1118,7 +1111,7 @@ module.exports = [
         "name": "getTimeSubscription",
         "outputs": [
             {
-                "name": "_endTime",
+                "name": "",
                 "type": "uint256"
             }
         ],
@@ -1210,27 +1203,27 @@ module.exports = [
         "name": "getInfoNode",
         "outputs": [
             {
-                "name": "",
+                "name": "hashType",
                 "type": "uint32"
             },
             {
-                "name": "",
+                "name": "collectState",
                 "type": "bool"
             },
             {
-                "name": "",
+                "name": "collectTime",
                 "type": "uint256"
             },
             {
-                "name": "",
+                "name": "hash",
                 "type": "string"
             },
             {
-                "name": "",
+                "name": "ip",
                 "type": "string"
             },
             {
-                "name": "",
+                "name": "coordinates",
                 "type": "string"
             }
         ],

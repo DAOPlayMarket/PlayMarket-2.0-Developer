@@ -22,7 +22,7 @@ class Header extends Component {
             data: '',
             params: {
                 name: '',
-                info: ''
+                desc: ''
             }
         }
     };
@@ -35,7 +35,7 @@ class Header extends Component {
 
     openModal = async e => {
         e.preventDefault();
-        let { address, name, info } = this.props;
+        let { address, name, desc } = this.props;
         let balance = await getBalance(address);
         await this.setState({
             balance: balance,
@@ -45,7 +45,7 @@ class Header extends Component {
                 params: {
                     ...this.state.changeInfoDev.params,
                     name: name,
-                    info: info
+                    desc: desc
                 }
             }
         });
@@ -81,39 +81,28 @@ class Header extends Component {
 
     getDeveloper = async () => {
         let { address } = this.props;
-        let state = await contractMethod({
-            contract: 'PlayMarket',
-            name: 'getStateDev',
-            params: [address]
-        });
-        let name = await contractMethod({
-            contract: 'PlayMarket',
-            name: 'getNameDev',
-            params: [address]
-        });
         let info = await contractMethod({
             contract: 'PlayMarket',
             name: 'getInfoDev',
             params: [address]
         });
         return {
-            state: state,
-            name: web3Utils.hexToAscii(name).replace(/\u0000/g, ''),
-            info: web3Utils.hexToAscii(info).replace(/\u0000/g, '')
+            name: web3Utils.hexToAscii(info.name).replace(/\u0000/g, ''),
+            desc: web3Utils.hexToAscii(info.desc).replace(/\u0000/g, '')
         };
     };
 
     handleSubmitChangeInfo_1 = async e => {
         e.preventDefault();
         let { address } = this.props;
-        let { name, info } = this.state.changeInfoDev.params;
+        let { name, desc } = this.state.changeInfoDev.params;
 
         this.props.startLoading();
         try {
             let data = await getData({
                 contract: 'PlayMarket',
                 method: 'changeNameDev',
-                params: [web3Utils.toHex(name), web3Utils.toHex(info)]
+                params: [web3Utils.toHex(name), web3Utils.toHex(desc)]
             });
             let gasLimit = await getGasLimit({
                 from: address,
@@ -172,7 +161,7 @@ class Header extends Component {
                 let developer = await this.getDeveloper();
                 this.props.userChangeInfo({
                     name: developer.name,
-                    info: developer.info
+                    desc: developer.desc
                 });
                 await this.setState({
                     changeInfoDev: {
@@ -269,8 +258,8 @@ class Header extends Component {
                                                               <input className="header-popup__changeInfo__list-item__input" required name="name" type="text" value={changeInfoDev.params.name} onChange={this.handleChangeDataParams}/>
                                                           </li>
                                                           <li className="header-popup__changeInfo__list-item">
-                                                              <div className="header-popup__changeInfo__list-item__title">Info:</div>
-                                                              <input className="header-popup__changeInfo__list-item__input" name="info" type="text" value={changeInfoDev.params.info} onChange={this.handleChangeDataParams}/>
+                                                              <div className="header-popup__changeInfo__list-item__title">Description:</div>
+                                                              <input className="header-popup__changeInfo__list-item__input" name="desc" type="text" value={changeInfoDev.params.desc} onChange={this.handleChangeDataParams}/>
                                                           </li>
                                                       </ul>
                                                       <div className="header-popup__btn-block">
@@ -290,10 +279,10 @@ class Header extends Component {
                                                               <div className="header-popup__changeInfo__preview-list__item--value">{changeInfoDev.params.name}</div>
                                                           </li>
                                                           <li className="header-popup__changeInfo__preview-list__item">
-                                                              <div className="header-popup__changeInfo__preview-list__item--title">Info:</div>
+                                                              <div className="header-popup__changeInfo__preview-list__item--title">Description:</div>
                                                               <div className="header-popup__changeInfo__preview-list__item--value">
                                                                   {
-                                                                      !!changeInfoDev.params.info ? changeInfoDev.params.info : (
+                                                                      !!changeInfoDev.params.desc ? changeInfoDev.params.desc : (
                                                                           <span className="header-popup__changeInfo__preview-list__item--value__placeholder">Not specified</span>
                                                                       )
                                                                   }
@@ -368,7 +357,7 @@ const mapStateToProps = (state) => {
         keystore: state.user.keystore,
         address: state.user.address,
         name: state.user.name,
-        info: state.user.info
+        desc: state.user.desc
     }
 };
 

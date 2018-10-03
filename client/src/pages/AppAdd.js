@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import axios from 'axios';
 import {Helmet} from "react-helmet";
 import TextareaAutosize from 'react-textarea-autosize';
+import fileExtension from 'file-extension';
 import $ from "jquery";
-import filesize from 'filesize'
+import filesize from 'filesize';
 import Popup from "reactjs-popup";
 import {utils as web3Utils} from 'web3';
 
@@ -174,9 +175,6 @@ class AppAdd extends Component {
         let name = e.target.getAttribute('name');
         await this.setState({app: {...this.state.app, [name]: e.target.value}});
     };
-    handleChangePassword = async e => {
-        await this.setState({password: e.target.value});
-    };
 
     handleChangeLogo = async e => {
         e.persist();
@@ -210,7 +208,6 @@ class AppAdd extends Component {
         let file = e.target.files.length ? e.target.files[0] : null;
         if (file) {
             if (file.type === 'application/vnd.android.package-archive') {
-                // console.log(filesize(file.size));
                 this.setState({app: {...this.state.app, files: {...this.state.app.files, apk: file}}});
             } else {
                 $(e.target).val('');
@@ -218,7 +215,7 @@ class AppAdd extends Component {
                 Notification('error', 'Invalid application file');
             }
         } else {
-            this.setState({app: {...this.state.app, files: {...this.state.app.files, apk: file}}});
+            this.setState({app: {...this.state.app, files: {...this.state.app.files, apk: null}}});
         }
     };
     handleChangeGallery = async e => {
@@ -296,9 +293,8 @@ class AppAdd extends Component {
             });
         }
     };
-    handleRemoveKeyword = async e => {
-        let index = $(e.target).data('index');
-
+    handleRemoveKeyword = index => async e => {
+        e.preventDefault();
         let _keywords = this.state.app.keywords;
         _keywords.splice(index, 1);
         await this.setState({
@@ -333,7 +329,9 @@ class AppAdd extends Component {
             fd.append("subCategory", subCategory);
             fd.append("slogan", slogan);
             fd.append("shortDescr", shortDescr);
-            fd.append("keywords", keywords);
+
+            fd.append("keywords", JSON.stringify(keywords));
+
             fd.append("youtubeID", youtubeID);
             fd.append("email", email);
             fd.append("packageName", packageName);
@@ -348,15 +346,15 @@ class AppAdd extends Component {
             fd.append("longDescr", longDescr);
 
             fd.append("apk", apk);
-            fd.append("logo", logo);
-            fd.append("banner", banner);
+            fd.append("logo", logo, logo ? ('logo.' + fileExtension(logo.name)) : null);
+            fd.append("banner", banner, banner ? ('banner.' + fileExtension(banner.name)) : null);
             for (let i = 0; i < gallery.length; i++) {
-                fd.append("gallery", gallery[i]);
+                fd.append("gallery", gallery[i], [i] + '.' + fileExtension(gallery[i].name));
             }
 
             let response = (await axios({
                 method: 'post',
-                url: 'api/app-add',
+                url: '/api/app-add',
                 headers: {'address': address},
                 data: fd
             })).data;
@@ -488,7 +486,7 @@ class AppAdd extends Component {
                                     <div className="app-add__section-1__logo">
                                         {logo ? (<img src={logo.imageBase64} alt="PREVIEW"/>) : null}
                                         <div className={"app-add__section-1__logo__placeholder " + (logo ? '' : 'visible')}>no image available</div>
-                                        <input required type="file" name="logo" accept=".png, .jpg, .jpeg" onChange={this.handleChangeLogo}/>
+                                        <input required type="file" accept=".png, .jpg, .jpeg" onChange={this.handleChangeLogo}/>
                                     </div>
                                 </div>
                                 <div className="app-add__section-1__box">
@@ -631,7 +629,7 @@ class AppAdd extends Component {
                                                 return (
                                                     <li className="app-add__section-4__keywords-block__list-item" key={index}>
                                                         <div className="app-add__section-4__keywords-block__list-item__value">{item}</div>
-                                                        <div className="app-add__section-4__keywords-block__list-item__remove" data-index={index} onClick={this.handleRemoveKeyword} title="Remove"></div>
+                                                        <div className="app-add__section-4__keywords-block__list-item__remove" onClick={this.handleRemoveKeyword(index)} title="Remove"></div>
                                                     </li>
                                                 )
                                             })
@@ -665,7 +663,7 @@ class AppAdd extends Component {
                                     <li className="app-add__section-4__typical-block-text__list--item">
                                         <div className="app-add__section-4__typical-block-text__list--item__title">YouTube video ID</div>
                                         <div className="app-add__section-4__typical-block-text__list--item__input">
-                                            <input  placeholder="QYjyfCt6gWc" type="text" name='youtubeID' value={youtubeID} onChange={this.handleChangeText}/>
+                                            <input placeholder="QYjyfCt6gWc" type="text" name='youtubeID' value={youtubeID} onChange={this.handleChangeText}/>
                                         </div>
                                     </li>
                                 </ul>

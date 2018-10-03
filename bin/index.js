@@ -44,7 +44,7 @@ app.use("*", function(req, resp) {
             console.log('IPFS start successful');
             await Promise.all([
                 makeDir(lib.dirApp),
-                // makeDir(lib.dirICO)
+                makeDir(lib.dirICO)
             ]);
             console.log('Data folder structure will be created');
             let PORT = process.env.PORT || lib.server.port;
