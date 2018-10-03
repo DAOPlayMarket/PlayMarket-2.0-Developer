@@ -659,19 +659,19 @@ class IcoAdd extends Component {
                                                 <li className="ico-add__section-1__content__list-item">
                                                     <div className="ico-add__section-1__content__list-item__title">Token name:</div>
                                                     <div className="ico-add__section-1__content__list-item__input">
-                                                        <input  placeholder="Play Market Token" type="text" value={tokenName} onChange={this.handleChangeTokenName}/>
+                                                        <input required placeholder="Play Market Token" type="text" value={tokenName} onChange={this.handleChangeTokenName}/>
                                                     </div>
                                                 </li>
                                                 <li className="ico-add__section-1__content__list-item">
                                                     <div className="ico-add__section-1__content__list-item__title">Token symbol:</div>
                                                     <div className="ico-add__section-1__content__list-item__input">
-                                                        <input  placeholder="PMT" type="text" value={tokenSymbol} onChange={this.handleChangeTokenSymbol}/>
+                                                        <input required placeholder="PMT" type="text" value={tokenSymbol} onChange={this.handleChangeTokenSymbol}/>
                                                     </div>
                                                 </li>
                                                 <li className="ico-add__section-1__content__list-item">
                                                     <div className="ico-add__section-1__content__list-item__title">Hard cup USD:</div>
                                                     <div className="ico-add__section-1__content__list-item__input">
-                                                        <input  placeholder="1500000" min="1" type="number" value={hardCapUSD} onChange={this.handleChangeHardCapUSD}/>
+                                                        <input required placeholder="1500000" min="1" type="number" value={hardCapUSD} onChange={this.handleChangeHardCapUSD}/>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -705,11 +705,6 @@ class IcoAdd extends Component {
                                                 The system will automatically issue a token and will place the app in exchange ICO, stop or significantly change the settings of ICO will not be possible until its completion.
                                             </div>
                                         </div>
-                                        {/*<div className="app-add__section-1__logo">*/}
-                                        {/*{logo ? (<img src={logo.imageBase64} alt="PREVIEW"/>) : null}*/}
-                                        {/*<div className={"app-add__section-1__logo__placeholder " + (logo ? '' : 'visible')}>no image available</div>*/}
-                                        {/*<input type="file" name="logo" accept=".png, .jpg, .jpeg" onChange={this.handleChangeLogo}/>*/}
-                                        {/*</div>*/}
                                     </div>
                                 </section>
                                 <section className="ico-add__section ico-add__section-2">
@@ -748,7 +743,7 @@ class IcoAdd extends Component {
                                                             }
                                                         </div>
                                                         <div className="ico-add__section-2__content__box__description-item__content__textarea">
-                                                            <TextareaAutosize  placeholder="DAO PlayMarket 2.0 is a decentralized Android App Store that accepts payments in cryptocurrency and is combined with an ICO platform for developers." minRows={1} value={ico.description.text} onChange={this.handleChangeDescriptionText('description')}/>
+                                                            <TextareaAutosize required placeholder="DAO PlayMarket 2.0 is a decentralized Android App Store that accepts payments in cryptocurrency and is combined with an ICO platform for developers." minRows={1} value={ico.description.text} onChange={this.handleChangeDescriptionText('description')}/>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -782,7 +777,7 @@ class IcoAdd extends Component {
                                                             }
                                                         </div>
                                                         <div className="ico-add__section-2__content__box__description-item__content__textarea">
-                                                            <TextareaAutosize placeholder="Investors who participate in the crowdsale of the DAO PlayMarket 2.0 will receive dividend income from the PlayMarket Foundation. This fund will be replenished by a 5% commission fee, paid by developers who issue their own tokens of their applications. The platform will host a built-in crypto-exchange PEX. It will be possible to exchange tokens of the platform and applications to fiat or other cryptocurrencies and back. The exchange will be decentralized, and therefore more resistant to possible hacker attacks." minRows={1} value={ico.advantages.text} onChange={this.handleChangeDescriptionText('advantages')}/>
+                                                            <TextareaAutosize required placeholder="Investors who participate in the crowdsale of the DAO PlayMarket 2.0 will receive dividend income from the PlayMarket Foundation. This fund will be replenished by a 5% commission fee, paid by developers who issue their own tokens of their applications. The platform will host a built-in crypto-exchange PEX. It will be possible to exchange tokens of the platform and applications to fiat or other cryptocurrencies and back. The exchange will be decentralized, and therefore more resistant to possible hacker attacks." minRows={1} value={ico.advantages.text} onChange={this.handleChangeDescriptionText('advantages')}/>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -801,7 +796,7 @@ class IcoAdd extends Component {
                                                                 <div className="ico-add__section-2__content__box__logo-banner__logo-box__logo__placeholder">Add image</div>
                                                             )
                                                         }
-                                                        <input  type="file" accept=".png, .jpg, .jpeg" onChange={this.handleChangeLogo}/>
+                                                        <input required type="file" accept=".png, .jpg, .jpeg" onChange={this.handleChangeLogo}/>
                                                     </div>
                                                 </div>
                                                 <div className="ico-add__section-2__content__box__logo-banner__banner-box">
@@ -896,7 +891,7 @@ class IcoAdd extends Component {
                                                     <li className="ico-add__section-2__content__box__contacts__list--item">
                                                         <div className="ico-add__section-2__content__box__contacts__list--item__title">EMAIL</div>
                                                         <div className="ico-add__section-2__content__box__contacts__list--item__input">
-                                                            <input placeholder="support@playmarket.io" type="email" name='email' value={email} onChange={this.handleChangeText}/>
+                                                            <input required placeholder="support@playmarket.io" type="email" name='email' value={email} onChange={this.handleChangeText}/>
                                                         </div>
                                                     </li>
                                                     <li className="ico-add__section-2__content__box__contacts__list--item">

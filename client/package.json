@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:8090",
+  "proxy": "http://127.0.0.1:3030",
   "dependencies": {
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
