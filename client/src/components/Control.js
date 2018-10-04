@@ -4,6 +4,8 @@ import {utils as web3Utils}  from 'web3';
 
 import { setGasPrice } from '../actions/tx'
 
+import lib from '../lib'
+
 class Control extends Component {
     handleChangeGasPrice = (e) => {
         let value = e.target.value;
@@ -13,14 +15,33 @@ class Control extends Component {
     };
 
     render(){
-        let { gasPrice } = this.props;
+        let { gasPrice, mode } = this.props;
 
         let value = web3Utils.fromWei(gasPrice, 'gwei');
 
         return (
-            !!gasPrice ? (
+            !!gasPrice && !!mode ? (
                 <div className="control">
-                    <div className="control__network">Network: <span>Rinkeby</span></div>
+                    <div className="control__network">Network:&nbsp;
+                        <span>
+                            {
+                                lib.ethereum.chainId === 1 ? 'Main' : null
+                            }
+                            {
+                                lib.ethereum.chainId === 4 ? 'Rinkeby' : null
+                            }
+                        </span>
+                    </div>
+                    <div className="control__provider">Provider:&nbsp;
+                        <span>
+                            {
+                                mode === 'keystore' ? 'Infura' : null
+                            }
+                            {
+                                mode === 'metamask' ? 'MetaMask' : null
+                            }
+                        </span>
+                    </div>
                     <div className="control__price">Gas Price: <span>{value}</span> Gwei</div>
                     <div className="control__input">
                         <input type="range" min="1" max="99" step="1" value={value} onChange={this.handleChangeGasPrice}/>
@@ -35,7 +56,8 @@ class Control extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        gasPrice: state.gasPrice
+        gasPrice: state.gasPrice,
+        mode: state.mode
     }
 };
 

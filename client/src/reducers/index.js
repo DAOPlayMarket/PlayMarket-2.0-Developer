@@ -1,4 +1,4 @@
-import { categories } from '../lib/categories.js'
+import { categories } from '../lib/categories.js';
 
 const initState = {
     node: {
@@ -13,11 +13,18 @@ const initState = {
     },
     isLoading: false,
     gasPrice: '',
+    mode: '',
     categories: categories
 };
 
 const rootReducer = (state = initState, action) => {
     switch (action.type) {
+        case 'SET_MODE':
+            state = {
+                ...state,
+                mode: action.mode
+            };
+            break;
         case 'USER_LOGIN':
             state = {
                 ...state,

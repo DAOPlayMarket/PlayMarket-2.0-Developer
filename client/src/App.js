@@ -12,9 +12,7 @@ import {AuthRoute, DashboardRoute, ErrorRoute} from './routes'
 import Preloader from './components/Preloader'
 import Control from './components/Control'
 
-import { setGasPrice } from './actions/tx'
 
-import { getGasPrice } from './utils/web3'
 
 import Apps from './pages/Apps'
 import App from './pages/App'
@@ -25,10 +23,7 @@ import NotFound from './pages/NotFound'
 
 class _App extends Component {
     async componentDidMount(){
-        let gasPrice = await getGasPrice();
-        await this.props.setGasPrice({
-            gasPrice: gasPrice
-        })
+
     }
 
     render() {
@@ -70,7 +65,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setGasPrice: (payload) => dispatch(setGasPrice(payload))
+
     }
 };
 

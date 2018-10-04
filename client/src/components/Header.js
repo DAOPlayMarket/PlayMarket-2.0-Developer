@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Popup from "reactjs-popup";
 import {utils as web3Utils} from 'web3';
 
-import { getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 import Notification from '../components/Notification';
 
@@ -135,19 +135,51 @@ class Header extends Component {
     };
     handleSubmitChangeInfo_3 = async e => {
         e.preventDefault();
+        let { gasPrice, address, mode } = this.props;
+        let { data, gasLimit } = this.state.changeInfoDev;
         this.props.startLoading();
-        let { keystore, gasPrice, address } = this.props;
-        let { password, data, gasLimit } = this.state.changeInfoDev;
+        let tx;
+        switch (mode) {
+            case 'keystore':
+                let { keystore } = this.props;
+                let { password } = this.state.changeInfoDev;
+                try {
+                    let wallet = await getWallet(keystore, password);
+                    let signedTransaction = await getSignedTransaction({
+                        wallet: wallet,
+                        contract: 'PlayMarket',
+                        data: data,
+                        gasLimit: gasLimit,
+                        gasPrice: gasPrice
+                    });
+                    tx = await sendSignedTransaction(signedTransaction.rawTransaction);
+                } catch (err) {
+                    this.props.endLoading();
+                    Notification('error', err.message);
+                    return;
+                }
+                break;
+            case 'metamask':
+                try {
+                    let txParams = await getTxParams({
+                        contract: 'PlayMarket',
+                        data: data,
+                        gasLimit: gasLimit,
+                        gasPrice: gasPrice,
+                        address: address
+                    });
+                    tx = await sendTransaction_MM(txParams);
+                } catch (err) {
+                    this.props.endLoading();
+                    Notification('error', err.message);
+                    return;
+                }
+                break;
+            default:
+                Notification('error', 'Mode is not selected');
+                break;
+        }
         try {
-            let wallet = await getWallet(keystore, password);
-            let signedTransaction = await getSignedTransaction({
-                wallet: wallet,
-                contract: 'PlayMarket',
-                data: data,
-                gasLimit: gasLimit,
-                gasPrice: gasPrice
-            });
-            let tx = await sendSignedTransaction(signedTransaction.rawTransaction);
             let transactionStatus = await getTransactionStatus(tx.transactionHash);
             let balance = await getBalance(address);
             await this.setState({
@@ -209,7 +241,7 @@ class Header extends Component {
     };
 
     render(){
-        let { address, name, gasPrice } = this.props;
+        let { address, name, gasPrice, mode } = this.props;
         let { popupOpen, balance, changeInfoDev } = this.state;
         let { gasLimit, password } = this.state.changeInfoDev;
 
@@ -316,12 +348,16 @@ class Header extends Component {
                                               changeInfoDev.step === 3 ? (
                                                   <form className="header-popup__changeInfo" onSubmit={this.handleSubmitChangeInfo_3}>
                                                       <div className="header-popup__changeInfo__title">Sending transaction</div>
-                                                      <ul className="header-popup__changeInfo__list">
-                                                          <li className="header-popup__changeInfo__list-item">
-                                                              <div className="header-popup__changeInfo__list-item__title">Keystore password:</div>
-                                                              <input className="header-popup__changeInfo__list-item__input" required name="password" type="password" value={password} onChange={this.handleChangeTxParams}/>
-                                                          </li>
-                                                      </ul>
+                                                      {
+                                                          mode === 'keystore' ? (
+                                                              <ul className="header-popup__changeInfo__list">
+                                                                  <li className="header-popup__changeInfo__list-item">
+                                                                      <div className="header-popup__changeInfo__list-item__title">Keystore password:</div>
+                                                                      <input className="header-popup__changeInfo__list-item__input" required name="password" type="password" value={password} onChange={this.handleChangeTxParams}/>
+                                                                  </li>
+                                                              </ul>
+                                                          ) : null
+                                                      }
                                                       <div className="header-popup__btn-block">
                                                           <button className="header-popup__btn-block__btn">send tx</button>
                                                           <div className="header-popup__btn-block__btn--cancel" onClick={this.handleClickBackChangeInfo_2}>Back</div>
@@ -357,7 +393,8 @@ const mapStateToProps = (state) => {
         keystore: state.user.keystore,
         address: state.user.address,
         name: state.user.name,
-        desc: state.user.desc
+        desc: state.user.desc,
+        mode: state.mode
     }
 };
 

@@ -14,7 +14,7 @@ import Select from 'react-select';
 
 import { startLoading, endLoading } from '../actions/preloader'
 
-import { getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 import Notification from '../components/Notification';
 
@@ -419,19 +419,50 @@ class AppAdd extends Component {
     };
     handleSubmitRegistration_2 = async e => {
         e.preventDefault();
+        let { gasPrice, address, mode } = this.props;
+        let { data, gasLimit } = this.state.registration;
         this.props.startLoading();
-        let { keystore, gasPrice, address } = this.props;
-        let { password, data, gasLimit } = this.state.registration;
+        let tx;
+        switch (mode) {
+            case 'keystore':
+                let { keystore } = this.state;
+                let { password } = this.state.registration;
+                try {
+                    let wallet = await getWallet(keystore, password);
+                    let signedTransaction = await getSignedTransaction({
+                        wallet: wallet,
+                        contract: 'PlayMarket',
+                        data: data,
+                        gasLimit: gasLimit,
+                        gasPrice: gasPrice
+                    });
+                    tx = await sendSignedTransaction(signedTransaction.rawTransaction);
+                } catch (err) {
+                    this.props.endLoading();
+                    Notification('error', err.message);
+                    return;
+                }
+                break;
+            case 'metamask':
+                try {
+                    let txParams = await getTxParams({
+                        contract: 'PlayMarket',
+                        data: data,
+                        gasLimit: gasLimit,
+                        gasPrice: gasPrice,
+                        address: address
+                    });
+                    tx = await sendTransaction_MM(txParams);
+                } catch (err) {
+                    this.props.endLoading();
+                    Notification('error', err.message);
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
         try {
-            let wallet = await getWallet(keystore, password);
-            let signedTransaction = await getSignedTransaction({
-                wallet: wallet,
-                contract: 'PlayMarket',
-                data: data,
-                gasLimit: gasLimit,
-                gasPrice: gasPrice
-            });
-            let tx = await sendSignedTransaction(signedTransaction.rawTransaction);
             let transactionStatus = await getTransactionStatus(tx.transactionHash);
             let balance = await getBalance(address);
             await this.setState({
@@ -448,11 +479,10 @@ class AppAdd extends Component {
             } else {
                 Notification('error', 'Transaction failed');
             }
-            this.props.endLoading();
         } catch (err) {
-            this.props.endLoading();
             Notification('error', err.message);
         }
+        this.props.endLoading();
     };
     handleSubmitRegistration_3 = async e => {
         e.preventDefault();
@@ -463,10 +493,9 @@ class AppAdd extends Component {
         let { popupOpen, hash, hashType, balance } = this.state;
 
         let { idCTG, subCategory, nameApp, slogan, shortDescr, keywords, youtubeID, email, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
-        // let { packageName, version } = this.state.app;
         let { gallery, logo, banner, keyword, select } = this.state.SERVICE;
 
-        let { gasPrice, address } = this.props;
+        let { gasPrice, address, mode } = this.props;
         let { step, gasLimit, password } = this.state.registration;
 
         return (
@@ -840,12 +869,23 @@ class AppAdd extends Component {
                                                         <form className="app-add-popup__registration" onSubmit={this.handleSubmitRegistration_2}>
                                                             <h3 className="app-add-popup__registration__title">app registration</h3>
                                                             <div className="app-add-popup__registration__subtitle">Sending transaction</div>
-                                                            <ul className="app-add-popup__registration__list">
-                                                                <li className="app-add-popup__registration__list-item">
-                                                                    <div className="app-add-popup__registration__list-item__title">Keystore password:</div>
-                                                                    <input className="app-add-popup__registration__list-item__input" required name="password" type="password" value={password} onChange={this.handleChangeTxParams}/>
-                                                                </li>
-                                                            </ul>
+                                                            {
+                                                                mode === 'keystore' ? (
+                                                                    <ul className="app-add-popup__registration__list">
+                                                                        <li className="app-add-popup__registration__list-item">
+                                                                            <div
+                                                                                className="app-add-popup__registration__list-item__title">
+                                                                                Keystore password:
+                                                                            </div>
+                                                                            <input
+                                                                                className="app-add-popup__registration__list-item__input"
+                                                                                required name="password" type="password"
+                                                                                value={password}
+                                                                                onChange={this.handleChangeTxParams}/>
+                                                                        </li>
+                                                                    </ul>
+                                                                ) : null
+                                                            }
                                                             <div className="app-add-popup__btn-block">
                                                                 <button className="app-add-popup__btn-block__btn">send tx</button>
                                                                 <div className="app-add-popup__btn-block__btn--cancel" onClick={this.handleClickBackRegistration_1}>Back</div>
@@ -871,7 +911,8 @@ const mapStateToProps = (state) => {
         gasPrice: state.gasPrice,
         categories: state.categories,
         address: state.user.address,
-        keystore: state.user.keystore
+        keystore: state.user.keystore,
+        mode: state.mode
     }
 };
 

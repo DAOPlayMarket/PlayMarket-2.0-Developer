@@ -87,7 +87,7 @@
     margin: 0 auto
     display: flex
     justify-content: center
-    &__btn
+    &__keystore
       position: relative
       display: flex
       align-items: center
@@ -125,6 +125,40 @@
         font-weight: 400
         font-size: 16px
         color: #fff
+    &__metamask
+      &__divider
+        text-align: center
+        margin: 20px 0 5px
+        font-family: $FiraSansSemiBold
+        font-weight: 500
+        font-size: 14px
+        color: #67777b
+      &__btn
+        display: flex
+        justify-content: center
+        button
+          min-height: 40px
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 14px
+          color: #67777b
+          cursor: pointer
+          border: 0
+          background-color: transparent
+          padding: 10px 10px 10px 50px
+          position: relative
+          &:before
+            content: ''
+            position: absolute
+            top: 50%
+            left: 10px
+            transform: translateY(-50%)
+            width: 30px
+            height: 30px
+            background-image: url("../images/icons/metamask.svg")
+            background-size: contain
+            background-repeat: no-repeat
+            background-position: center
   &-popup
     width: 490px !important
     padding: 60px 50px 50px !important

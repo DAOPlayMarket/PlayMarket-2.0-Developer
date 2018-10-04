@@ -4,26 +4,93 @@ import lib from '../lib';
 
 import Notification from '../components/Notification';
 
-let provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
-let web3 = new Web3(provider);
+let web3;
+export async function setProvider(provider) {
+    try {
+        switch (provider) {
+            case 'infura':
+                stopAddressWatcher_MM();
+                provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
+                web3 = new Web3(provider);
+                Notification('success', 'Web3 (Infura) connection successful!');
+                break;
+            case 'metamask':
+                if (typeof window.web3 !== 'undefined') {
+                    provider = window.web3.currentProvider;
+                    web3 = new Web3(provider);
+                    startAddressWatcher_MM();
+                    Notification('success', 'Web3 (MetaMask) connection successful!');
+                } else {
+                    throw new TypeError('MetaMask extension not installed or disable');
+                }
+                break;
+            default:
+                break;
+        }
+    } catch (err) {
+        throw err;
+    }
+}
 
-provider.on('connect', () => {
-    Notification('success', 'Web3 WSS connection successful!');
-});
-provider.on('error', e => {
-    Notification('error', 'Web3 WSS connection error:', e.message);
-});
-provider.on('close', e => {
-    Notification('warn', 'Web3 WSS connection close:', e.message);
-});
-provider.on('end', e => {
-    Notification('warn', 'Web3 WSS connection end:', e.message);
-    // provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
-    // web3 = new Web3(provider);
-    // provider.on('connect', function () {
-    //     Notification('success', 'Web3 WSS reconnection successful!');
-    // });
-});
+/*
+-----------------------------------------------------------------------------
+ */
+
+let timer = null;
+function startAddressWatcher_MM() {
+    (async () => {
+        let address = await web3.eth.getCoinbase();
+        timer = setInterval(async() => {
+            if (await web3.eth.getCoinbase() !== address) {
+                window.location.reload();
+            }
+        }, 1000);
+    })();
+}
+function stopAddressWatcher_MM() {
+    (async () => {
+        clearInterval(timer);
+        timer = null;
+    })();
+}
+
+export async function getAddress_MM() {
+    try {
+        return await web3.eth.getCoinbase();
+    } catch (err) {
+        throw err;
+    }
+}
+export async function sendTransaction_MM(params) {
+    try {
+        return await web3.eth.sendTransaction(params);
+    } catch (err) {
+        throw err;
+    }
+}
+
+/*
+-----------------------------------------------------------------------------
+ */
+
+export async function getTxParams(obj) {
+    try {
+        return {
+            gasPrice: web3.utils.toHex(obj.gasPrice),
+            gasLimit: web3.utils.toHex(obj.gasLimit),
+            from: obj.address,
+            to: lib.contracts[obj.contract].address,
+            data: obj.data,
+            chainId: lib.ethereum.chainId
+        }
+    } catch (err) {
+        throw err;
+    }
+}
+
+/*
+-----------------------------------------------------------------------------
+ */
 
 export async function getWallet(keystore, password) {
     try {
@@ -32,7 +99,6 @@ export async function getWallet(keystore, password) {
         throw err;
     }
 }
-
 export async function getBalance(address) {
     try {
         return await web3.eth.getBalance(address);
@@ -40,7 +106,6 @@ export async function getBalance(address) {
         throw err;
     }
 }
-
 export async function getData(obj) {
     try {
         let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
@@ -49,7 +114,6 @@ export async function getData(obj) {
         throw err;
     }
 }
-
 export async function getGasPrice() {
     try {
         return await web3.eth.getGasPrice();
@@ -57,7 +121,6 @@ export async function getGasPrice() {
         throw err;
     }
 }
-
 export async function getGasLimit(obj) {
     try {
         return await web3.eth.estimateGas({
@@ -69,7 +132,6 @@ export async function getGasLimit(obj) {
         throw err;
     }
 }
-
 export async function getSignedTransaction(obj) {
     try {
         let params = {
@@ -77,14 +139,13 @@ export async function getSignedTransaction(obj) {
             gasLimit: web3.utils.toHex(obj.gasLimit),
             to: lib.contracts[obj.contract].address,
             data: obj.data,
-            chainId: 4
+            chainId: lib.ethereum.chainId
         };
         return await web3.eth.accounts.signTransaction(params, obj.wallet.privateKey);
     } catch (err) {
         throw err;
     }
 }
-
 export async function sendSignedTransaction(rawTransaction) {
     try {
         return await web3.eth.sendSignedTransaction(rawTransaction);
@@ -92,7 +153,6 @@ export async function sendSignedTransaction(rawTransaction) {
         throw err;
     }
 }
-
 export async function getTransactionStatus(hash) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -113,7 +173,6 @@ export async function getTransactionStatus(hash) {
         }
     });
 }
-
 export async function contractMethod(obj) {
     try {
         let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
