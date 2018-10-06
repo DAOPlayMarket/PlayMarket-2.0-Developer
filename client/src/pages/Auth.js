@@ -4,7 +4,8 @@ import {Helmet} from "react-helmet";
 import $ from "jquery";
 import {utils as web3Utils} from 'web3';
 import Popup from "reactjs-popup";
-// import Web3 from 'web3';
+
+import lib from '../lib';
 
 import Notification from '../components/Notification';
 
@@ -12,8 +13,9 @@ import { startLoading, endLoading } from '../actions/preloader'
 import { userLogin } from '../actions/user'
 import { setMode } from '../actions/mode'
 import { setGasPrice } from '../actions/tx'
+import { setContracts } from '../actions/contract'
 
-import { getGasPrice, setProvider, getAddress_MM, getTxParams, sendTransaction_MM, getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { getContractsInfo, getGasPrice, setProvider, getAddress_MM, getTxParams, sendTransaction_MM, getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 class Auth extends Component {
     constructor(props) {
@@ -61,8 +63,9 @@ class Auth extends Component {
 
     getDeveloper = async () => {
         let { address } = this.state;
+        let { contracts } = this.props;
         let info = await contractMethod({
-            contract: 'PlayMarket',
+            contract: contracts.PlayMarket,
             name: 'getInfoDev',
             params: [address]
         });
@@ -83,6 +86,30 @@ class Auth extends Component {
         await this.setState({ popupOpen: false });
     };
 
+    setContractsInfo = async () => {
+        let { contracts } = this.props;
+        try {
+            let contractsInfo = await getContractsInfo({
+                Proxy: contracts.Proxy,
+                ICO: contracts.ICO
+            });
+            let contractVersion = web3Utils.hexToAscii(contractsInfo.version).replace(/\u0000/g, '');
+            this.props.setContracts({
+                version: contractVersion,
+                PlayMarket: contractsInfo.PlayMarket,
+                ICO: contractsInfo.ICO,
+                ICOList: contractsInfo.ICOList,
+                endTime: contractsInfo.endTime,
+                number: contractsInfo.number
+            });
+            if (contractVersion.split('.')[0] !== lib.version) {
+                throw TypeError('You are using an incompatible version of "Play Market 2.0 Developer module". Last contract version (' + contractVersion + ') has a critical update! Please, download last actual version of "Play Market 2.0 Developer module" from GitHub.');
+            }
+        } catch (err) {
+            throw err;
+        }
+    };
+
     handleChangeKeystore = async e => {
         e.persist();
         let { mode } = this.props;
@@ -90,6 +117,7 @@ class Auth extends Component {
             if (mode !== 'infura') {
                 await setProvider('infura');
             }
+            await this.setContractsInfo();
             await this.recalculateGasPrice();
             this.props.setMode({
                 mode: 'keystore'
@@ -158,6 +186,7 @@ class Auth extends Component {
             if (mode !== 'metamask') {
                 await setProvider('metamask');
             }
+            await this.setContractsInfo();
             await this.recalculateGasPrice();
             this.props.setMode({
                 mode: 'metamask'
@@ -242,17 +271,18 @@ class Auth extends Component {
     handleSubmitRegistration_1 = async e => {
         e.preventDefault();
         let { address } = this.state;
+        let { contracts } = this.props;
         let { name, desc } = this.state.registration.params;
         this.props.startLoading();
         try {
             let data = await getData({
-                contract: 'PlayMarket',
+                contract: contracts.PlayMarket,
                 method: 'addDev',
                 params: [web3Utils.toHex(name), web3Utils.toHex(desc)]
             });
             let gasLimit = await getGasLimit({
+                contract: contracts.PlayMarket,
                 from: address,
-                contract: 'PlayMarket',
                 data: data,
                 reserve: 0
             });
@@ -262,6 +292,7 @@ class Auth extends Component {
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.log(err);
             Notification('error', err.message);
         }
     };
@@ -273,7 +304,7 @@ class Auth extends Component {
     };
     handleSubmitRegistration_3 = async e => {
         e.preventDefault();
-        let { mode, gasPrice } = this.props;
+        let { mode, gasPrice, contracts } = this.props;
         let { data, gasLimit } = this.state.registration;
         this.props.startLoading();
         let tx;
@@ -285,7 +316,7 @@ class Auth extends Component {
                     let wallet = await getWallet(keystore, password);
                     let signedTransaction = await getSignedTransaction({
                         wallet: wallet,
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
                         gasPrice: gasPrice
@@ -300,11 +331,11 @@ class Auth extends Component {
                 let { address } = this.state;
                 try {
                     let txParams = await getTxParams({
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
                         gasPrice: gasPrice,
-                        address: address
+                        from: address
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
@@ -553,7 +584,8 @@ class Auth extends Component {
 const mapStateToProps = (state) => {
     return {
         gasPrice: state.gasPrice,
-        mode: state.mode
+        mode: state.mode,
+        contracts: state.contracts
     }
 };
 
@@ -563,7 +595,8 @@ const mapDispatchToProps = (dispatch) => {
         endLoading: () => dispatch(endLoading()),
         userLogin: (payload) => dispatch(userLogin(payload)),
         setMode: (payload) => dispatch(setMode(payload)),
-        setGasPrice: (payload) => dispatch(setGasPrice(payload))
+        setGasPrice: (payload) => dispatch(setGasPrice(payload)),
+        setContracts: (payload) => dispatch(setContracts(payload))
     }
 };
 

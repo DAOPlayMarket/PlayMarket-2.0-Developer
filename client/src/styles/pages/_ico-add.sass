@@ -53,7 +53,7 @@
       color: #67777b
       font-size: 18px
       margin-bottom: 20px
-  &__section-1
+  &__section-1, &__section-3
     margin-bottom: 30px
     &:after
       content: ''
@@ -83,7 +83,7 @@
             font-size: 14px
             margin-bottom: 5px
           &__input
-            input
+            input[type='text'], input[type='number']
               width: 100%
               font-family: $FiraSans
               font-size: 14px
@@ -95,6 +95,43 @@
               border-bottom: 1px solid #00c8ab
               &::placeholder
                 color: #d3d3d3
+          &__radio
+            &-item
+              margin-bottom: 5px
+              height: 18px
+              display: flex
+              align-items: center
+              &:last-child
+                margin-bottom: 0
+              input[type='radio']
+                display: none
+                &:checked + label:after
+                  content: ''
+                  position: absolute
+                  top: 50%
+                  transform: translateY(-50%)
+                  width: 10px
+                  height: 10px
+                  left: 3px
+                  background-color: #00e7d5
+              label
+                cursor: pointer
+                position: relative
+                padding-left: 26px
+                font-family: $FiraSans
+                font-size: 14px
+                font-weight: 400
+                color: #0f1914
+                &:before
+                  content: ''
+                  position: absolute
+                  top: 50%
+                  transform: translateY(-50%)
+                  left: 0
+                  width: 16px
+                  height: 16px
+                  border: 1px solid #00e7d5
+                  box-sizing: border-box
       &__date
         margin-bottom: 20px
         &__title
@@ -1018,6 +1055,9 @@
     display: flex
     justify-content: center
     margin-top: 40px
+    position: relative
+    &--space-between
+      justify-content: space-between
     &__btn
       cursor: pointer
       font-family: $Archive
@@ -1034,6 +1074,163 @@
       border-radius: 22px
       background-color: #00e7d5
       box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+    &__back
+      cursor: pointer
+      font-family: $Archive
+      border: 0
+      font-weight: 400
+      font-size: 16px
+      color: #fff
+      width: auto
+      display: flex
+      align-items: center
+      justify-content: center
+      padding: 0 20px 0 50px
+      height: 44px
+      border-radius: 22px
+      background-color: #00e7d5
+      box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+      &:before
+        content: ''
+        position: absolute
+        top: 50%
+        left: 20px
+        transform: translateY(-50%)
+        width: 20px
+        height: 20px
+        background-image: url("../images/icons/back.svg")
+        background-position: center
+        background-repeat: no-repeat
+        background-size: contain
+  &-popup
+    width: 490px !important
+    padding: 60px 50px 50px !important
+    box-sizing: border-box !important
+    border: 0 !important
+    background-color: #ffffff !important
+    box-shadow: 0 2px 5px 0 #e6e6e6 !important
+    &__main
+      margin-bottom: 30px
+      &__title
+        font-family: $Archive
+        font-size: 28px
+        text-align: center
+        color: #67777b
+      &__list
+        margin-top: 15px
+        &-item
+          margin-bottom: 15px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &__value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+            span
+              color: #00e7d5
+    &__btn-block
+      display: flex
+      justify-content: flex-start
+      align-items: center
+      margin-top: 20px
+      &--center
+        justify-content: center
+      &__btn
+        cursor: pointer
+        border: 0
+        display: flex
+        align-items: center
+        justify-content: center
+        text-transform: uppercase
+        padding: 0 20px
+        height: 44px
+        font-family: $Archive
+        font-weight: 400
+        font-size: 16px
+        color: #fff
+        border-radius: 22px
+        background-color: #00e7d5
+        box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+        &--cancel
+          cursor: pointer
+          margin-left: 40px
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 16px
+          color: #006f9e
+          border-bottom: 1px solid #006f9e
+    &__registration
+      &__title
+        font-family: $Archive
+        font-size: 28px
+        text-align: center
+        color: #67777b
+        margin-bottom: 10px
+      &__subtitle
+        font-family: $Archive
+        font-size: 14px
+        text-align: center
+        color: #67777b
+        margin-bottom: 30px
+      &__preview-list
+        margin-bottom: 15px
+        padding: 10px
+        box-shadow: 0 2px 5px 0 #e6e6e6
+        &__item
+          margin-bottom: 10px
+          &:last-child
+            margin-bottom: 0
+          &--title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 12px
+            padding-bottom: 5px
+          &--value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 14px
+      &__fee-list
+        margin: 15px 0
+        &__item
+          margin-bottom: 10px
+          &:last-child
+            margin-bottom: 0
+          &--title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &--value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+      &__list
+        &-item
+          margin-bottom: 15px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &__input
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+            height: 35px
+            border-radius: 2px
+            background-color: #e8e8e8
+            width: 100%
+            border: 0
+            padding: 0 10px
+            box-sizing: border-box
+
 
 
 

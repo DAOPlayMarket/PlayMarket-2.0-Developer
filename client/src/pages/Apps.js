@@ -76,6 +76,7 @@ class Apps extends Component {
                 <Helmet>
                     <title>Apps | Play Market 2.0 Developer Module</title>
                 </Helmet>
+                {/*<Link to="ico-add/1">CLICK ME</Link>*/}
                 <div className="apps-page__header">
                     <div className="apps-page__header--left">
                         <div className="apps-page__header__title">Your applications</div>

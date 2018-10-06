@@ -317,7 +317,7 @@ class AppAdd extends Component {
         e.preventDefault();
         this.props.startLoading();
         try {
-            let { address } = this.props;
+            let { address, contracts } = this.props;
             let { nameApp, idCTG, subCategory } = this.state.app;
             let { slogan, shortDescr, keywords, youtubeID, email, packageName, version, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
             let { apk, logo, banner, gallery } = this.state.app.files;
@@ -361,13 +361,13 @@ class AppAdd extends Component {
             if (response.status === 200) {
                 try {
                     let data = await getData({
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         method: 'addApp',
                         params: [response.result.hashType, 1,  price * 10000, publish, response.result.hash]
                     });
                     let gasLimit = await getGasLimit({
                         from: address,
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         data: data,
                         reserve: 0
                     });
@@ -419,19 +419,19 @@ class AppAdd extends Component {
     };
     handleSubmitRegistration_2 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode } = this.props;
+        let { gasPrice, address, mode, contracts } = this.props;
         let { data, gasLimit } = this.state.registration;
         this.props.startLoading();
         let tx;
         switch (mode) {
             case 'keystore':
-                let { keystore } = this.state;
+                let { keystore } = this.props;
                 let { password } = this.state.registration;
                 try {
                     let wallet = await getWallet(keystore, password);
                     let signedTransaction = await getSignedTransaction({
                         wallet: wallet,
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
                         gasPrice: gasPrice
@@ -446,11 +446,11 @@ class AppAdd extends Component {
             case 'metamask':
                 try {
                     let txParams = await getTxParams({
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
                         gasPrice: gasPrice,
-                        address: address
+                        from: address
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
@@ -759,7 +759,6 @@ class AppAdd extends Component {
                         <button className="app-add__load-block__btn">Upload</button>
                     </div>
 
-
                     {/*<section>*/}
                     {/*<h3>Package name</h3>*/}
                     {/*<input required type="text" name='packageName' value={packageName} onChange={this.handleChangeText}/>*/}
@@ -912,7 +911,8 @@ const mapStateToProps = (state) => {
         categories: state.categories,
         address: state.user.address,
         keystore: state.user.keystore,
-        mode: state.mode
+        mode: state.mode,
+        contracts: state.contracts
     }
 };
 

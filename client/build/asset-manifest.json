@@ -1,8 +1,8 @@
 {
   "main.css": "static/css/main.803fed18.css",
   "main.css.map": "static/css/main.803fed18.css.map",
-  "main.js": "static/js/main.4b1f0b81.js",
-  "main.js.map": "static/js/main.4b1f0b81.js.map",
+  "main.js": "static/js/main.030d1b25.js",
+  "main.js.map": "static/js/main.030d1b25.js.map",
   "static\\media\\Archive.eot": "static/media/Archive.77b3dab5.eot",
   "static\\media\\Archive.svg": "static/media/Archive.4a5e408e.svg",
   "static\\media\\Archive.woff": "static/media/Archive.f869dd12.woff",
@@ -88,6 +88,7 @@
   "static\\media\\add.svg": "static/media/add.bd7589ef.svg",
   "static\\media\\apk.svg": "static/media/apk.dc7721aa.svg",
   "static\\media\\apps.svg": "static/media/apps.4b4a9d3f.svg",
+  "static\\media\\back.svg": "static/media/back.27cc3bfe.svg",
   "static\\media\\calendar.svg": "static/media/calendar.674c417f.svg",
   "static\\media\\delete.svg": "static/media/delete.7ff682b2.svg",
   "static\\media\\edit.svg": "static/media/edit.38794a34.svg",

@@ -80,9 +80,9 @@ class Header extends Component {
     };
 
     getDeveloper = async () => {
-        let { address } = this.props;
+        let { address, contracts } = this.props;
         let info = await contractMethod({
-            contract: 'PlayMarket',
+            contract: contracts.PlayMarket,
             name: 'getInfoDev',
             params: [address]
         });
@@ -94,19 +94,19 @@ class Header extends Component {
 
     handleSubmitChangeInfo_1 = async e => {
         e.preventDefault();
-        let { address } = this.props;
+        let { address, contracts } = this.props;
         let { name, desc } = this.state.changeInfoDev.params;
 
         this.props.startLoading();
         try {
             let data = await getData({
-                contract: 'PlayMarket',
+                contract: contracts.PlayMarket,
                 method: 'changeNameDev',
                 params: [web3Utils.toHex(name), web3Utils.toHex(desc)]
             });
             let gasLimit = await getGasLimit({
                 from: address,
-                contract: 'PlayMarket',
+                contract: contracts.PlayMarket,
                 data: data,
                 reserve: 0
             });
@@ -135,7 +135,7 @@ class Header extends Component {
     };
     handleSubmitChangeInfo_3 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode } = this.props;
+        let { gasPrice, address, mode, contracts } = this.props;
         let { data, gasLimit } = this.state.changeInfoDev;
         this.props.startLoading();
         let tx;
@@ -147,7 +147,7 @@ class Header extends Component {
                     let wallet = await getWallet(keystore, password);
                     let signedTransaction = await getSignedTransaction({
                         wallet: wallet,
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
                         gasPrice: gasPrice
@@ -162,11 +162,11 @@ class Header extends Component {
             case 'metamask':
                 try {
                     let txParams = await getTxParams({
-                        contract: 'PlayMarket',
+                        contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
                         gasPrice: gasPrice,
-                        address: address
+                        from: address
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
@@ -394,7 +394,8 @@ const mapStateToProps = (state) => {
         address: state.user.address,
         name: state.user.name,
         desc: state.user.desc,
-        mode: state.mode
+        mode: state.mode,
+        contracts: state.contracts
     }
 };
 

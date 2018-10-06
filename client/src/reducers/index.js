@@ -1,5 +1,3 @@
-import { categories } from '../lib/categories.js';
-
 const initState = {
     node: {
         url: 'https://n000002.playmarket.io:3000'
@@ -11,14 +9,58 @@ const initState = {
         name: '',
         desc: ''
     },
+    contracts: {
+        Proxy: {
+            address: '0x87ef26717654c92b6ecc19e3c7a145406b112315',
+            abi: require('../lib/abi/Proxy.js')
+        },
+        version: '',
+        PlayMarket: {
+            address: '',
+            abi: require('../lib/abi/PlayMarket.js')
+        },
+        ICO: {
+            address: '',
+            abi: require('../lib/abi/ICO.js')
+        },
+        ICOList: {
+            address: '',
+            abi: require('../lib/abi/ICOList.js')
+        },
+        endTime: '',
+        number: ''
+    },
     isLoading: false,
     gasPrice: '',
     mode: '',
-    categories: categories
+    categories: require('../lib/other/categories.js')
 };
 
 const rootReducer = (state = initState, action) => {
     switch (action.type) {
+        case 'SET_CONTRACTS':
+            state = {
+                ...state,
+                contracts: {
+                    ...state.contracts,
+                    version: action.version,
+                    PlayMarket: {
+                        ...state.contracts.PlayMarket,
+                        address: action.PlayMarket
+                    },
+                    ICO: {
+                        ...state.contracts.ICO,
+                        address: action.ICO
+                    },
+                    ICOList: {
+                        ...state.contracts.ICOList,
+                        address: action.ICOList
+                    },
+                    endTime: action.endTime,
+                    number: action.number
+                }
+            };
+            break;
         case 'SET_MODE':
             state = {
                 ...state,

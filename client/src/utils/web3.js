@@ -78,11 +78,33 @@ export async function getTxParams(obj) {
         return {
             gasPrice: web3.utils.toHex(obj.gasPrice),
             gasLimit: web3.utils.toHex(obj.gasLimit),
-            from: obj.address,
-            to: lib.contracts[obj.contract].address,
+            from: obj.from,
+            to: obj.contract.address,
             data: obj.data,
             chainId: lib.ethereum.chainId
         }
+    } catch (err) {
+        throw err;
+    }
+}
+
+/*
+-----------------------------------------------------------------------------
+ */
+
+export async function getContractsInfo(contracts) {
+    try {
+        let Contract = new web3.eth.Contract(contracts.Proxy.abi, contracts.Proxy.address);
+        let result = await Contract.methods.getLastVersion().call();
+        result.ICOList = await contractMethod({
+            contract: {
+                address: result.ICO,
+                abi: contracts.ICO.abi
+            },
+            name: 'ICOList',
+            params: []
+        });
+        return result;
     } catch (err) {
         throw err;
     }
@@ -106,42 +128,9 @@ export async function getBalance(address) {
         throw err;
     }
 }
-export async function getData(obj) {
-    try {
-        let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
-        return await Contract.methods[obj.method].apply(this, obj.params).encodeABI();
-    } catch (err) {
-        throw err;
-    }
-}
 export async function getGasPrice() {
     try {
         return await web3.eth.getGasPrice();
-    } catch (err) {
-        throw err;
-    }
-}
-export async function getGasLimit(obj) {
-    try {
-        return await web3.eth.estimateGas({
-            from: obj.from,
-            to: lib.contracts[obj.contract].address,
-            data: obj.data
-        }) + obj.reserve;
-    } catch (err) {
-        throw err;
-    }
-}
-export async function getSignedTransaction(obj) {
-    try {
-        let params = {
-            gasPrice: web3.utils.toHex(obj.gasPrice),
-            gasLimit: web3.utils.toHex(obj.gasLimit),
-            to: lib.contracts[obj.contract].address,
-            data: obj.data,
-            chainId: lib.ethereum.chainId
-        };
-        return await web3.eth.accounts.signTransaction(params, obj.wallet.privateKey);
     } catch (err) {
         throw err;
     }
@@ -156,12 +145,12 @@ export async function sendSignedTransaction(rawTransaction) {
 export async function getTransactionStatus(hash) {
     return new Promise(async (resolve, reject) => {
         try {
-            let timer = await setInterval(async () => {
+            let timerTx = await setInterval(async () => {
                 try {
                     let tx = await web3.eth.getTransactionReceipt(hash);
                     let result = tx ? {pending: false, status: tx.status} : {pending: true};
                     if (!result.pending) {
-                        clearTimeout(timer);
+                        clearTimeout(timerTx);
                         resolve(result.status);
                     }
                 } catch (err) {
@@ -173,9 +162,42 @@ export async function getTransactionStatus(hash) {
         }
     });
 }
+export async function getData(obj) {
+    try {
+        let Contract = new web3.eth.Contract(obj.contract.abi, obj.contract.address);
+        return await Contract.methods[obj.method].apply(this, obj.params).encodeABI();
+    } catch (err) {
+        throw err;
+    }
+}
+export async function getGasLimit(obj) {
+    try {
+        return await web3.eth.estimateGas({
+            from: obj.from,
+            to: obj.contract.address,
+            data: obj.data
+        }) + obj.reserve;
+    } catch (err) {
+        throw err;
+    }
+}
+export async function getSignedTransaction(obj) {
+    try {
+        let params = {
+            gasPrice: web3.utils.toHex(obj.gasPrice),
+            gasLimit: web3.utils.toHex(obj.gasLimit),
+            to: obj.contract.address,
+            data: obj.data,
+            chainId: lib.ethereum.chainId
+        };
+        return await web3.eth.accounts.signTransaction(params, obj.wallet.privateKey);
+    } catch (err) {
+        throw err;
+    }
+}
 export async function contractMethod(obj) {
     try {
-        let Contract = new web3.eth.Contract(lib.contracts[obj.contract].abi, lib.contracts[obj.contract].address);
+        let Contract = new web3.eth.Contract(obj.contract.abi, obj.contract.address);
         return await Contract.methods[obj.name].apply(this, obj.params).call();
     } catch (err) {
         throw err;

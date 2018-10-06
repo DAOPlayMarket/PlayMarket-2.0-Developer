@@ -15,7 +15,7 @@ class Control extends Component {
     };
 
     render(){
-        let { gasPrice, mode } = this.props;
+        let { gasPrice, mode, contracts } = this.props;
 
         let value = web3Utils.fromWei(gasPrice, 'gwei');
 
@@ -42,6 +42,8 @@ class Control extends Component {
                             }
                         </span>
                     </div>
+                    <div className="control__version">Contracts version:&nbsp;<span>{contracts.version}</span>
+                    </div>
                     <div className="control__price">Gas Price: <span>{value}</span> Gwei</div>
                     <div className="control__input">
                         <input type="range" min="1" max="99" step="1" value={value} onChange={this.handleChangeGasPrice}/>
@@ -57,7 +59,8 @@ class Control extends Component {
 const mapStateToProps = (state) => {
     return {
         gasPrice: state.gasPrice,
-        mode: state.mode
+        mode: state.mode,
+        contracts: state.contracts
     }
 };
 
