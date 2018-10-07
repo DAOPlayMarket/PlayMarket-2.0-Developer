@@ -1,6 +1,6 @@
 const initState = {
     node: {
-        url: 'https://n000002.playmarket.io:3000'
+        url: 'https://n000001.playmarket.io:3000'
     },
     isAuth: false,
     user: {

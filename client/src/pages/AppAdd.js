@@ -337,7 +337,7 @@ class AppAdd extends Component {
             fd.append("packageName", packageName);
             fd.append("version", version);
             fd.append("ageRestrictions", ageRestrictions);
-            fd.append("price", price * 10000);
+            fd.append("price", price * 100);
             fd.append("publish", publish);
             fd.append("advertising", advertising);
             fd.append("forChildren", forChildren);
@@ -363,7 +363,7 @@ class AppAdd extends Component {
                     let data = await getData({
                         contract: contracts.PlayMarket,
                         method: 'addApp',
-                        params: [response.result.hashType, 1,  price * 10000, publish, response.result.hash]
+                        params: [response.result.hashType, 1,  price * 100, publish, response.result.hash]
                     });
                     let gasLimit = await getGasLimit({
                         from: address,

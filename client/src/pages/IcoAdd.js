@@ -1360,7 +1360,7 @@ class IcoAdd extends Component {
                                                         <li className="ico-add__section-2__content__box__stuff-item">
                                                             <div className="ico-add__section-2__content__box__stuff-item__title">Privacy policy URL</div>
                                                             <div className="ico-add__section-2__content__box__stuff-item__input">
-                                                                <input placeholder="https://playmarket.io/privacy-policy" type="text" name="privacyPolicy" value={ico.youtubeID} onChange={this.handleChangeText}/>
+                                                                <input placeholder="https://playmarket.io/privacy-policy" type="text" name="privacyPolicy" value={ico.privacyPolicy} onChange={this.handleChangeText}/>
                                                             </div>
                                                         </li>
                                                         <li className="ico-add__section-2__content__box__stuff-item">

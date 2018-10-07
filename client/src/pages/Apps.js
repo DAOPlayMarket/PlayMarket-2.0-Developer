@@ -13,7 +13,7 @@ class Apps extends Component {
     state = {
         apps: [],
         loadedApps: [],
-        notLoadedApps: []
+        // notLoadedApps: []
     };
 
     async componentDidMount(){
@@ -33,18 +33,19 @@ class Apps extends Component {
             })).data;
             let apps = response.result;
 
-            let loadedApps = apps.filter(app => app.loadFile === true);
+            // console.log('apps:', apps);
+            let loadedApps = apps.filter(app => !!app.hash);
             loadedApps.forEach(item=> {
                 item.SERVICE = {
                     isExtend: false
                 }
             });
-            let notLoadedApps = apps.filter(app => app.loadFile === false);
+            // let notLoadedApps = apps.filter(app => app.loadFile === false);
 
             await this.setState({
                 apps: apps,
                 loadedApps: loadedApps,
-                notLoadedApps: notLoadedApps
+                // notLoadedApps: notLoadedApps
             });
             this.props.endLoading();
         } catch (err) {
@@ -102,7 +103,7 @@ class Apps extends Component {
                                                 </ul>
                                                 <ul className="apps-page__body__list-item__main">
                                                     <li className="apps-page__body__list-item__main-item" data-section="logo">
-                                                        <img src={`${url}/data/${app.hashTag}/${app.hash}/${app.files.images.logo}`} alt="LOGO"/>
+                                                        <img src={`${url}/data/${app.hashType}/${app.hash}/${app.files.images.logo}`} alt="LOGO"/>
                                                     </li>
                                                     <li className="apps-page__body__list-item__main-item" data-section="name">
                                                         {app.nameApp.length ? app.nameApp : <span>Not specified</span>}
@@ -125,21 +126,21 @@ class Apps extends Component {
                                                         <li className="apps-page__body__list-item__dropdown__table-item">
                                                             <div className="apps-page__body__list-item__dropdown__table-item__title">confirmation</div>
                                                             <div className="apps-page__body__list-item__dropdown__table-item__value">
-                                                                YES
+                                                                {app.confirmation ? 'YES' : 'NO'}
                                                             </div>
                                                         </li>
                                                         <li className="apps-page__body__list-item__dropdown__table-item">
                                                             <div className="apps-page__body__list-item__dropdown__table-item__title">price</div>
                                                             <div className="apps-page__body__list-item__dropdown__table-item__value">
-                                                                {app.price}
+                                                                {parseInt(app.price, 10) / 100}
                                                             </div>
                                                         </li>
-                                                        <li className="apps-page__body__list-item__dropdown__table-item">
-                                                            <div className="apps-page__body__list-item__dropdown__table-item__title">ico</div>
-                                                            <div className="apps-page__body__list-item__dropdown__table-item__value">
-                                                                {app.icoRelease ? 'YES' : 'NO'}
-                                                            </div>
-                                                        </li>
+                                                        {/*<li className="apps-page__body__list-item__dropdown__table-item">*/}
+                                                            {/*<div className="apps-page__body__list-item__dropdown__table-item__title">ico</div>*/}
+                                                            {/*<div className="apps-page__body__list-item__dropdown__table-item__value">*/}
+                                                                {/*{app.icoRelease ? 'YES' : 'NO'}*/}
+                                                            {/*</div>*/}
+                                                        {/*</li>*/}
                                                     </ul>
                                                     <ul className="apps-page__body__list-item__dropdown__links">
                                                         <li className="apps-page__body__list-item__dropdown__links-item">

@@ -62,7 +62,7 @@ class App extends Component {
                             <div className="app-main">
                                 <div className="app-main--left">
                                     <div className="app-main__logo">
-                                        <img src={`${url}/data/${app.hashTag}/${app.hash}/${app.files.images.logo}`} alt={app.nameApp}/>
+                                        <img src={`${url}/data/${app.hashType}/${app.hash}/${app.files.images.logo}`} alt={app.nameApp}/>
                                     </div>
                                     <div className="app-main__type">
                                         <div className="app-main__type--title">Type:</div>
@@ -87,7 +87,7 @@ class App extends Component {
                                 </div>
                             </div>
                             <div className="app-gallery">
-                                <Gallery path={`${url}/data/${app.hashTag}/${app.hash}`} images={app.files.images.gallery}/>
+                                <Gallery path={`${url}/data/${app.hashType}/${app.hash}`} images={app.files.images.gallery}/>
                             </div>
                         </div>
                 ) : null
