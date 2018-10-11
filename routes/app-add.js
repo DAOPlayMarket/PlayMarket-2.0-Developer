@@ -4,6 +4,7 @@ const del = require('del');
 const makeDir = require('make-dir');
 const path = require('path');
 const fse = require('fs-extra');
+const ApkReader = require('adbkit-apkreader');
 
 /** UTILS **/
 const ipfs = require(path.join(__dirname, '..', 'utils', 'ipfs.js'));
@@ -20,16 +21,26 @@ router.post('/', async (req, res) => {
             makeDir(path.join(lib.dirApp, address, 'images', 'gallery')),
             makeDir(path.join(lib.dirApp, address, 'images', 'banner'))
         ]);
-        await formidablePromise(req, {address: address});
+        let config = await formidablePromise(req, {address: address});
+
+        let parserAPK = await ApkReader.open(path.join(lib.dirApp, address, config.files.apk));
+        let manifest = await parserAPK.readManifest();
+
+        config.version = manifest.versionCode;
+        config.packageName = manifest.package;
+
+        await fse.outputJson(path.join(lib.dirApp, address, 'config', 'config.json'), config);
+
         let result = await ipfs.upload(path.join(lib.dirApp, address), 'app');
         await del(path.join(lib.dirApp, address), {force: true});
+
         res.json({
             result: result,
             status: 200
         });
     } catch(err) {
         console.error(`error ${modules.time.timeNow()}`, err);
-        res.json({result: err.toString(), status: 500});
+        res.json({message: err.toString(), status: 500});
     }
 });
 
@@ -95,7 +106,6 @@ function formidablePromise(req, data) {
                         config.files.images.banner = url;
                 })
                 .on('end', async() => {
-                    await fse.outputJson(path.join(form.uploadDir, 'config', 'config.json'), config);
                     resolve(config);
                 })
         } catch (err) {

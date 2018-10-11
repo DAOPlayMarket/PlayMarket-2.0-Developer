@@ -1,6 +1,6 @@
 const initState = {
     node: {
-        url: 'https://n000001.playmarket.io:3000'
+        url: 'https://t000001.playmarket.io'
     },
     isAuth: false,
     user: {
@@ -14,7 +14,6 @@ const initState = {
             address: '0x87ef26717654c92b6ecc19e3c7a145406b112315',
             abi: require('../lib/abi/Proxy.js')
         },
-        version: '',
         PlayMarket: {
             address: '',
             abi: require('../lib/abi/PlayMarket.js')
@@ -27,6 +26,7 @@ const initState = {
             address: '',
             abi: require('../lib/abi/ICOList.js')
         },
+        version: '',
         endTime: '',
         number: ''
     },

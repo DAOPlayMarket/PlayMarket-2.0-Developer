@@ -77,7 +77,6 @@ class Apps extends Component {
                 <Helmet>
                     <title>Apps | Play Market 2.0 Developer Module</title>
                 </Helmet>
-                {/*<Link to="ico-add/1">CLICK ME</Link>*/}
                 <div className="apps-page__header">
                     <div className="apps-page__header--left">
                         <div className="apps-page__header__title">Your applications</div>
@@ -146,6 +145,9 @@ class Apps extends Component {
                                                         <li className="apps-page__body__list-item__dropdown__links-item">
                                                             <Link to={`/app/${app.idApp}`}>app</Link>
                                                         </li>
+                                                        <li className="apps-page__body__list-item__dropdown__links-item">
+                                                            <Link to={`/update-apk/${app.idApp}`}>update apk</Link>
+                                                        </li>
                                                         {
                                                             !app.icoRelease ? (
                                                                 <li className="apps-page__body__list-item__dropdown__links-item">
@@ -160,7 +162,9 @@ class Apps extends Component {
                                     })
                                 }
                             </ul>
-                        ) : null
+                        ) : (
+                            <div className="apps-page__body__placeholder">You don't have downloaded apps</div>
+                        )
                     }
                 </div>
             </div>

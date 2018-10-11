@@ -2,6 +2,7 @@ const readdir = require("recursive-readdir");
 const path = require('path');
 const fse = require('fs-extra');
 const pull = require('pull-stream');
+const makeDir = require('make-dir');
 
 const upload = (dir, headFolderName) => {
     return new Promise(async(resolve, reject) => {
@@ -37,6 +38,55 @@ const upload = (dir, headFolderName) => {
     });
 };
 
+const download = (dir, multiHash) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let stream = nodeIPFS.files.getReadableStream(multiHash);
+            console.log('Load files START:', multiHash);
+            stream.on('data', async (file) => {
+                stream.pause();
+                let filePath = path.join((file.path).replace(multiHash,''));
+                switch (file.type) {
+                    case 'dir':
+                        await makeDir(path.join(dir, filePath));
+                        break;
+                    case 'file':
+                        await new Promise(async (resolve, reject) => {
+                            try {
+                                let ws = fse.createWriteStream(path.join(dir, filePath));
+                                file.content.pipe(ws);
+                                ws.on('error', e => {
+                                    ws.end();
+                                    throw e;
+                                });
+                                ws.on('close', () => {
+                                    resolve();
+                                });
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
+
+                        break;
+                    default:
+                        break;
+                }
+                stream.resume();
+            });
+            stream.on('end', () => {
+                console.log('Load files END:', multiHash);
+                resolve();
+            });
+            setTimeout(function () {
+                reject(new Error('Disconnection by timeout'));
+            }, 600000);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 module.exports = {
-    upload: upload
+    upload: upload,
+    download: download
 };

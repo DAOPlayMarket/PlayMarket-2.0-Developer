@@ -5,18 +5,23 @@ import lib from '../lib';
 import Notification from '../components/Notification';
 
 let web3;
-export async function setProvider(provider) {
+export async function setProvider(_provider) {
     try {
-        switch (provider) {
-            case 'infura':
+        switch (_provider) {
+            case 'infura': {
                 stopAddressWatcher_MM();
-                provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
+                let provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
                 web3 = new Web3(provider);
-                Notification('success', 'Web3 (Infura) connection successful!');
+                provider.on('connect', () => {
+                    startWebSocketPing();
+                    Notification('success', 'Web3 (Infura) connection successful!');
+                });
                 break;
-            case 'metamask':
+            }
+            case 'metamask': {
+                stopWebSocketPing();
                 if (typeof window.web3 !== 'undefined') {
-                    provider = window.web3.currentProvider;
+                    let provider = window.web3.currentProvider;
                     web3 = new Web3(provider);
                     startAddressWatcher_MM();
                     Notification('success', 'Web3 (MetaMask) connection successful!');
@@ -24,23 +29,36 @@ export async function setProvider(provider) {
                     throw new TypeError('MetaMask extension not installed or disable');
                 }
                 break;
+            }
             default:
                 break;
         }
     } catch (err) {
+        console.log(err);
         throw err;
     }
 }
 
-/*
------------------------------------------------------------------------------
- */
+let timer1 = null;
+function startWebSocketPing() {
+    (async () => {
+        timer1 = setInterval(async() => {
+            await web3.eth.getBlockNumber();
+        }, 60000);
+    })();
+}
+function stopWebSocketPing() {
+    (async () => {
+        clearInterval(timer1);
+        timer1 = null;
+    })();
+}
 
-let timer = null;
+let timer2 = null;
 function startAddressWatcher_MM() {
     (async () => {
         let address = await web3.eth.getCoinbase();
-        timer = setInterval(async() => {
+        timer2 = setInterval(async() => {
             if (await web3.eth.getCoinbase() !== address) {
                 window.location.reload();
             }
@@ -49,10 +67,14 @@ function startAddressWatcher_MM() {
 }
 function stopAddressWatcher_MM() {
     (async () => {
-        clearInterval(timer);
-        timer = null;
+        clearInterval(timer2);
+        timer2 = null;
     })();
 }
+
+/*
+-----------------------------------------------------------------------------
+ */
 
 export async function getAddress_MM() {
     try {

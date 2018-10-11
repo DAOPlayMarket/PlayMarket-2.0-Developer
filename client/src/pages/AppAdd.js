@@ -49,7 +49,8 @@ class AppAdd extends Component {
         registration: {
             step: 1,
             hash: '',
-            password: ''
+            password: '',
+            gasLimit: ''
         },
         app: {
             nameApp: '',
@@ -60,8 +61,6 @@ class AppAdd extends Component {
             keywords: [],
             youtubeID: '',
             email: '',
-            packageName: '',
-            version: '',
             ageRestrictions: '',
             price: 0,
             publish: true,
@@ -319,7 +318,7 @@ class AppAdd extends Component {
         try {
             let { address, contracts } = this.props;
             let { nameApp, idCTG, subCategory } = this.state.app;
-            let { slogan, shortDescr, keywords, youtubeID, email, packageName, version, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
+            let { slogan, shortDescr, keywords, youtubeID, email, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
             let { apk, logo, banner, gallery } = this.state.app.files;
 
             let fd = new FormData();
@@ -334,8 +333,6 @@ class AppAdd extends Component {
 
             fd.append("youtubeID", youtubeID);
             fd.append("email", email);
-            fd.append("packageName", packageName);
-            fd.append("version", version);
             fd.append("ageRestrictions", ageRestrictions);
             fd.append("price", price * 100);
             fd.append("publish", publish);
@@ -389,13 +386,12 @@ class AppAdd extends Component {
                     Notification('error', err.message);
                 }
             } else {
-                Notification('error', response.result);
+                Notification('error', response.message);
             }
-            this.props.endLoading();
         } catch (err) {
-            this.props.endLoading();
             Notification('error', err.message);
         }
+        this.props.endLoading();
     };
 
     handleClickBackRegistration_1 = async () => {
@@ -506,6 +502,7 @@ class AppAdd extends Component {
                 <div className="app-add__control">
                     <Link className="app-add__control__back" to="/apps">Applications</Link>
                 </div>
+                <div className="app-add__title">Add new application</div>
                 <form onSubmit={this.handleSubmitUpload}>
                     <section className="app-add__section-1">
                         <div className="app-add__section-1__block">
@@ -758,16 +755,6 @@ class AppAdd extends Component {
                     <div className="app-add__load-block">
                         <button className="app-add__load-block__btn">Upload</button>
                     </div>
-
-                    {/*<section>*/}
-                    {/*<h3>Package name</h3>*/}
-                    {/*<input required type="text" name='packageName' value={packageName} onChange={this.handleChangeText}/>*/}
-                    {/*</section>*/}
-                    {/*<section>*/}
-                    {/*<h3>App version (integer)</h3>*/}
-                    {/*<input required type="text" name='version' value={version} onChange={this.handleChangeText}/>*/}
-                    {/*</section>*/}
-
                 </form>
                 <Popup className="app-add-popup" open={popupOpen} onClose={this.closeModal}>
                     <div>

@@ -16,6 +16,7 @@ import Control from './components/Control'
 
 import Apps from './pages/Apps'
 import App from './pages/App'
+import AppUpdateAPK from './pages/AppUpdateAPK'
 import AppAdd from './pages/AppAdd'
 import Auth from './pages/Auth'
 import IcoAdd from './pages/IcoAdd'
@@ -44,6 +45,7 @@ class _App extends Component {
                 <DashboardRoute isAuth={isAuth} exact path='/' component={Apps} />
                 <DashboardRoute isAuth={isAuth} path='/apps' component={Apps} />
                 <DashboardRoute isAuth={isAuth} path='/app/:app_id' component={App} />
+                <DashboardRoute isAuth={isAuth} path='/update-apk/:app_id/' component={AppUpdateAPK} />
                 <DashboardRoute isAuth={isAuth} path='/app-add' component={AppAdd} />
                 <DashboardRoute isAuth={isAuth} path='/ico-add/:app_id' component={IcoAdd} />
                 <ErrorRoute path="*" component={NotFound} />
