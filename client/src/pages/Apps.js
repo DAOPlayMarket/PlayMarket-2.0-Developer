@@ -115,36 +115,24 @@ class Apps extends Component {
                                                     </li>
                                                 </ul>
                                                 <div className={'apps-page__body__list-item__dropdown ' + (app.SERVICE.isExtend ? 'visible' : '')}>
-                                                    <ul className="apps-page__body__list-item__dropdown__table">
-                                                       <li className="apps-page__body__list-item__dropdown__table-item">
-                                                           <div className="apps-page__body__list-item__dropdown__table-item__title">publish</div>
-                                                           <div className="apps-page__body__list-item__dropdown__table-item__value">
-                                                               {app.publish ? 'YES' : 'NO'}
-                                                           </div>
-                                                       </li>
-                                                        <li className="apps-page__body__list-item__dropdown__table-item">
-                                                            <div className="apps-page__body__list-item__dropdown__table-item__title">confirmation</div>
-                                                            <div className="apps-page__body__list-item__dropdown__table-item__value">
-                                                                {app.confirmation ? 'YES' : 'NO'}
-                                                            </div>
-                                                        </li>
-                                                        <li className="apps-page__body__list-item__dropdown__table-item">
-                                                            <div className="apps-page__body__list-item__dropdown__table-item__title">price</div>
-                                                            <div className="apps-page__body__list-item__dropdown__table-item__value">
-                                                                {parseInt(app.price, 10) / 100}
-                                                            </div>
-                                                        </li>
-                                                        {/*<li className="apps-page__body__list-item__dropdown__table-item">*/}
-                                                            {/*<div className="apps-page__body__list-item__dropdown__table-item__title">ico</div>*/}
-                                                            {/*<div className="apps-page__body__list-item__dropdown__table-item__value">*/}
-                                                                {/*{app.icoRelease ? 'YES' : 'NO'}*/}
-                                                            {/*</div>*/}
-                                                        {/*</li>*/}
-                                                    </ul>
+                                                    <div className="apps-page__body__list-item__dropdown__info">
+                                                        <ul className="apps-page__body__list-item__dropdown__info-main">
+                                                            <li className="apps-page__body__list-item__dropdown__info-main__item">Confirmed:&nbsp;<span>{app.confirmation ? 'YES' : 'NO'}</span></li>
+                                                            <li className="apps-page__body__list-item__dropdown__info-main__item">Publish:&nbsp;<span>{app.publish ? 'YES' : 'NO'}</span></li>
+                                                            <li className="apps-page__body__list-item__dropdown__info-main__item">Price:&nbsp;<span>{parseInt(app.price, 10) / 100}</span></li>
+                                                        </ul>
+                                                        <ul className="apps-page__body__list-item__dropdown__info-tech">
+                                                            <li className="apps-page__body__list-item__dropdown__info-tech__item">App ID:&nbsp;<span>{app.idApp}</span></li>
+                                                            <li className="apps-page__body__list-item__dropdown__info-tech__item">Package name:&nbsp;<span>{app.packageName}</span></li>
+                                                            <li className="apps-page__body__list-item__dropdown__info-tech__item">Version code:&nbsp;<span>{app.version}</span></li>
+                                                            <li className="apps-page__body__list-item__dropdown__info-tech__item">Hash type:&nbsp;<span>{app.hashType === '1' ? 'IPFS' : 'unknown hash type'}</span></li>
+                                                            <li className="apps-page__body__list-item__dropdown__info-tech__item">Hash:&nbsp;<span>{app.hash}</span></li>
+                                                        </ul>
+                                                    </div>
                                                     <ul className="apps-page__body__list-item__dropdown__links">
-                                                        <li className="apps-page__body__list-item__dropdown__links-item">
-                                                            <Link to={`/app/${app.idApp}`}>app</Link>
-                                                        </li>
+                                                        {/*<li className="apps-page__body__list-item__dropdown__links-item">*/}
+                                                            {/*<Link to={`/app/${app.idApp}`}>app</Link>*/}
+                                                        {/*</li>*/}
                                                         <li className="apps-page__body__list-item__dropdown__links-item">
                                                             <Link to={`/update-apk/${app.idApp}`}>update apk</Link>
                                                         </li>

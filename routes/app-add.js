@@ -66,7 +66,7 @@ function formidablePromise(req, data) {
             form.parse(req);
             form
                 .on('error', (err) => {
-                    if (err) return reject(err)
+                    reject(err);
                 })
                 .on('field', (field, value) => {
                     if (value !== 'undefined') {
@@ -105,7 +105,7 @@ function formidablePromise(req, data) {
                     if (field === 'banner')
                         config.files.images.banner = url;
                 })
-                .on('end', async() => {
+                .on('end', () => {
                     resolve(config);
                 })
         } catch (err) {

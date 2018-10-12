@@ -4,6 +4,7 @@ import axios from 'axios';
 import {Helmet} from "react-helmet";
 import filesize from 'filesize';
 import Popup from "reactjs-popup";
+import TextareaAutosize from 'react-textarea-autosize';
 import { Link } from 'react-router-dom'
 import {utils as web3Utils} from 'web3';
 
@@ -17,8 +18,9 @@ class AppUpdateAPK extends Component {
     state = {
         app: null,
         popupOpen: false,
-        upload: {
-            apk: null
+        data: {
+            apk: null,
+            description: ''
         },
         _: {
             step: 1,
@@ -65,15 +67,18 @@ class AppUpdateAPK extends Component {
         let file = e.target.files.length ? e.target.files[0] : null;
         if (file) {
             if (file.type === 'application/vnd.android.package-archive') {
-                this.setState({upload: {...this.state.upload, apk: file}});
+                this.setState({data: {...this.state.data, apk: file}});
             } else {
                 e.target.value = '';
-                this.setState({upload: {...this.state.upload, apk: null}});
+                this.setState({data: {...this.state.data, apk: null}});
                 Notification('error', 'Invalid application file');
             }
         } else {
-            this.setState({upload: {...this.state.upload, apk: null}});
+            this.setState({data: {...this.state.data, apk: null}});
         }
+    };
+    handleChangeDesc = async e => {
+        await this.setState({data: {...this.state.data, description: e.target.value}});
     };
 
     handleSubmitUpload = async e => {
@@ -81,12 +86,13 @@ class AppUpdateAPK extends Component {
         this.props.startLoading();
         try {
             let { address, contracts } = this.props;
-            let { apk } = this.state.upload;
+            let { apk, description } = this.state.data;
             let { app } = this.state;
 
             let fd = new FormData();
 
             fd.append("apk", apk);
+            fd.append("description", description);
 
             let obj = {
                 hash: app.hash,
@@ -243,7 +249,7 @@ class AppUpdateAPK extends Component {
     };
 
     render(){
-        const { app, popupOpen, balance, hashType, hash, isUpload, upload} = this.state;
+        const { app, popupOpen, balance, hashType, hash, isUpload, data} = this.state;
         const { step, gasLimit, success, password } = this.state._;
         const { gasPrice, mode, address } = this.props;
 
@@ -260,25 +266,33 @@ class AppUpdateAPK extends Component {
                             </div>
                             <div className="ico-add__title">Update APK for <span>{app.nameApp}</span></div>
                             <form onSubmit={this.handleSubmitUpload}>
-                                <section className="update-apk__section">
-                                    <div className="update-apk__section__title">Application file</div>
-                                    <div className="update-apk__section__box">
-                                        {
-                                            upload.apk ? (
-                                                <div className="update-apk__section__box__preview">
-                                                    <div className="update-apk__section__box__preview__img"></div>
-                                                    <ul className="update-apk__section__box__preview__info-list">
-                                                        <li className="update-apk__section__box__preview__info-list__item">Name: <span>{upload.apk.name}</span></li>
-                                                        <li className="update-apk__section__box__preview__info-list__item">Size: <span>{filesize(upload.apk.size)}</span></li>
-                                                    </ul>
-                                                </div>
-                                            ) : (
-                                                <div className="update-apk__section__box__preview__placeholder">Select APK file</div>
-                                            )
-                                        }
-                                        <input required type="file" name="apk" accept=".apk" onChange={this.handleChangeAPK}/>
-                                    </div>
-                                </section>
+                                <div className="update-apk__sections">
+                                    <section className="update-apk__section">
+                                        <div className="update-apk__section__title">Application file</div>
+                                        <div className="update-apk__section__file">
+                                            {
+                                                data.apk ? (
+                                                    <div className="update-apk__section__file__preview">
+                                                        <div className="update-apk__section__file__preview__img"></div>
+                                                        <ul className="update-apk__section__file__preview__info-list">
+                                                            <li className="update-apk__section__file__preview__info-list__item">Name: <span>{data.apk.name}</span></li>
+                                                            <li className="update-apk__section__file__preview__info-list__item">Size: <span>{filesize(data.apk.size)}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                ) : (
+                                                    <div className="update-apk__section__file__preview__placeholder">Select APK file</div>
+                                                )
+                                            }
+                                            <input required type="file" name="apk" accept=".apk" onChange={this.handleChangeAPK}/>
+                                        </div>
+                                    </section>
+                                    <section className="update-apk__section">
+                                        <div className="update-apk__section__title">Description of changes</div>
+                                        <div className="update-apk__section__text">
+                                            <TextareaAutosize required placeholder="New features, more stable" minRows={1} value={data.description} onChange={this.handleChangeDesc}/>
+                                        </div>
+                                    </section>
+                                </div>
                                 <div className="update-apk__load-block">
                                     <button className="update-apk__load-block__btn">Upload</button>
                                 </div>

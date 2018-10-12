@@ -42,15 +42,19 @@
     span
       font-family: $FiraSans
       color: #00e7d5
+  &__sections
   &__section
     box-sizing: border-box
+    margin-bottom: 30px
+    &:last-child
+      margin-bottom: 0
     &__title
       font-family: $Archive
       font-weight: 400
       font-size: 18px
       color: #00e7d5
       margin-bottom: 15px
-    &__box
+    &__file
       position: relative
       width: 100%
       min-height: 40px
@@ -102,6 +106,31 @@
           font-weight: 400
           font-size: 14px
           color: #67777b
+    &__text
+      padding: 35px 60px 50px 30px
+      background-color: #fff
+      position: relative
+      border-radius: 5px 5px 5px 0
+      &:after
+        content: ''
+        position: absolute
+        bottom: -5px
+        left: 0
+        height: 5px
+        width: 40px
+        background-color: #ff4661
+      textarea
+        border: 0
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        border-bottom: 2px solid #b3bbbd
+        max-width: 100%
+        width: 100%
+        resize: none
+        padding: 0 0 5px 0
+        &::placeholder
+          color: #d3d3d3
   &__load-block
     display: flex
     justify-content: center
