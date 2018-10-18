@@ -17,7 +17,7 @@ global.nodeIPFS = new IPFS({
     repo: lib.ipfs.repo,
     config: lib.ipfs.config
 });
-nodeIPFS.on('error', (e)=>{
+nodeIPFS.on('error', e =>{
     console.log('error:', modules.time.timeNow(), e.message);
     process.exit(1);
 });
@@ -34,13 +34,13 @@ app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
 /** ROUTES **/
 app.use('/api', require('../routes'));
-app.use("*", function(req, resp) {
-    resp.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
+app.use("*", (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
 });
 
 (async () => {
     try {
-        nodeIPFS.on('start', async() => {
+        nodeIPFS.on('start', async () => {
             console.log('IPFS start successful');
             await Promise.all([
                 makeDir(lib.dirApp),

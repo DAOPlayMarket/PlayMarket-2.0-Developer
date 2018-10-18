@@ -209,7 +209,6 @@ class Header extends Component {
         } catch (err) {
             this.props.endLoading();
             Notification('error', err.message);
-            console.log(err);
         }
     };
     handleSubmitChangeInfo_4 = async e => {

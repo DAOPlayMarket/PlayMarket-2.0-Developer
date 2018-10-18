@@ -20,9 +20,19 @@ export async function setProvider(_provider) {
             }
             case 'metamask': {
                 stopWebSocketPing();
-                if (typeof window.web3 !== 'undefined') {
-                    let provider = window.web3.currentProvider;
-                    web3 = new Web3(provider);
+                if (window.ethereum) {
+                    window.ethereum.setMaxListeners(30);
+                    web3 = new Web3(window.ethereum);
+                    try {
+                        await window.ethereum.enable();
+                        startAddressWatcher_MM();
+                        Notification('success', 'Web3 (MetaMask) connection successful!');
+                    } catch (err) {
+                        Notification('error', 'Web3 (MetaMask) connection failed! User denied account access.');
+                    }
+                } else if (window.web3) {
+                    window.web3.setMaxListeners(30);
+                    web3 = new Web3(window.web3.currentProvider);
                     startAddressWatcher_MM();
                     Notification('success', 'Web3 (MetaMask) connection successful!');
                 } else {
@@ -34,7 +44,6 @@ export async function setProvider(_provider) {
                 break;
         }
     } catch (err) {
-        console.log(err);
         throw err;
     }
 }
@@ -62,7 +71,7 @@ function startAddressWatcher_MM() {
             if (await web3.eth.getCoinbase() !== address) {
                 window.location.reload();
             }
-        }, 1000);
+        }, 2000);
     })();
 }
 function stopAddressWatcher_MM() {
@@ -105,6 +114,18 @@ export async function getTxParams(obj) {
             data: obj.data,
             chainId: lib.ethereum.chainId
         }
+    } catch (err) {
+        throw err;
+    }
+}
+export async function getDataByTypes(obj) {
+   try {
+        return await web3.eth.abi.encodeFunctionCall(
+            {
+                name: obj.name,
+                type: obj.type,
+                inputs: obj.inputs
+            }, obj.params);
     } catch (err) {
         throw err;
     }
@@ -172,13 +193,13 @@ export async function getTransactionStatus(hash) {
                     let tx = await web3.eth.getTransactionReceipt(hash);
                     let result = tx ? {pending: false, status: tx.status} : {pending: true};
                     if (!result.pending) {
-                        clearTimeout(timerTx);
+                        clearInterval(timerTx);
                         resolve(result.status);
                     }
                 } catch (err) {
                     throw err;
                 }
-            }, 1000);
+            }, 2000);
         } catch (err) {
             reject(err);
         }

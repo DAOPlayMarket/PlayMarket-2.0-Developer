@@ -22,7 +22,8 @@
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "pull-stream": "^3.6.9",
-    "recursive-readdir": "^2.2.2"
+    "recursive-readdir": "^2.2.2",
+    "ua-parser-js": "^0.7.18"
   },
   "nodemonConfig": {
     "ignore": [

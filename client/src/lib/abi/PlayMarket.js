@@ -411,33 +411,6 @@ module.exports = [
         "type": "function"
     },
     {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_app",
-                "type": "uint256"
-            }
-        ],
-        "name": "getInfoAppICO",
-        "outputs": [
-            {
-                "name": "hashType",
-                "type": "uint32"
-            },
-            {
-                "name": "confirmation",
-                "type": "bool"
-            },
-            {
-                "name": "hash",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "constant": false,
         "inputs": [
             {
@@ -1141,15 +1114,15 @@ module.exports = [
                 "type": "uint256"
             },
             {
-                "name": "vote",
+                "name": "_vote",
                 "type": "uint256"
             },
             {
-                "name": "description",
+                "name": "_description",
                 "type": "string"
             },
             {
-                "name": "txIndex",
+                "name": "_txIndex",
                 "type": "bytes32"
             }
         ],

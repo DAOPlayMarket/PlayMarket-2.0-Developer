@@ -1,13 +1,22 @@
 const initState = {
     node: {
-        url: 'https://t000001.playmarket.io'
+        url: '',
+        lat: '',
+        long: '',
+        ip: '',
+        domain: ''
     },
+    nodes: [],
     isAuth: false,
     user: {
         keystore: '',
         address: '',
         name: '',
-        desc: ''
+        desc: '',
+        position: {
+            lat: '',
+            long: ''
+        }
     },
     contracts: {
         Proxy: {
@@ -72,6 +81,7 @@ const rootReducer = (state = initState, action) => {
                 ...state,
                 isAuth: true,
                 user: {
+                    ...state.user,
                     keystore: action.keystore,
                     address: action.address,
                     name: action.name,
@@ -84,6 +94,7 @@ const rootReducer = (state = initState, action) => {
                 ...state,
                 isAuth: false,
                 user: {
+                    ...state.user,
                     keystore: '',
                     address: '',
                     name: '',
@@ -98,6 +109,18 @@ const rootReducer = (state = initState, action) => {
                     ...state.user,
                     name: action.name,
                     desc: action.desc
+                }
+            };
+            break;
+        case 'SET_USER_POSITION':
+            state = {
+                ...state,
+                user: {
+                    ...state.user,
+                    position: {
+                        lat: action.lat,
+                        long: action.long
+                    }
                 }
             };
             break;
@@ -117,6 +140,24 @@ const rootReducer = (state = initState, action) => {
             state = {
                 ...state,
                 gasPrice: action.gasPrice
+            };
+            break;
+        case 'SET_NODES':
+            state = {
+                ...state,
+                nodes: action.nodes
+            };
+            break;
+        case 'SET_NODE':
+            state = {
+                ...state,
+                node: {
+                    domain: action.domain,
+                    url: action.url,
+                    lat: action.lat,
+                    long: action.long,
+                    ip: action.ip
+                }
             };
             break;
         default:

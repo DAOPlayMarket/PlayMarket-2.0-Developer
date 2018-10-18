@@ -17,7 +17,7 @@ import { startLoading, endLoading } from '../actions/preloader';
 
 import Notification from '../components/Notification';
 
-import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getData, getGasLimit, getSignedTransaction, contractMethod } from '../utils/web3'
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 class IcoAdd extends Component {
     state = {
@@ -143,7 +143,7 @@ class IcoAdd extends Component {
 
     async componentDidMount(){
         let idApp = this.props.id;
-        let { url, contracts, address } = this.props;
+        let { url } = this.props;
         await this.props.startLoading();
         try {
             let response = (await axios({
@@ -710,7 +710,7 @@ class IcoAdd extends Component {
                     let data = await getData({
                         contract: contracts.ICO,
                         method: 'addAppICOInfo',
-                        params: [parseInt(app.idApp, 10), tokenName, tokenSymbol, startDate.unix(), 3, 2592000, parseInt(hardCapUSD * 10000, 10), response.result.hash, parseInt(response.result.hashType, 10)]
+                        params: [parseInt(app.idApp, 10), tokenName, tokenSymbol, startDate.unix(), 3, 2592000, parseInt(hardCapUSD * 1000000, 10), response.result.hash, parseInt(response.result.hashType, 10)]
                     });
                     let gasLimit = await getGasLimit({
                         from: address,

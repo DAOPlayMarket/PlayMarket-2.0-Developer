@@ -43,7 +43,7 @@ const download = (dir, multiHash) => {
         try {
             let stream = nodeIPFS.files.getReadableStream(multiHash);
             console.log('Load files START:', multiHash);
-            stream.on('data', async (file) => {
+            stream.on('data', async file => {
                 stream.pause();
                 let filePath = path.join((file.path).replace(multiHash,''));
                 switch (file.type) {
@@ -66,7 +66,6 @@ const download = (dir, multiHash) => {
                                 reject(e);
                             }
                         });
-
                         break;
                     default:
                         break;
@@ -77,7 +76,7 @@ const download = (dir, multiHash) => {
                 console.log('Load files END:', multiHash);
                 resolve();
             });
-            setTimeout(function () {
+            setTimeout(() => {
                 reject(new Error('Disconnection by timeout'));
             }, 600000);
         } catch (e) {

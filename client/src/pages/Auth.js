@@ -286,13 +286,17 @@ class Auth extends Component {
                 data: data,
                 reserve: 0
             });
-            await this.setState({registration: {
-                ...this.state.registration, step: 2, data: data, gasLimit: gasLimit
-            }});
+            await this.setState({
+                registration: {
+                    ...this.state.registration,
+                    step: 2,
+                    data: data,
+                    gasLimit: gasLimit
+                }
+            });
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
-            console.log(err);
             Notification('error', err.message);
         }
     };

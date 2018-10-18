@@ -1,6 +1,7 @@
 .control
   position: fixed
-  z-index: 1000
+  z-index: 100
+  top: 0
   bottom: 0
   left: 0
   width: 250px
@@ -8,41 +9,93 @@
   padding: 20px
   color: #fff
   box-sizing: border-box
-  border-radius: 0 22px 0 0
-  &__network, &__provider, &__version
-    font-family: $FiraSans
-    font-weight: 400
-    font-size: 14px
-    margin-bottom: 5px
-    span
-      font-family: $FiraSansSemiBold
-      font-weight: 500
-      color: #00e7d5
-  &__price
-    padding-top: 5px
-    font-family: $FiraSansSemiBold
-    font-weight: 500
-    font-size: 14px
-    margin-bottom: 5px
-    span
-      color: #00e7d5
-      width: 18px
-      display: inline-block
-      text-align: right
-  &__input
-    font-size: 0
-    margin-bottom: 10px
-    input
-      margin: 0
-      padding: 0
-      width: 100%
-  &__text
+  &__logo
+    height: 30px
+    margin-bottom: 20px
+    background-image: url("../images/icons/pmdev_logo.png")
+    background-position: center
+    background-size: contain
+    background-repeat: no-repeat
+  &__web3isNotConnect
     font-family: $FiraSansThin
     font-weight: 200
-    font-size: 12px
-    line-height: 14px
-    margin-bottom: 10px
-  &__warning
-    font-family: $FiraSans
-    font-weight: 400
-    font-size: 12px
+    font-size: 16px
+    color: #fff
+    text-align: center
+  &__web3
+    &-title
+      font-family: $Archive
+      font-weight: 400
+      font-size: 14px
+      text-align: center
+      margin-bottom: 10px
+    &__list
+      &-item
+        &__typical
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 14px
+          margin-bottom: 5px
+          span
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            color: #00e7d5
+        &__price
+          padding-top: 5px
+          font-family: $FiraSansSemiBold
+          font-weight: 500
+          font-size: 14px
+          margin-bottom: 5px
+          span
+            color: #00e7d5
+            width: 18px
+            display: inline-block
+            text-align: right
+        &__input
+          font-size: 0
+          margin-bottom: 10px
+          input
+            margin: 0
+            padding: 0
+            width: 100%
+        &__text
+          font-family: $FiraSansThin
+          font-weight: 200
+          font-size: 12px
+          line-height: 14px
+          margin-bottom: 10px
+        &__warning
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 12px
+    &__placeholder
+      font-family: $FiraSansThin
+      font-weight: 200
+      font-size: 16px
+      color: #fff
+      text-align: center
+  &__nodes
+    margin-top: 20px
+    &-title
+      font-family: $Archive
+      font-weight: 400
+      font-size: 14px
+      text-align: center
+      margin-bottom: 10px
+    &__list
+      &-item
+        font-family: $FiraSansSemiBold
+        font-weight: 500
+        font-size: 12px
+        padding-bottom: 3px
+        span
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 12px
+    &__placeholder
+      font-family: $FiraSansThin
+      font-weight: 200
+      font-size: 16px
+      color: #fff
+      text-align: center
+

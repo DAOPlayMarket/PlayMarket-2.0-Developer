@@ -21,3 +21,11 @@ export const userChangeInfo = payload => {
     }
 };
 
+export const setUserPosition = payload => {
+    return {
+        type: 'SET_USER_POSITION',
+        lat: payload.lat,
+        long: payload.long
+    }
+};
+
