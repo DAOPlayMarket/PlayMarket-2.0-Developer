@@ -91,16 +91,20 @@ class _App extends Component {
                     nodes: nodes
                 });
                 for (let node of nodes) {
-                    let isActive = await this.pingNode('https://' + node.domain);
-                    if (isActive) {
-                        await this.props.setNode({
-                            url: 'https://' + node.domain,
-                            domain: node.domain,
-                            lat: node.lat,
-                            long: node.long,
-                            ip: node.ip
-                        });
-                        break;
+                    try {
+                        let isActive = await this.pingNode('https://' + node.domain);
+                        if (isActive) {
+                            await this.props.setNode({
+                                url: 'https://' + node.domain,
+                                domain: node.domain,
+                                lat: node.lat,
+                                long: node.long,
+                                ip: node.ip
+                            });
+                            break;
+                        }
+                    } catch (err) {
+                        console.log('error:', err.message);
                     }
                 }
                 this.props.endLoading();
@@ -133,7 +137,7 @@ class _App extends Component {
             let response = (await axios({
                 method: 'get',
                 url: domain + '/api/ping'
-            })).data;
+            }));
             return response.status === 200
         } catch (err) {
             return false

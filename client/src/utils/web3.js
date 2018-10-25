@@ -23,12 +23,17 @@ export async function setProvider(_provider) {
                 if (window.ethereum) {
                     window.ethereum.setMaxListeners(30);
                     web3 = new Web3(window.ethereum);
-                    try {
-                        await window.ethereum.enable();
-                        startAddressWatcher_MM();
-                        Notification('success', 'Web3 (MetaMask) connection successful!');
-                    } catch (err) {
-                        Notification('error', 'Web3 (MetaMask) connection failed! User denied account access.');
+                    let netId = await web3.eth.net.getId();
+                    if (parseInt(netId) === lib.ethereum.chainId) {
+                        try {
+                            await window.ethereum.enable();
+                            startAddressWatcher_MM();
+                            Notification('success', 'Web3 (MetaMask) connection successful!');
+                        } catch (err) {
+                            Notification('error', 'Web3 (MetaMask) connection failed! User denied account access.');
+                        }
+                    } else {
+                        throw new TypeError('You have the incorrect network id. Please, change it to ' + lib.ethereum.chainId + ' ('+ lib.ethereum.chainName +')');
                     }
                 } else if (window.web3) {
                     window.web3.setMaxListeners(30);

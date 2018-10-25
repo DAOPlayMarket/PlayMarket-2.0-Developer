@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const IPFS = require('ipfs');
 const makeDir = require('make-dir');
+const nocache = require('nocache');
+const requestIp = require('request-ip');
+require('dotenv').config({path: path.join(__dirname, '..', '.env')});
 
 /** GLOBAL VARIABLES **/
 global.lib = require(path.join(__dirname, '..', 'lib'));
@@ -28,6 +31,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 // cors
 app.use(cors());
+// nocache
+app.use(nocache());
+// ip
+app.use(requestIp.mw());
 
 /** STATIC FOLDERS **/
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
@@ -47,8 +54,8 @@ app.use("*", (req, res) => {
                 makeDir(lib.dirICO)
             ]);
             console.log('Data folder structure will be created');
-            let PORT = process.env.PORT || lib.server.port;
-            let HOST = process.env.HOST || lib.server.host;
+            const PORT = process.env.SERVER_PORT;
+            const HOST = process.env.SERVER_HOST;
             app.listen(PORT, HOST, () => {
                 // console.info(process.env.NODE_ENV);
                 console.info(`Server listening on ${HOST}:${PORT} | ${modules.time.timeNow()}`);

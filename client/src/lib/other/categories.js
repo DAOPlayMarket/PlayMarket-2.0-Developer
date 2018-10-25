@@ -130,6 +130,10 @@ module.exports = [
             {
                 id: 32,
                 name: 'photography'
+            },
+            {
+                id : 33,
+                name : "libraries and demo"
             }
         ]
     },

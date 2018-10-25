@@ -1,10 +1,11 @@
 module.exports = {
     version: '1',
     web3: {
-        infura: 'wss://rinkeby.infura.io/ws'
+        infura: 'wss://mainnet.infura.io/ws'
     },
     ethereum: {
-        chainId: 4
+        chainId: 1,
+        chainName: 'MAINNET'
     }
 };
 

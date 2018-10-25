@@ -20,7 +20,7 @@ const initState = {
     },
     contracts: {
         Proxy: {
-            address: '0x87ef26717654c92b6ecc19e3c7a145406b112315',
+            address: '0x3A7075f150162d83EB2422735dfE6326b745c25B',
             abi: require('../lib/abi/Proxy.js')
         },
         PlayMarket: {
