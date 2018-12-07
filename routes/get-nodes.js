@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
                     domain : domain
                 });
             } catch (err) {
-                // console.log('error: can\'t get address info for ' + domen);
+                // console.log('error: can\'t get address info for ' + domain);
             }
         }
         res.json({

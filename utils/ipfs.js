@@ -21,9 +21,9 @@ const upload = (dir, headFolderName) => {
             pull(
                 pull.values(arr),
                 stream,
-                pull.collect((err, values) => {
-                    if (err) {
-                        reject(err)
+                pull.collect((e, values) => {
+                    if (e) {
+                        reject(e)
                     }
                     resolve({
                         hashType: 1,
@@ -33,7 +33,6 @@ const upload = (dir, headFolderName) => {
             )
         } catch (e) {
             reject(e);
-            console.log('error', modules.timeNow(), e);
         }
     });
 };
@@ -84,6 +83,38 @@ const download = (dir, multiHash) => {
         }
     });
 };
+
+// const download = async (dir, multiHash) => {
+//     let timeout = setTimeout(() => {
+//         throw new Error('Disconnection by timeout');
+//     }, 1200000);
+//     try {
+//         console.log('*** Downloading from IPFS, hash: ' + multiHash);
+//         let result = {};
+//         let files = await nodeIPFS.files.get(multiHash);
+//         for (let file of files) {
+//             let filePath = path.join((file.path).replace(multiHash,''));
+//             switch (file.type) {
+//                 case 'dir':
+//                     await makeDir(path.join(dir, filePath));
+//                     break;
+//                 case 'file':
+//                     fse.writeFileSync(path.join(dir, filePath), file.content);
+//                     if(file.name === 'config.json') {
+//                         result.config = JSON.parse(file.content.toString());
+//                     }
+//                     break;
+//                 default:
+//                     break;
+//             }
+//         }
+//         clearTimeout(timeout);
+//         return result;
+//     } catch (e) {
+//         clearTimeout(timeout);
+//         throw e;
+//     }
+// };
 
 module.exports = {
     upload: upload,

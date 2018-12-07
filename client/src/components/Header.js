@@ -404,7 +404,6 @@ const mapDispatchToProps = (dispatch) => {
         userChangeInfo: (payload) => dispatch(userChangeInfo(payload)),
         startLoading: () => dispatch(startLoading()),
         endLoading: () => dispatch(endLoading())
-
     }
 };
 
