@@ -224,6 +224,14 @@ class IcoAdd extends Component {
             }
         });
     };
+    handleChangeCSID = async e => {
+        await this.setState({
+            settings: {
+                ...this.state.settings,
+                CSID: parseInt(e.target.value, 10)
+            }
+        });
+    };
 
     handleChangeMemberPhoto = param => async e => {
         e.preventDefault();
@@ -1000,7 +1008,7 @@ class IcoAdd extends Component {
         let { gasPrice, address, mode } = this.props;
 
         let { minDate, members, logo, banner, gallery, description, advantages, keyword } = this.state.SERVICE;
-        let { tokenName, tokenSymbol, startDate, hardCapUSD, multisigWallet, ATID } = this.state.settings;
+        let { tokenName, tokenSymbol, startDate, hardCapUSD, multisigWallet, CSID, ATID } = this.state.settings;
         let { info, contract } = this.state._;
 
         return (
@@ -1744,11 +1752,28 @@ class IcoAdd extends Component {
                                                             <ul className="ico-add__section-3__content__list-item__radio">
                                                                 <li className="ico-add__section-3__content__list-item__radio-item">
                                                                     <input id="ATID_1" checked={ATID === 1} name="ATID" type="radio" value="1" onChange={this.handleChangeATID}/>
-                                                                    <label htmlFor="ATID_1" title="ERC20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens. ERC stands for Ethereum Request for Comment, and 20 is the number that was assigned to this request. The clear majority of tokens issued on the Ethereum blockchain are ERC20 compliant.">ERC20</label>
+                                                                    <label htmlFor="ATID_1" title="ERC20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens. ERC stands for Ethereum Request for Comment, and 20 is the number that was assigned to this request. The clear majority of tokens issued on the Ethereum blockchain are ERC20 compliant.">ERC20 (v. 1.0.0)</label>
                                                                 </li>
                                                                 <li className="ico-add__section-3__content__list-item__radio-item">
                                                                     <input id="ATID_2" checked={ATID === 2} name="ATID" type="radio" value="2" onChange={this.handleChangeATID}/>
-                                                                    <label htmlFor="ATID_2" title="ERC223 is a token standard that allows token transfers to behave exactly as ether transactions. ERC223 utilizes event handling (considers a transaction an event) to prevent tokens from being lost in unhandled transactions.">ERC223</label>
+                                                                    <label htmlFor="ATID_2" title="ERC223 is a token standard that allows token transfers to behave exactly as ether transactions. ERC223 utilizes event handling (considers a transaction an event) to prevent tokens from being lost in unhandled transactions.">ERC223 (v. 1.0.0)</label>
+                                                                </li>
+                                                                <li className="ico-add__section-3__content__list-item__radio-item">
+                                                                    <input id="ATID_3" checked={ATID === 3} name="ATID" type="radio" value="3" onChange={this.handleChangeATID}/>
+                                                                    <label htmlFor="ATID_3" title="ERC20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens. ERC stands for Ethereum Request for Comment, and 20 is the number that was assigned to this request. The clear majority of tokens issued on the Ethereum blockchain are ERC20 compliant.">ERC20 (v. 2.0.0)</label>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li className="ico-add__section-3__content__list-item">
+                                                            <div className="ico-add__section-3__content__list-item__title">Crowdsale type:</div>
+                                                            <ul className="ico-add__section-3__content__list-item__radio">
+                                                                <li className="ico-add__section-3__content__list-item__radio-item">
+                                                                    <input id="CSID_1" checked={CSID === 1} name="CSID" type="radio" value="1" onChange={this.handleChangeCSID}/>
+                                                                    <label htmlFor="CSID_1" title="Type ID: 1">1</label>
+                                                                </li>
+                                                                <li className="ico-add__section-3__content__list-item__radio-item">
+                                                                    <input id="CSID_2" checked={CSID === 2} name="CSID" type="radio" value="2" onChange={this.handleChangeCSID}/>
+                                                                    <label htmlFor="CSID_2" title="Type ID: 2">2</label>
                                                                 </li>
                                                             </ul>
                                                         </li>
