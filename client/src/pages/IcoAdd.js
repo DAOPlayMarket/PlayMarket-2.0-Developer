@@ -1773,10 +1773,10 @@ class IcoAdd extends Component {
                                                                     <input id="ATID_2" checked={ATID === 2} name="ATID" type="radio" value="2" onChange={this.handleChangeATID}/>
                                                                     <label htmlFor="ATID_2" title="ERC223 is a token standard that allows token transfers to behave exactly as ether transactions. ERC223 utilizes event handling (considers a transaction an event) to prevent tokens from being lost in unhandled transactions.">ERC223 (v. 1.0.0)</label>
                                                                 </li>
-                                                                <li className="ico-add__section-3__content__list-item__radio-item">
-                                                                    <input id="ATID_3" checked={ATID === 3} name="ATID" type="radio" value="3" onChange={this.handleChangeATID}/>
-                                                                    <label htmlFor="ATID_3" title="ERC20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens. ERC stands for Ethereum Request for Comment, and 20 is the number that was assigned to this request. The clear majority of tokens issued on the Ethereum blockchain are ERC20 compliant.">ERC20 (v. 2.0.0)</label>
-                                                                </li>
+                                                                {/*<li className="ico-add__section-3__content__list-item__radio-item">*/}
+                                                                    {/*<input id="ATID_3" checked={ATID === 3} name="ATID" type="radio" value="3" onChange={this.handleChangeATID}/>*/}
+                                                                    {/*<label htmlFor="ATID_3" title="ERC20 is a technical standard used for smart contracts on the Ethereum blockchain for implementing tokens. ERC stands for Ethereum Request for Comment, and 20 is the number that was assigned to this request. The clear majority of tokens issued on the Ethereum blockchain are ERC20 compliant.">ERC20 (v. 2.0.0)</label>*/}
+                                                                {/*</li>*/}
                                                             </ul>
                                                         </li>
                                                     </ul>
