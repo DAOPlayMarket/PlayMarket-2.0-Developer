@@ -51,7 +51,8 @@ class IcoAdd extends Component {
             logo: null,
             banner: null,
             keyword: '',
-            minDate: moment().add(3, 'day').startOf('day'),
+            minDate: moment().startOf('day'),
+            // minDate: moment().add(3, 'day').startOf('day'),
             members: {
                 temp : {
                     team: {
@@ -96,11 +97,13 @@ class IcoAdd extends Component {
         settings: {
             tokenName: '',
             tokenSymbol: '',
-            startDate: moment().add(3, 'day').startOf('day'),
+            startDate: moment().startOf('hour'),
+            // startDate: moment().add(3, 'day').startOf('day'),
             hardCapUSD: '',
             multisigWallet: '',
             CSID: 1,
             ATID: 1,
+            periods: 3
         },
         ico: {
             keywords: [],
@@ -217,18 +220,30 @@ class IcoAdd extends Component {
         });
     };
     handleChangeATID = async e => {
+        const ATID = parseInt(e.target.value, 10);
+
+        let CSID;
+        if (ATID === 1 || ATID === 2) {
+            CSID = 1
+        }
+        if (ATID === 3) {
+            CSID = 2
+        }
+
+        let periods;
+        if (CSID === 1) {
+            periods = 3
+        }
+        if (CSID === 2) {
+            periods = 8
+        }
+
         await this.setState({
             settings: {
                 ...this.state.settings,
-                ATID: parseInt(e.target.value, 10)
-            }
-        });
-    };
-    handleChangeCSID = async e => {
-        await this.setState({
-            settings: {
-                ...this.state.settings,
-                CSID: parseInt(e.target.value, 10)
+                ATID: ATID,
+                CSID: CSID,
+                periods: periods
             }
         });
     };
@@ -711,14 +726,14 @@ class IcoAdd extends Component {
             })).data;
             if (response.status === 200) {
                 try {
-                    let { startDate, hardCapUSD, tokenName, tokenSymbol } = this.state.settings;
+                    let { startDate, hardCapUSD, tokenName, tokenSymbol, periods } = this.state.settings;
                     let { contracts } = this.props;
                     let { app } = this.state;
 
                     let data = await getData({
                         contract: contracts.ICO,
                         method: 'addAppICOInfo',
-                        params: [parseInt(app.idApp, 10), tokenName, tokenSymbol, startDate.unix(), 3, 2592000, parseInt(hardCapUSD * 1000000, 10), response.result.hash, parseInt(response.result.hashType, 10)]
+                        params: [parseInt(app.idApp, 10), tokenName, tokenSymbol, startDate.unix(), parseInt(periods, 10), 2592000, parseInt(hardCapUSD * 1000000, 10), response.result.hash, parseInt(response.result.hashType, 10)]
                     });
                     let gasLimit = await getGasLimit({
                         from: address,
@@ -1008,7 +1023,7 @@ class IcoAdd extends Component {
         let { gasPrice, address, mode } = this.props;
 
         let { minDate, members, logo, banner, gallery, description, advantages, keyword } = this.state.SERVICE;
-        let { tokenName, tokenSymbol, startDate, hardCapUSD, multisigWallet, CSID, ATID } = this.state.settings;
+        let { tokenName, tokenSymbol, startDate, hardCapUSD, multisigWallet, ATID, CSID, periods } = this.state.settings;
         let { info, contract } = this.state._;
 
         return (
@@ -1764,19 +1779,6 @@ class IcoAdd extends Component {
                                                                 </li>
                                                             </ul>
                                                         </li>
-                                                        <li className="ico-add__section-3__content__list-item">
-                                                            <div className="ico-add__section-3__content__list-item__title">Crowdsale type:</div>
-                                                            <ul className="ico-add__section-3__content__list-item__radio">
-                                                                <li className="ico-add__section-3__content__list-item__radio-item">
-                                                                    <input id="CSID_1" checked={CSID === 1} name="CSID" type="radio" value="1" onChange={this.handleChangeCSID}/>
-                                                                    <label htmlFor="CSID_1" title="Type ID: 1">1</label>
-                                                                </li>
-                                                                <li className="ico-add__section-3__content__list-item__radio-item">
-                                                                    <input id="CSID_2" checked={CSID === 2} name="CSID" type="radio" value="2" onChange={this.handleChangeCSID}/>
-                                                                    <label htmlFor="CSID_2" title="Type ID: 2">2</label>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1862,6 +1864,13 @@ class IcoAdd extends Component {
                                                                                         </div>
                                                                                         <div
                                                                                             className="ico-add-popup__registration__preview-list__item--value">{startDate.unix()}</div>
+                                                                                    </li>
+                                                                                    <li className="ico-add-popup__registration__preview-list__item">
+                                                                                        <div
+                                                                                            className="ico-add-popup__registration__preview-list__item--title">
+                                                                                            Periods:
+                                                                                        </div>
+                                                                                        <div className="ico-add-popup__registration__preview-list__item--value">{periods}</div>
                                                                                     </li>
                                                                                     <li className="ico-add-popup__registration__preview-list__item">
                                                                                         <div
@@ -1995,8 +2004,22 @@ class IcoAdd extends Component {
                                                                                                 className="ico-add-popup__registration__preview-list__item--title">
                                                                                                 Token standard:
                                                                                             </div>
-                                                                                            <div
-                                                                                                className="ico-add-popup__registration__preview-list__item--value">{ATID === 1 ? 'ERC20' : 'ERC223'}</div>
+                                                                                            <div className="ico-add-popup__registration__preview-list__item--value">
+                                                                                                {ATID === 1 ? 'ERC20 (v 1.0.0)' : null}
+                                                                                                {ATID === 2 ? 'ERC223 (v 1.0.0)' : null}
+                                                                                                {ATID === 3 ? 'ERC20 (v 2.0.0)' : null}
+                                                                                            </div>
+                                                                                        </li>
+                                                                                        <li className="ico-add-popup__registration__preview-list__item">
+                                                                                            <div className="ico-add-popup__registration__preview-list__item--title">Crowdsale type:</div>
+                                                                                            <div className="ico-add-popup__registration__preview-list__item--value">
+                                                                                                {CSID === 1 ? 'CSID (v 1.0.0)' : null}
+                                                                                                {CSID === 2 ? 'CSID (v 2.0.0)' : null}
+                                                                                            </div>
+                                                                                        </li>
+                                                                                        <li className="ico-add-popup__registration__preview-list__item">
+                                                                                            <div className="ico-add-popup__registration__preview-list__item--title">Number of periods:</div>
+                                                                                            <div className="ico-add-popup__registration__preview-list__item--value">{periods}</div>
                                                                                         </li>
                                                                                     </ul>
                                                                                     <ul className="ico-add-popup__registration__list">
