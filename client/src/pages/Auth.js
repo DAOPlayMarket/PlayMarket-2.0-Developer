@@ -327,7 +327,9 @@ class Auth extends Component {
                     });
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -343,7 +345,9 @@ class Auth extends Component {
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -352,7 +356,7 @@ class Auth extends Component {
                 break;
         }
         try {
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
+            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
             let balance = await getBalance(this.state.address);
             await this.setState({
                 balance: balance,
@@ -361,19 +365,28 @@ class Auth extends Component {
                     hash: tx.transactionHash
                 }
             });
-            if (transactionStatus) {
-                let developer = await this.getDeveloper();
-                await this.setState({
-                    isRegistered: developer.state,
-                    user: {
-                        ...this.state.user,
-                        name: developer.name,
-                        desc: developer.desc
-                    }
-                });
-            } else {
-                Notification('error', 'Transaction failed');
-            }
+            let developer = await this.getDeveloper();
+            await this.setState({
+                isRegistered: developer.state,
+                user: {
+                    ...this.state.user,
+                    name: developer.name,
+                    desc: developer.desc
+                }
+            });
+            // if (transactionStatus) {
+            //     let developer = await this.getDeveloper();
+            //     await this.setState({
+            //         isRegistered: developer.state,
+            //         user: {
+            //             ...this.state.user,
+            //             name: developer.name,
+            //             desc: developer.desc
+            //         }
+            //     });
+            // } else {
+            //     Notification('error', 'Transaction failed');
+            // }
         } catch (err) {
             Notification('error', err.message);
         }

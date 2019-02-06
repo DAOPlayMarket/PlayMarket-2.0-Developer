@@ -182,7 +182,7 @@ class AppUpdateAPK extends Component {
         switch (mode) {
             case 'keystore':
                 let { keystore } = this.props;
-                let { password } = this.state.registration;
+                let { password } = this.state._;
                 try {
                     let wallet = await getWallet(keystore, password);
                     let signedTransaction = await getSignedTransaction({
@@ -195,7 +195,9 @@ class AppUpdateAPK extends Component {
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
                     this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -211,7 +213,9 @@ class AppUpdateAPK extends Component {
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
                     this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -219,7 +223,7 @@ class AppUpdateAPK extends Component {
                 break;
         }
         try {
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
+            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
             let balance = await getBalance(address);
             await this.setState({
                 balance: balance,
@@ -228,16 +232,22 @@ class AppUpdateAPK extends Component {
                     hash: tx.transactionHash
                 }
             });
-            if (transactionStatus) {
-                await this.setState({
-                    _: {
-                        ...this.state._,
-                        success: true
-                    }
-                });
-            } else {
-                Notification('error', 'Transaction failed');
-            }
+            await this.setState({
+                _: {
+                    ...this.state._,
+                    success: true
+                }
+            });
+            // if (transactionStatus) {
+            //     await this.setState({
+            //         _: {
+            //             ...this.state._,
+            //             success: true
+            //         }
+            //     });
+            // } else {
+            //     Notification('error', 'Transaction failed');
+            // }
         } catch (err) {
             Notification('error', err.message);
         }
@@ -440,6 +450,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         idApp: ownProps.match.params.app_id,
         address: state.user.address,
+        keystore: state.user.keystore,
         contracts: state.contracts,
         mode: state.mode,
         url: state.node.url,

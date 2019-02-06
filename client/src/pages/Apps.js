@@ -204,8 +204,9 @@ class Apps extends Component {
                     });
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
-                    this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -220,8 +221,9 @@ class Apps extends Component {
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
-                    this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -230,7 +232,7 @@ class Apps extends Component {
                 break;
         }
         try {
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
+            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
             let balance = await getBalance(address);
             await this.setState({
                 balance: balance,
@@ -239,16 +241,22 @@ class Apps extends Component {
                     hash: tx.transactionHash
                 }
             });
-            if (transactionStatus) {
-                await this.setState({
-                    popup: {
-                        ...this.state.popup,
-                        success: true
-                    }
-                });
-            } else {
-                Notification('error', 'Transaction failed');
-            }
+            await this.setState({
+                popup: {
+                    ...this.state.popup,
+                    success: true
+                }
+            });
+            // if (transactionStatus) {
+            //     await this.setState({
+            //         popup: {
+            //             ...this.state.popup,
+            //             success: true
+            //         }
+            //     });
+            // } else {
+            //     Notification('error', 'Transaction failed');
+            // }
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();

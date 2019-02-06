@@ -155,7 +155,9 @@ class Header extends Component {
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
                     this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -171,7 +173,9 @@ class Header extends Component {
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
                     this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -180,7 +184,7 @@ class Header extends Component {
                 break;
         }
         try {
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
+            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
             let balance = await getBalance(address);
             await this.setState({
                 balance: balance,
@@ -189,22 +193,32 @@ class Header extends Component {
                     hash: tx.transactionHash
                 }
             });
-            if (transactionStatus) {
-                let developer = await this.getDeveloper();
-                this.props.userChangeInfo({
-                    name: developer.name,
-                    desc: developer.desc
-                });
-                await this.setState({
-                    changeInfoDev: {
-                        ...this.state.changeInfoDev,
-                        step: 4
-                    }
-                });
-
-            } else {
-                Notification('error', 'Transaction failed');
-            }
+            let developer = await this.getDeveloper();
+            this.props.userChangeInfo({
+                name: developer.name,
+                desc: developer.desc
+            });
+            await this.setState({
+                changeInfoDev: {
+                    ...this.state.changeInfoDev,
+                    step: 4
+                }
+            });
+            // if (transactionStatus) {
+            //     let developer = await this.getDeveloper();
+            //     this.props.userChangeInfo({
+            //         name: developer.name,
+            //         desc: developer.desc
+            //     });
+            //     await this.setState({
+            //         changeInfoDev: {
+            //             ...this.state.changeInfoDev,
+            //             step: 4
+            //         }
+            //     });
+            // } else {
+            //     Notification('error', 'Transaction failed');
+            // }
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
@@ -389,8 +403,8 @@ class Header extends Component {
 const mapStateToProps = (state) => {
     return {
         gasPrice: state.gasPrice,
-        keystore: state.user.keystore,
         address: state.user.address,
+        keystore: state.user.keystore,
         name: state.user.name,
         desc: state.user.desc,
         mode: state.mode,

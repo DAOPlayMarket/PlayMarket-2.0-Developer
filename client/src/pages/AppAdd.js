@@ -434,8 +434,9 @@ class AppAdd extends Component {
                     });
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
-                    this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -450,8 +451,9 @@ class AppAdd extends Component {
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
-                    this.props.endLoading();
-                    Notification('error', err.message);
+                    // Notification('error', err.message);
+                    console.error(err.message);
+                    Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
@@ -459,7 +461,7 @@ class AppAdd extends Component {
                 break;
         }
         try {
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
+            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
             let balance = await getBalance(address);
             await this.setState({
                 balance: balance,
@@ -468,13 +470,16 @@ class AppAdd extends Component {
                     hash: tx.transactionHash
                 }
             });
-            if (transactionStatus) {
-                await this.setState({
-                    isRegistered: true
-                });
-            } else {
-                Notification('error', 'Transaction failed');
-            }
+            await this.setState({
+                isRegistered: true
+            });
+            // if (transactionStatus) {
+            //     await this.setState({
+            //         isRegistered: true
+            //     });
+            // } else {
+            //     Notification('error', 'Transaction failed');
+            // }
         } catch (err) {
             Notification('error', err.message);
         }
