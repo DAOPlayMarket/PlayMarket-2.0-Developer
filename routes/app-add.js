@@ -34,6 +34,7 @@ router.post('/', async (req, res) => {
         await fse.outputJson(path.join(lib.dirApp, address, 'config', 'config.json'), config);
 
         const result = await ipfs.upload(path.join(lib.dirApp, address), 'app');
+        await ipfsAPI.pin.add(result.hash);
         await del(path.join(lib.dirApp, address), {force: true});
 
         res.json({

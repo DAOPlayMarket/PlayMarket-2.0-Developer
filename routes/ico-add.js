@@ -26,8 +26,11 @@ router.post('/', async (req, res) => {
             makeDir(path.join(lib.dirICO, address, 'docs'))
         ]);
         await formidablePromise(req, {address: address});
+
         const result = await ipfs.upload(path.join(lib.dirICO, address), 'ico');
+        await ipfsAPI.pin.add(result.hash);
         await del(path.join(lib.dirICO, address), {force: true});
+
         res.json({
             result: result,
             status: 200
