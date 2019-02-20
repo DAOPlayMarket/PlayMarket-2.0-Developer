@@ -11,7 +11,8 @@ const ipfs = require(path.join(__dirname, '..', 'utils', 'ipfs.js'));
 router.post('/', async (req, res) => {
     console.log(`/ico-add [${req.method}] ${modules.time.timeNow()}`);
     try {
-        let address = req.header('address');
+        const address = req.header('address');
+
         await del(path.join(lib.dirICO, address), {force: true});
         await Promise.all([
             makeDir(path.join(lib.dirICO, address, 'config')),
@@ -25,7 +26,7 @@ router.post('/', async (req, res) => {
             makeDir(path.join(lib.dirICO, address, 'docs'))
         ]);
         await formidablePromise(req, {address: address});
-        let result = await ipfs.upload(path.join(lib.dirICO, address), 'ico');
+        const result = await ipfs.upload(path.join(lib.dirICO, address), 'ico');
         await del(path.join(lib.dirICO, address), {force: true});
         res.json({
             result: result,
@@ -118,7 +119,7 @@ function formidablePromise(req, data) {
                     file.path = path.join(form.uploadDir, 'docs', file.name);
             })
             .on('file', (field, file) => {
-                let url = path.relative(form.uploadDir, file.path).replace(/\\/g, "\/");
+                const url = path.relative(form.uploadDir, file.path).replace(/\\/g, "\/");
                 if (field === 'logo')
                     config.files.images.logo = url;
                 if (field === 'gallery')

@@ -15,7 +15,7 @@ import { setMode } from '../actions/mode'
 import { setGasPrice } from '../actions/tx'
 import { setContracts } from '../actions/contract'
 
-import { getContractsInfo, getGasPrice, setProvider, getAddress_MM, getTxParams, sendTransaction_MM, getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { getContractsInfo, getGasPrice, setProvider, getAddress_MM, getTxParams, sendTransaction_MM, getWallet, sendSignedTransaction, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 class Auth extends Component {
     constructor(props) {
@@ -153,11 +153,13 @@ class Auth extends Component {
                             this.props.endLoading();
                         } catch(err) {
                             this.props.endLoading();
+                            console.error(err);
                             Notification('error', err.message);
                         }
                     } catch (err) {
                         this.props.endLoading();
                         $(e.target).val('');
+                        console.error(err);
                         Notification('error', 'This is not a valid wallet file.');
                     }
                 };
@@ -175,6 +177,7 @@ class Auth extends Component {
                 }
             }
         } catch (err) {
+            console.error(err);
             Notification('error', err.message);
         }
     };
@@ -211,12 +214,14 @@ class Auth extends Component {
                     });
                     await this.openModal();
                 } catch(err) {
+                    console.error(err);
                     Notification('error', err.message);
                 }
             } else {
                 Notification('warning', 'Please, log in to your MetaMask account');
             }
         } catch (err) {
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();
@@ -297,6 +302,7 @@ class Auth extends Component {
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
     };
@@ -308,17 +314,17 @@ class Auth extends Component {
     };
     handleSubmitRegistration_3 = async e => {
         e.preventDefault();
-        let { mode, gasPrice, contracts } = this.props;
-        let { data, gasLimit } = this.state.registration;
+        const { mode, gasPrice, contracts } = this.props;
+        const { data, gasLimit } = this.state.registration;
         this.props.startLoading();
         let tx;
         switch (mode) {
             case 'keystore':
-                let { keystore } = this.state;
-                let { password } = this.state.registration;
+                const { keystore } = this.state;
+                const { password } = this.state.registration;
                 try {
-                    let wallet = await getWallet(keystore, password);
-                    let signedTransaction = await getSignedTransaction({
+                    const wallet = await getWallet(keystore, password);
+                    const signedTransaction = await getSignedTransaction({
                         wallet: wallet,
                         contract: contracts.PlayMarket,
                         data: data,
@@ -327,16 +333,16 @@ class Auth extends Component {
                     });
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    this.props.endLoading();
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
             case 'metamask':
-                let { address } = this.state;
+                const { address } = this.state;
                 try {
-                    let txParams = await getTxParams({
+                    const txParams = await getTxParams({
                         contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
@@ -345,8 +351,8 @@ class Auth extends Component {
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    this.props.endLoading();
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
@@ -356,8 +362,7 @@ class Auth extends Component {
                 break;
         }
         try {
-            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(this.state.address);
+            const balance = await getBalance(this.state.address);
             await this.setState({
                 balance: balance,
                 registration: {
@@ -365,7 +370,7 @@ class Auth extends Component {
                     hash: tx.transactionHash
                 }
             });
-            let developer = await this.getDeveloper();
+            const developer = await this.getDeveloper();
             await this.setState({
                 isRegistered: developer.state,
                 user: {
@@ -374,20 +379,9 @@ class Auth extends Component {
                     desc: developer.desc
                 }
             });
-            // if (transactionStatus) {
-            //     let developer = await this.getDeveloper();
-            //     await this.setState({
-            //         isRegistered: developer.state,
-            //         user: {
-            //             ...this.state.user,
-            //             name: developer.name,
-            //             desc: developer.desc
-            //         }
-            //     });
-            // } else {
-            //     Notification('error', 'Transaction failed');
-            // }
         } catch (err) {
+            this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();

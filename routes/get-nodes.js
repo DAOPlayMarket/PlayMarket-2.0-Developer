@@ -4,21 +4,21 @@ const dns = require('dns');
 router.get('/', async (req, res) => {
     console.log(`/get-nodes [${req.method}] ${modules.time.timeNow()}`);
     try {
-        let recordsArr = await resolveTxt(lib.node.txtRecordsServer);
+        const recordsArr = await resolveTxt(lib.node.txtRecordsServer);
 
         let recordsStr = ([].concat(...recordsArr)).toString().replace(/,/g, '');
         recordsStr = recordsStr.slice(0, recordsStr.length-1);
 
-        let records = recordsStr.split('|');
+        const records = recordsStr.split('|');
 
         let result = [];
         for (let item of records) {
-            let number = item.split(':')[0];
-            let lat = item.split(':')[1];
-            let long = item.split(':')[2];
-            let domain  = lib.node.prefix + number + '.playmarket.io';
+            const number = item.split(':')[0];
+            const lat = item.split(':')[1];
+            const long = item.split(':')[2];
+            const domain  = lib.node.prefix + number + '.playmarket.io';
             try {
-                let ip = await lookup(domain);
+                const ip = await lookup(domain);
                 result.push({
                     ip: ip,
                     lat: lat,

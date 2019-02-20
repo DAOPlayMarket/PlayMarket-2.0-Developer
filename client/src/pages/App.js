@@ -38,6 +38,7 @@ class App extends Component {
             await this.props.endLoading();
         } catch (err) {
             await this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
     }

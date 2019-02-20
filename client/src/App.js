@@ -35,12 +35,12 @@ class _App extends Component {
             let nodes = await this.getNodes();
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
-                    async (position) => {
+                    async position => {
                         await this.props.setUserPosition({
                             lat: position.coords.latitude,
                             long: position.coords.longitude
                         });
-                        nodes.map(node => {
+                        nodes.forEach(node => {
                             node.distance = geolib.getDistance(
                                 {latitude: position.coords.latitude, longitude: position.coords.longitude},
                                 {latitude: node.lat, longitude: node.long}
@@ -65,12 +65,12 @@ class _App extends Component {
                         }
                         this.props.endLoading();
                     },
-                    async (err) => {
+                    async err => {
                         await this.props.setNodes({
                             nodes: nodes
                         });
-                        for (let node of nodes) {
-                            let isActive = await this.pingNode('https://' + node.domain);
+                        for (const node of nodes) {
+                            const isActive = await this.pingNode('https://' + node.domain);
                             if (isActive) {
                                 await this.props.setNode({
                                     url: 'https://' + node.domain,
@@ -92,7 +92,7 @@ class _App extends Component {
                 });
                 for (let node of nodes) {
                     try {
-                        let isActive = await this.pingNode('https://' + node.domain);
+                        const isActive = await this.pingNode('https://' + node.domain);
                         if (isActive) {
                             await this.props.setNode({
                                 url: 'https://' + node.domain,
@@ -104,7 +104,7 @@ class _App extends Component {
                             break;
                         }
                     } catch (err) {
-                        console.log('error:', err.message);
+                        console.error(err);
                     }
                 }
                 this.props.endLoading();
@@ -112,13 +112,14 @@ class _App extends Component {
             }
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
     }
 
     getNodes = async () => {
         try {
-            let response = (await axios({
+            const response = (await axios({
                 method: 'get',
                 url: '/api/get-nodes'
             })).data;
@@ -132,9 +133,9 @@ class _App extends Component {
         }
     };
 
-    pingNode = async (domain) => {
+    pingNode = async domain => {
         try {
-            let response = (await axios({
+            const response = (await axios({
                 method: 'get',
                 url: domain + '/api/ping'
             }));

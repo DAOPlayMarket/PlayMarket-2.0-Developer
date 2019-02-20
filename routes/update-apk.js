@@ -12,8 +12,8 @@ const ipfs = require(path.join(__dirname, '..', 'utils', 'ipfs.js'));
 router.post('/', async (req, res) => {
     console.log(`/update-apk [${req.method}] ${modules.time.timeNow()}`);
     try {
-        let address = req.header('address');
-        let payload = JSON.parse(req.header('data'));
+        const address = req.header('address');
+        const payload = JSON.parse(req.header('data'));
 
         const dir = path.join(lib.dirApp, address);
 
@@ -24,10 +24,10 @@ router.post('/', async (req, res) => {
 
         await del(path.join(dir, 'apk', '**.*'));
 
-        let data = await formidablePromise(req, {address: address});
+        const data = await formidablePromise(req, {address: address});
 
-        let readerAPK = await ApkReader.open(path.join(dir, data.apk));
-        let manifest = await readerAPK.readManifest();
+        const readerAPK = await ApkReader.open(path.join(dir, data.apk));
+        const manifest = await readerAPK.readManifest();
 
         let config = JSON.parse(fse.readFileSync(path.join(dir, 'config', 'config.json')));
 
@@ -49,8 +49,11 @@ router.post('/', async (req, res) => {
         await del(path.join(dir, 'config', '**.*'));
 
         config.version = manifest.versionCode;
+        config.versionName = manifest.versionName;
+        config.size = data.size;
         config.files.apk = data.apk;
-        let changelog = {
+
+        const changelog = {
             version: manifest.versionCode,
             description: data.description
         };
@@ -62,7 +65,7 @@ router.post('/', async (req, res) => {
 
         await fse.outputJson(path.join(dir, 'config', 'config.json'), config);
 
-        let result = await ipfs.upload(dir, 'app');
+        const result = await ipfs.upload(dir, 'app');
 
         await del(dir);
 
@@ -82,6 +85,7 @@ function formidablePromise(req, data) {
             let form = new formidable.IncomingForm();
 
             let obj = {
+                size: 0,
                 apk: '',
                 description: ''
             };
@@ -112,8 +116,10 @@ function formidablePromise(req, data) {
                         file.path = path.join(form.uploadDir, 'apk', file.name);
                 })
                 .on('file', (field, file) => {
-                    if (field === 'apk')
+                    if (field === 'apk') {
+                        obj.size = file.size;
                         obj.apk = path.relative(form.uploadDir, file.path).replace(/\\/g, "\/");
+                    }
                 })
                 .on('end', () => {
                     resolve(obj);

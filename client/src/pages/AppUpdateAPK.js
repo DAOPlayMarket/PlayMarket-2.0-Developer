@@ -12,7 +12,7 @@ import { startLoading, endLoading } from '../actions/preloader';
 
 import Notification from '../components/Notification';
 
-import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 class AppUpdateAPK extends Component {
     state = {
@@ -107,18 +107,18 @@ class AppUpdateAPK extends Component {
             })).data;
             if (response.status === 200) {
                 try {
-                    let data = await getData({
+                    const data = await getData({
                         contract: contracts.PlayMarket,
                         method: 'changeHashApp',
                         params: [app.idApp, response.result.hash, response.result.hashType]
                     });
-                    let gasLimit = await getGasLimit({
+                    const gasLimit = await getGasLimit({
                         from: address,
                         contract: contracts.PlayMarket,
                         data: data,
                         reserve: 0
                     });
-                    let balance = await getBalance(address);
+                    const balance = await getBalance(address);
                     await this.setState({
                         _: {
                             ...this.state._,
@@ -175,17 +175,17 @@ class AppUpdateAPK extends Component {
     };
     handleSubmitRegistration_2 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode, contracts } = this.props;
-        let { data, gasLimit } = this.state._;
+        const { gasPrice, address, mode, contracts } = this.props;
+        const { data, gasLimit } = this.state._;
         this.props.startLoading();
         let tx;
         switch (mode) {
             case 'keystore':
-                let { keystore } = this.props;
-                let { password } = this.state._;
+                const { keystore } = this.props;
+                const { password } = this.state._;
                 try {
-                    let wallet = await getWallet(keystore, password);
-                    let signedTransaction = await getSignedTransaction({
+                    const wallet = await getWallet(keystore, password);
+                    const signedTransaction = await getSignedTransaction({
                         wallet: wallet,
                         contract: contracts.PlayMarket,
                         data: data,
@@ -195,15 +195,14 @@ class AppUpdateAPK extends Component {
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
                     this.props.endLoading();
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
             case 'metamask':
                 try {
-                    let txParams = await getTxParams({
+                    const txParams = await getTxParams({
                         contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
@@ -213,8 +212,7 @@ class AppUpdateAPK extends Component {
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
                     this.props.endLoading();
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
@@ -223,8 +221,7 @@ class AppUpdateAPK extends Component {
                 break;
         }
         try {
-            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(address);
+            const balance = await getBalance(address);
             await this.setState({
                 balance: balance,
                 _: {
@@ -238,17 +235,8 @@ class AppUpdateAPK extends Component {
                     success: true
                 }
             });
-            // if (transactionStatus) {
-            //     await this.setState({
-            //         _: {
-            //             ...this.state._,
-            //             success: true
-            //         }
-            //     });
-            // } else {
-            //     Notification('error', 'Transaction failed');
-            // }
         } catch (err) {
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();

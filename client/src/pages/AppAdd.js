@@ -14,7 +14,7 @@ import Select from 'react-select';
 
 import { startLoading, endLoading } from '../actions/preloader'
 
-import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 import Notification from '../components/Notification';
 
@@ -316,10 +316,10 @@ class AppAdd extends Component {
         e.preventDefault();
         this.props.startLoading();
         try {
-            let { address, contracts } = this.props;
-            let { nameApp, idCTG, subCategory } = this.state.app;
-            let { slogan, shortDescr, keywords, youtubeID, email, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
-            let { apk, logo, banner, gallery } = this.state.app.files;
+            const { address, contracts } = this.props;
+            const { nameApp, idCTG, subCategory } = this.state.app;
+            const { slogan, shortDescr, keywords, youtubeID, email, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
+            const { apk, logo, banner, gallery } = this.state.app.files;
 
             let fd = new FormData();
 
@@ -349,7 +349,7 @@ class AppAdd extends Component {
                 fd.append("gallery", gallery[i], [i] + '.' + fileExtension(gallery[i].name));
             }
 
-            let response = (await axios({
+            const response = (await axios({
                 method: 'post',
                 url: '/api/app-add',
                 headers: {'address': address},
@@ -357,18 +357,18 @@ class AppAdd extends Component {
             })).data;
             if (response.status === 200) {
                 try {
-                    let data = await getData({
+                    const data = await getData({
                         contract: contracts.PlayMarket,
                         method: 'addApp',
                         params: [response.result.hashType, 1,  price * 100, publish, response.result.hash]
                     });
-                    let gasLimit = await getGasLimit({
+                    const gasLimit = await getGasLimit({
                         from: address,
                         contract: contracts.PlayMarket,
                         data: data,
                         reserve: 0
                     });
-                    let balance = await getBalance(address);
+                    const balance = await getBalance(address);
                     await this.setState({
                         registration: {
                             ...this.state.registration,
@@ -383,12 +383,14 @@ class AppAdd extends Component {
                     });
                     await this.openModal();
                 } catch (err) {
+                    console.error(err);
                     Notification('error', err.message);
                 }
             } else {
                 Notification('error', response.message);
             }
         } catch (err) {
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();
@@ -415,17 +417,17 @@ class AppAdd extends Component {
     };
     handleSubmitRegistration_2 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode, contracts } = this.props;
-        let { data, gasLimit } = this.state.registration;
+        const { gasPrice, address, mode, contracts } = this.props;
+        const { data, gasLimit } = this.state.registration;
         this.props.startLoading();
         let tx;
         switch (mode) {
             case 'keystore':
-                let { keystore } = this.props;
-                let { password } = this.state.registration;
+                const { keystore } = this.props;
+                const { password } = this.state.registration;
                 try {
-                    let wallet = await getWallet(keystore, password);
-                    let signedTransaction = await getSignedTransaction({
+                    const wallet = await getWallet(keystore, password);
+                    const signedTransaction = await getSignedTransaction({
                         wallet: wallet,
                         contract: contracts.PlayMarket,
                         data: data,
@@ -434,15 +436,15 @@ class AppAdd extends Component {
                     });
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    this.props.endLoading();
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
             case 'metamask':
                 try {
-                    let txParams = await getTxParams({
+                    const txParams = await getTxParams({
                         contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
@@ -451,8 +453,8 @@ class AppAdd extends Component {
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    this.props.endLoading();
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
@@ -461,8 +463,7 @@ class AppAdd extends Component {
                 break;
         }
         try {
-            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(address);
+            const balance = await getBalance(address);
             await this.setState({
                 balance: balance,
                 registration: {
@@ -473,14 +474,9 @@ class AppAdd extends Component {
             await this.setState({
                 isRegistered: true
             });
-            // if (transactionStatus) {
-            //     await this.setState({
-            //         isRegistered: true
-            //     });
-            // } else {
-            //     Notification('error', 'Transaction failed');
-            // }
         } catch (err) {
+            this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();

@@ -17,7 +17,7 @@ import { startLoading, endLoading } from '../actions/preloader';
 
 import Notification from '../components/Notification';
 
-import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 class IcoAdd extends Component {
     state = {
@@ -149,7 +149,7 @@ class IcoAdd extends Component {
         let { url } = this.props;
         await this.props.startLoading();
         try {
-            let response = (await axios({
+            const response = (await axios({
                 method: 'post',
                 url: `${url}/api/get-app-for-developer`,
                 data: {
@@ -180,6 +180,7 @@ class IcoAdd extends Component {
             await this.props.endLoading();
         } catch (err) {
             await this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
     }
@@ -759,6 +760,8 @@ class IcoAdd extends Component {
                     });
                     await this.openModal();
                 } catch (err) {
+                    this.props.endLoading();
+                    console.error(err);
                     Notification('error', err.message);
                 }
             } else {
@@ -768,10 +771,10 @@ class IcoAdd extends Component {
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
-
-
+        this.props.endLoading();
     };
     handleSubmitCreate = async e => {
         e.preventDefault();
@@ -805,6 +808,7 @@ class IcoAdd extends Component {
             });
             await this.openModal();
         } catch (err) {
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();
@@ -858,8 +862,8 @@ class IcoAdd extends Component {
                 let { keystore } = this.props;
                 let { password } = this.state._.info;
                 try {
-                    let wallet = await getWallet(keystore, password);
-                    let signedTransaction = await getSignedTransaction({
+                    const wallet = await getWallet(keystore, password);
+                    const signedTransaction = await getSignedTransaction({
                         wallet: wallet,
                         contract: contracts.ICO,
                         data: data,
@@ -869,15 +873,14 @@ class IcoAdd extends Component {
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
                     this.props.endLoading();
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
             case 'metamask':
                 try {
-                    let txParams = await getTxParams({
+                    const txParams = await getTxParams({
                         contract: contracts.ICO,
                         data: data,
                         gasLimit: gasLimit,
@@ -887,8 +890,7 @@ class IcoAdd extends Component {
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
                     this.props.endLoading();
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
@@ -897,8 +899,7 @@ class IcoAdd extends Component {
                 break;
         }
         try {
-            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(address);
+            const balance = await getBalance(address);
             await this.setState({
                 balance: balance,
                 _: {
@@ -919,21 +920,8 @@ class IcoAdd extends Component {
                     }
                 }
             });
-            // if (transactionStatus) {
-            //     await this.setState({
-            //         popupOpen: false,
-            //         _: {
-            //             ...this.state._,
-            //             info: {
-            //                 ...this.state._.info,
-            //                 success: true
-            //             }
-            //         }
-            //     });
-            // } else {
-            //     Notification('error', 'Transaction failed');
-            // }
         } catch (err) {
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();
@@ -953,8 +941,8 @@ class IcoAdd extends Component {
     };
     handleSubmitRegistration_4 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode, contracts } = this.props;
-        let { data, gasLimit } = this.state._.contract;
+        const { gasPrice, address, mode, contracts } = this.props;
+        const { data, gasLimit } = this.state._.contract;
         this.props.startLoading();
         let tx;
         switch (mode) {
@@ -973,6 +961,7 @@ class IcoAdd extends Component {
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
                     this.props.endLoading();
+                    console.error(err);
                     Notification('error', err.message);
                     return;
                 }
@@ -989,6 +978,7 @@ class IcoAdd extends Component {
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
                     this.props.endLoading();
+                    console.error(err);
                     Notification('error', err.message);
                     return;
                 }
@@ -997,8 +987,7 @@ class IcoAdd extends Component {
                 break;
         }
         try {
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(address);
+            const balance = await getBalance(address);
             await this.setState({
                 balance: balance,
                 _: {
@@ -1009,20 +998,17 @@ class IcoAdd extends Component {
                     }
                 }
             });
-            if (transactionStatus) {
-                await this.setState({
-                    _: {
-                        ...this.state._,
-                        contract: {
-                            ...this.state._.contract,
-                            success: true
-                        }
+            await this.setState({
+                _: {
+                    ...this.state._,
+                    contract: {
+                        ...this.state._.contract,
+                        success: true
                     }
-                });
-            } else {
-                Notification('error', 'Transaction failed');
-            }
+                }
+            });
         } catch (err) {
+            console.error(err);
             Notification('error', err.message);
         }
         this.props.endLoading();

@@ -3,6 +3,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const pull = require('pull-stream');
 const makeDir = require('make-dir');
+const BN = require('bignumber.js');
 
 const upload = (dir, headFolderName) => {
     return new Promise(async(resolve, reject) => {
@@ -17,7 +18,7 @@ const upload = (dir, headFolderName) => {
                     }
                 );
             }
-            const stream = nodeIPFS.files.addPullStream();
+            const stream = ipfsAPI.addPullStream();
             pull(
                 pull.values(arr),
                 stream,
@@ -37,84 +38,33 @@ const upload = (dir, headFolderName) => {
     });
 };
 
-const download = (dir, multiHash) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let stream = nodeIPFS.files.getReadableStream(multiHash);
-            console.log('Load files START:', multiHash);
-            stream.on('data', async file => {
-                stream.pause();
-                let filePath = path.join((file.path).replace(multiHash,''));
-                switch (file.type) {
-                    case 'dir':
-                        await makeDir(path.join(dir, filePath));
-                        break;
-                    case 'file':
-                        await new Promise(async (resolve, reject) => {
-                            try {
-                                let ws = fse.createWriteStream(path.join(dir, filePath));
-                                file.content.pipe(ws);
-                                ws.on('error', e => {
-                                    ws.end();
-                                    throw e;
-                                });
-                                ws.on('close', () => {
-                                    resolve();
-                                });
-                            } catch (e) {
-                                reject(e);
-                            }
-                        });
-                        break;
-                    default:
-                        break;
+const download = async (dir, multihash) => {
+    try {
+        console.log('*** Hash IPFS: ' + multihash + ', poll of nodes...');
+        const hashStat = await ipfsAPI.object.stat(multihash);
+        console.log('*** Hash is find. Size ~ ' + new BN(hashStat.CumulativeSize).div(1024).div(1024).decimalPlaces(2) + ' MB. Downloading...');
+        const files = await ipfsAPI.get(multihash);
+        // await ipfsAPI.pin.add(multihash);
+        console.log('*** Hash has been download. Saving to static...');
+        // console.log('*** Hash has been download and pinned. Saving to static...');
+        for (const file of files) {
+            const filePath = path.join((file.path).replace(multihash, ''));
+            switch (typeof file.content) {
+                case 'undefined': {
+                    await makeDir(path.join(dir, filePath));
+                    break;
                 }
-                stream.resume();
-            });
-            stream.on('end', () => {
-                console.log('Load files END:', multiHash);
-                resolve();
-            });
-            setTimeout(() => {
-                reject(new Error('Disconnection by timeout'));
-            }, 600000);
-        } catch (e) {
-            reject(e);
+                default: {
+                    fse.writeFileSync(path.join(dir, filePath), file.content);
+                    break;
+                }
+            }
         }
-    });
+        console.log('*** Hash has been saved to static');
+    } catch (e) {
+        throw e;
+    }
 };
-
-// const download = async (dir, multiHash) => {
-//     let timeout = setTimeout(() => {
-//         throw new Error('Disconnection by timeout');
-//     }, 1200000);
-//     try {
-//         console.log('*** Downloading from IPFS, hash: ' + multiHash);
-//         let result = {};
-//         let files = await nodeIPFS.files.get(multiHash);
-//         for (let file of files) {
-//             let filePath = path.join((file.path).replace(multiHash,''));
-//             switch (file.type) {
-//                 case 'dir':
-//                     await makeDir(path.join(dir, filePath));
-//                     break;
-//                 case 'file':
-//                     fse.writeFileSync(path.join(dir, filePath), file.content);
-//                     if(file.name === 'config.json') {
-//                         result.config = JSON.parse(file.content.toString());
-//                     }
-//                     break;
-//                 default:
-//                     break;
-//             }
-//         }
-//         clearTimeout(timeout);
-//         return result;
-//     } catch (e) {
-//         clearTimeout(timeout);
-//         throw e;
-//     }
-// };
 
 module.exports = {
     upload: upload,

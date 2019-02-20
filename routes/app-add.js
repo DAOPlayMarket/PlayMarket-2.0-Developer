@@ -12,7 +12,8 @@ const ipfs = require(path.join(__dirname, '..', 'utils', 'ipfs.js'));
 router.post('/', async (req, res) => {
     console.log(`/app-add [${req.method}] ${modules.time.timeNow()}`);
     try {
-        let address = req.header('address');
+        const address = req.header('address');
+
         await del(path.join(lib.dirApp, address), {force: true});
         await Promise.all([
             makeDir(path.join(lib.dirApp, address, 'apk')),
@@ -22,16 +23,17 @@ router.post('/', async (req, res) => {
             makeDir(path.join(lib.dirApp, address, 'images', 'banner'))
         ]);
         let config = await formidablePromise(req, {address: address});
+        const parserAPK = await ApkReader.open(path.join(lib.dirApp, address, config.files.apk));
 
-        let parserAPK = await ApkReader.open(path.join(lib.dirApp, address, config.files.apk));
-        let manifest = await parserAPK.readManifest();
+        const manifest = await parserAPK.readManifest();
 
         config.version = manifest.versionCode;
+        config.versionName = manifest.versionName;
         config.packageName = manifest.package;
 
         await fse.outputJson(path.join(lib.dirApp, address, 'config', 'config.json'), config);
 
-        let result = await ipfs.upload(path.join(lib.dirApp, address), 'app');
+        const result = await ipfs.upload(path.join(lib.dirApp, address), 'app');
         await del(path.join(lib.dirApp, address), {force: true});
 
         res.json({
@@ -50,6 +52,7 @@ function formidablePromise(req, data) {
             let form = new formidable.IncomingForm();
 
             let config = {
+                size: 0,
                 files: {
                     apk: null,
                     images: {
@@ -95,9 +98,11 @@ function formidablePromise(req, data) {
                         file.path = path.join(form.uploadDir, 'images', 'logo', file.name);
                 })
                 .on('file', (field, file) => {
-                    let url = path.relative(form.uploadDir, file.path).replace(/\\/g, "\/");
-                    if (field === 'apk')
+                    const url = path.relative(form.uploadDir, file.path).replace(/\\/g, "\/");
+                    if (field === 'apk') {
+                        config.size = file.size;
                         config.files.apk = url;
+                    }
                     if (field === 'logo')
                         config.files.images.logo = url;
                     if (field === 'gallery')

@@ -15,7 +15,7 @@ class Control extends Component {
     };
 
     render(){
-        let { gasPrice, mode, contracts, nodes, node} = this.props;
+        let { gasPrice, mode, contracts, node} = this.props;
 
         let value = web3Utils.fromWei(gasPrice, 'gwei');
 

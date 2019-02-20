@@ -10,7 +10,7 @@ import { startLoading, endLoading } from '../actions/preloader'
 
 import Notification from '../components/Notification';
 
-import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, getBalance, getGasLimit, getData, getDataByTypes, getSignedTransaction } from '../utils/web3';
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getBalance, getGasLimit, getData, getDataByTypes, getSignedTransaction } from '../utils/web3';
 
 class Apps extends Component {
     state = {
@@ -84,6 +84,7 @@ class Apps extends Component {
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
     };
@@ -171,6 +172,7 @@ class Apps extends Component {
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
     };
@@ -185,17 +187,17 @@ class Apps extends Component {
     };
     handleSubmitChangePrice_3 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode, contracts } = this.props;
-        let { data, gasLimit } = this.state.popup;
+        const { gasPrice, address, mode, contracts } = this.props;
+        const { data, gasLimit } = this.state.popup;
         this.props.startLoading();
         let tx;
         switch (mode) {
             case 'keystore':
-                let { keystore } = this.props;
-                let { password } = this.state.popup;
+                const { keystore } = this.props;
+                const { password } = this.state.popup;
                 try {
-                    let wallet = await getWallet(keystore, password);
-                    let signedTransaction = await getSignedTransaction({
+                    const wallet = await getWallet(keystore, password);
+                    const signedTransaction = await getSignedTransaction({
                         wallet: wallet,
                         contract: contracts.PlayMarket,
                         data: data,
@@ -204,15 +206,15 @@ class Apps extends Component {
                     });
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    this.props.endLoading();
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
             case 'metamask':
                 try {
-                    let txParams = await getTxParams({
+                    const txParams = await getTxParams({
                         contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
@@ -221,8 +223,8 @@ class Apps extends Component {
                     });
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    this.props.endLoading();
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
@@ -232,8 +234,7 @@ class Apps extends Component {
                 break;
         }
         try {
-            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(address);
+            const balance = await getBalance(address);
             await this.setState({
                 balance: balance,
                 popup: {
@@ -247,21 +248,12 @@ class Apps extends Component {
                     success: true
                 }
             });
-            // if (transactionStatus) {
-            //     await this.setState({
-            //         popup: {
-            //             ...this.state.popup,
-            //             success: true
-            //         }
-            //     });
-            // } else {
-            //     Notification('error', 'Transaction failed');
-            // }
-            this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
+        this.props.endLoading();
     };
     handleSubmitChangePrice_4 = async e => {
         e.preventDefault();
@@ -324,17 +316,17 @@ class Apps extends Component {
     };
     handleSubmitChangePublish_2 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode, contracts } = this.props;
-        let { data, gasLimit } = this.state.popup;
+        const { gasPrice, address, mode, contracts } = this.props;
+        const { data, gasLimit } = this.state.popup;
         this.props.startLoading();
         let tx;
         switch (mode) {
             case 'keystore':
-                let { keystore } = this.props;
-                let { password } = this.state.popup;
+                const { keystore } = this.props;
+                const { password } = this.state.popup;
                 try {
-                    let wallet = await getWallet(keystore, password);
-                    let signedTransaction = await getSignedTransaction({
+                    const wallet = await getWallet(keystore, password);
+                    const signedTransaction = await getSignedTransaction({
                         wallet: wallet,
                         contract: contracts.PlayMarket,
                         data: data,
@@ -344,13 +336,14 @@ class Apps extends Component {
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
                     this.props.endLoading();
+                    console.error(err);
                     Notification('error', err.message);
                     return;
                 }
                 break;
             case 'metamask':
                 try {
-                    let txParams = await getTxParams({
+                    const txParams = await getTxParams({
                         contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
@@ -360,6 +353,7 @@ class Apps extends Component {
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
                     this.props.endLoading();
+                    console.error(err);
                     Notification('error', err.message);
                     return;
                 }
@@ -368,10 +362,8 @@ class Apps extends Component {
                 Notification('error', 'Mode is not selected');
                 break;
         }
-
         try {
-            let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(address);
+            const balance = await getBalance(address);
             await this.setState({
                 balance: balance,
                 popup: {
@@ -379,21 +371,12 @@ class Apps extends Component {
                     hash: tx.transactionHash
                 }
             });
-            if (transactionStatus) {
-                await this.setState({
-                    popup: {
-                        ...this.state.popup,
-                        success: true
-                    }
-                });
-            } else {
-                Notification('error', 'Transaction failed');
-            }
-            this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
+        this.props.endLoading();
     };
     handleSubmitChangePublish_3 = async e => {
         e.preventDefault();

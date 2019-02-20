@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Popup from "reactjs-popup";
 import {utils as web3Utils} from 'web3';
 
-import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getTransactionStatus, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
+import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, contractMethod, getBalance, getData, getGasLimit, getSignedTransaction } from '../utils/web3'
 
 import Notification from '../components/Notification';
 
@@ -135,17 +135,17 @@ class Header extends Component {
     };
     handleSubmitChangeInfo_3 = async e => {
         e.preventDefault();
-        let { gasPrice, address, mode, contracts } = this.props;
-        let { data, gasLimit } = this.state.changeInfoDev;
+        const { gasPrice, address, mode, contracts } = this.props;
+        const { data, gasLimit } = this.state.changeInfoDev;
         this.props.startLoading();
         let tx;
         switch (mode) {
             case 'keystore':
-                let { keystore } = this.props;
-                let { password } = this.state.changeInfoDev;
+                const { keystore } = this.props;
+                const { password } = this.state.changeInfoDev;
                 try {
-                    let wallet = await getWallet(keystore, password);
-                    let signedTransaction = await getSignedTransaction({
+                    const wallet = await getWallet(keystore, password);
+                    const signedTransaction = await getSignedTransaction({
                         wallet: wallet,
                         contract: contracts.PlayMarket,
                         data: data,
@@ -155,15 +155,14 @@ class Header extends Component {
                     tx = await sendSignedTransaction(signedTransaction.rawTransaction);
                 } catch (err) {
                     this.props.endLoading();
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
                 break;
             case 'metamask':
                 try {
-                    let txParams = await getTxParams({
+                    const txParams = await getTxParams({
                         contract: contracts.PlayMarket,
                         data: data,
                         gasLimit: gasLimit,
@@ -173,8 +172,7 @@ class Header extends Component {
                     tx = await sendTransaction_MM(txParams);
                 } catch (err) {
                     this.props.endLoading();
-                    // Notification('error', err.message);
-                    console.error(err.message);
+                    console.error(err);
                     Notification('error', 'Transaction failed');
                     return;
                 }
@@ -184,8 +182,7 @@ class Header extends Component {
                 break;
         }
         try {
-            // let transactionStatus = await getTransactionStatus(tx.transactionHash);
-            let balance = await getBalance(address);
+            const balance = await getBalance(address);
             await this.setState({
                 balance: balance,
                 changeInfoDev: {
@@ -193,7 +190,7 @@ class Header extends Component {
                     hash: tx.transactionHash
                 }
             });
-            let developer = await this.getDeveloper();
+            const developer = await this.getDeveloper();
             this.props.userChangeInfo({
                 name: developer.name,
                 desc: developer.desc
@@ -204,24 +201,10 @@ class Header extends Component {
                     step: 4
                 }
             });
-            // if (transactionStatus) {
-            //     let developer = await this.getDeveloper();
-            //     this.props.userChangeInfo({
-            //         name: developer.name,
-            //         desc: developer.desc
-            //     });
-            //     await this.setState({
-            //         changeInfoDev: {
-            //             ...this.state.changeInfoDev,
-            //             step: 4
-            //         }
-            //     });
-            // } else {
-            //     Notification('error', 'Transaction failed');
-            // }
             this.props.endLoading();
         } catch (err) {
             this.props.endLoading();
+            console.error(err);
             Notification('error', err.message);
         }
     };

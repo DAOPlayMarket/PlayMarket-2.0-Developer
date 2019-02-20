@@ -23,13 +23,14 @@ export async function setProvider(_provider) {
                 if (window.ethereum) {
                     window.ethereum.setMaxListeners(30);
                     web3 = new Web3(window.ethereum);
-                    let netId = await web3.eth.net.getId();
+                    const netId = await web3.eth.net.getId();
                     if (parseInt(netId) === lib.ethereum.chainId) {
                         try {
                             await window.ethereum.enable();
                             startAddressWatcher_MM();
                             Notification('success', 'Web3 (MetaMask) connection successful!');
                         } catch (err) {
+                            console.error(err);
                             Notification('error', 'Web3 (MetaMask) connection failed! User denied account access.');
                         }
                     } else {
@@ -142,7 +143,7 @@ export async function getDataByTypes(obj) {
 
 export async function getContractsInfo(contracts) {
     try {
-        let Contract = new web3.eth.Contract(contracts.Proxy.abi, contracts.Proxy.address);
+        const Contract = new web3.eth.Contract(contracts.Proxy.abi, contracts.Proxy.address);
         let result = await Contract.methods.getLastVersion().call();
         result.ICOList = await contractMethod({
             contract: {
@@ -245,7 +246,7 @@ export async function getSignedTransaction(obj) {
 }
 export async function contractMethod(obj) {
     try {
-        let Contract = new web3.eth.Contract(obj.contract.abi, obj.contract.address);
+        const Contract = new web3.eth.Contract(obj.contract.abi, obj.contract.address);
         return await Contract.methods[obj.name].apply(this, obj.params).call();
     } catch (err) {
         throw err;
