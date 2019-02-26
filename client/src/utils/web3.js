@@ -9,25 +9,27 @@ export async function setProvider(_provider) {
     try {
         switch (_provider) {
             case 'infura': {
-                stopAddressWatcher_MM();
-                let provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
-                web3 = new Web3(provider);
-                provider.on('connect', () => {
-                    startWebSocketPing();
-                    Notification('success', 'Web3 (Infura) connection successful!');
-                });
+                web3 = new Web3(new Web3.providers.HttpProvider(lib.web3.infura));
+                Notification('success', 'Web3 (Infura) connection successful!');
+                // stopAddressWatcher_MM();
+                // let provider = new Web3.providers.WebsocketProvider(lib.web3.infura);
+                // web3 = new Web3(provider);
+                // provider.on('connect', () => {
+                //     startWebSocketPing();
+                //     Notification('success', 'Web3 (Infura) connection successful!');
+                // });
                 break;
             }
             case 'metamask': {
-                stopWebSocketPing();
+                // stopWebSocketPing();
                 if (window.ethereum) {
-                    window.ethereum.setMaxListeners(30);
+                    // window.ethereum.setMaxListeners(30);
                     web3 = new Web3(window.ethereum);
                     const netId = await web3.eth.net.getId();
                     if (parseInt(netId) === lib.ethereum.chainId) {
                         try {
                             await window.ethereum.enable();
-                            startAddressWatcher_MM();
+                            // startAddressWatcher_MM();
                             Notification('success', 'Web3 (MetaMask) connection successful!');
                         } catch (err) {
                             console.error(err);
@@ -37,9 +39,9 @@ export async function setProvider(_provider) {
                         throw new TypeError('You have the incorrect network id. Please, change it to ' + lib.ethereum.chainId + ' ('+ lib.ethereum.chainName +')');
                     }
                 } else if (window.web3) {
-                    window.web3.setMaxListeners(30);
+                    // window.web3.setMaxListeners(30);
                     web3 = new Web3(window.web3.currentProvider);
-                    startAddressWatcher_MM();
+                    // startAddressWatcher_MM();
                     Notification('success', 'Web3 (MetaMask) connection successful!');
                 } else {
                     throw new TypeError('MetaMask extension not installed or disable');
@@ -54,38 +56,38 @@ export async function setProvider(_provider) {
     }
 }
 
-let timer1 = null;
-function startWebSocketPing() {
-    (async () => {
-        timer1 = setInterval(async() => {
-            await web3.eth.getBlockNumber();
-        }, 60000);
-    })();
-}
-function stopWebSocketPing() {
-    (async () => {
-        clearInterval(timer1);
-        timer1 = null;
-    })();
-}
-
-let timer2 = null;
-function startAddressWatcher_MM() {
-    (async () => {
-        let address = await web3.eth.getCoinbase();
-        timer2 = setInterval(async() => {
-            if (await web3.eth.getCoinbase() !== address) {
-                window.location.reload();
-            }
-        }, 2000);
-    })();
-}
-function stopAddressWatcher_MM() {
-    (async () => {
-        clearInterval(timer2);
-        timer2 = null;
-    })();
-}
+// let timer1 = null;
+// function startWebSocketPing() {
+//     (async () => {
+//         timer1 = setInterval(async() => {
+//             await web3.eth.getBlockNumber();
+//         }, 60000);
+//     })();
+// }
+// function stopWebSocketPing() {
+//     (async () => {
+//         clearInterval(timer1);
+//         timer1 = null;
+//     })();
+// }
+//
+// let timer2 = null;
+// function startAddressWatcher_MM() {
+//     (async () => {
+//         let address = await web3.eth.getCoinbase();
+//         timer2 = setInterval(async() => {
+//             if (await web3.eth.getCoinbase() !== address) {
+//                 window.location.reload();
+//             }
+//         }, 2000);
+//     })();
+// }
+// function stopAddressWatcher_MM() {
+//     (async () => {
+//         clearInterval(timer2);
+//         timer2 = null;
+//     })();
+// }
 
 /*
 -----------------------------------------------------------------------------

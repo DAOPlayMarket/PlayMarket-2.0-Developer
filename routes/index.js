@@ -13,6 +13,7 @@ router.use('*', (req, res, next) => {
 
 router.use('/get-nodes', require('./get-nodes'));
 
+router.use('/download', require('./download'));
 router.use('/app-add', require('./app-add'));
 router.use('/update-apk', require('./update-apk'));
 router.use('/ico-add', require('./ico-add'));

@@ -32,7 +32,7 @@ class AppUpdate extends Component {
     };
 
     async componentDidMount(){
-        const { url, idApp } = this.props;
+        const { url, idApp, address } = this.props;
         await this.props.startLoading();
         try {
             const response = (await axios({
@@ -45,6 +45,17 @@ class AppUpdate extends Component {
             this.setState({
                 app: response.result
             });
+
+            const response2 = (await axios({
+                method: 'get',
+                url: '/api/download',
+                params: {
+                    address: address,
+                    multihash: response.result.hash
+                }
+            })).data;
+            console.log('response2:', response2);
+
             await this.props.endLoading();
         } catch (err) {
             await this.props.endLoading();

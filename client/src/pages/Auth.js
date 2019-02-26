@@ -55,16 +55,16 @@ class Auth extends Component {
     };
 
     recalculateGasPrice = async () => {
-        let gasPrice = await getGasPrice();
+        const gasPrice = await getGasPrice();
         await this.props.setGasPrice({
             gasPrice: gasPrice
         })
     };
 
     getDeveloper = async () => {
-        let { address } = this.state;
-        let { contracts } = this.props;
-        let info = await contractMethod({
+        const { address } = this.state;
+        const { contracts } = this.props;
+        const info = await contractMethod({
             contract: contracts.PlayMarket,
             name: 'getInfoDev',
             params: [address]

@@ -31,6 +31,8 @@
       margin-bottom: 10px
     &__list
       &-item
+        display: flex
+        align-items: center
         &__typical
           font-family: $FiraSans
           font-weight: 400
@@ -41,7 +43,7 @@
             font-weight: 500
             color: #00e7d5
         &__price
-          padding-top: 5px
+          padding-top: 10px
           font-family: $FiraSansSemiBold
           font-weight: 500
           font-size: 14px
@@ -50,6 +52,22 @@
             color: #00e7d5
             display: inline-block
             text-align: right
+          button
+            display: block
+            padding: 0
+            margin: 0 0 0 5px
+            width: 10px
+            height: 10px
+            background-repeat: no-repeat
+            background-size: contain
+            background-image: url("../images/icons/refresh-green.svg")
+            box-shadow: none
+            box-sizing: border-box
+            background-color: transparent
+            border: 0
+            cursor: pointer
+            &:hover
+              opacity: .7
         &__input
           font-size: 0
           margin-bottom: 10px

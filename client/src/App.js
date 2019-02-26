@@ -147,7 +147,7 @@ class _App extends Component {
     };
 
     render() {
-        let { isAuth } = this.props;
+        const { isAuth } = this.props;
 
         // window.onbeforeunload = () => {
         //     return "Are you sure you want to refresh? You will lost the current session.";

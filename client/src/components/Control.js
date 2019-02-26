@@ -1,26 +1,41 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {utils as web3Utils}  from 'web3';
+import { NavLink } from 'react-router-dom'
+import * as BN from 'bignumber.js'
+
+import { startLoading, endLoading } from '../actions/preloader'
+
+import { getGasPrice } from '../utils/web3'
 
 import { setGasPrice } from '../actions/tx'
 
 import lib from '../lib'
 
 class Control extends Component {
-    handleChangeGasPrice = (e) => {
-        let value = e.target.value;
+    handleChangeGasPrice = event => {
         this.props.setGasPrice({
-            gasPrice: web3Utils.toWei(value, 'gwei')
+            gasPrice: web3Utils.toWei(event.target.value, 'gwei')
         })
     };
 
-    render(){
-        let { gasPrice, mode, contracts, node} = this.props;
+    recalculateGasPrice = async () => {
+        this.props.startLoading();
+        const gasPrice = await getGasPrice();
+        await this.props.setGasPrice({
+            gasPrice: gasPrice
+        });
+        this.props.endLoading();
+    };
 
-        let value = web3Utils.fromWei(gasPrice, 'gwei');
+    render(){
+        const { gasPrice, mode, contracts, node} = this.props;
+
+        const value = web3Utils.fromWei(gasPrice, 'gwei');
 
         return (
             <div className="control">
+                {/*<NavLink to='/update/0'>Update</NavLink>*/}
                 <div className="control__logo"></div>
                 <div className="control__web3">
                     <div className="control__web3-title">Blockchain</div>
@@ -49,8 +64,8 @@ class Control extends Component {
                                 </li>
                                 <li className="control__web3__list-item control__web3__list-item__typical">Contracts version:&nbsp;<span>{contracts.version}</span></li>
 
-                                <li className="control__web3__list-item control__web3__list-item__price">Gas Price: <span>{value}</span> Gwei</li>
-                                <li className="control__web3__list-item control__web3__list-item__input"><input type="range" min="1" max="99" step="1" value={value} onChange={this.handleChangeGasPrice}/></li>
+                                <li className="control__web3__list-item control__web3__list-item__price">Gas Price:&nbsp;<span>{(new BN(value).decimalPlaces(2)).toString()}</span>&nbsp;Gwei&nbsp;<button onClick={this.recalculateGasPrice}></button></li>
+                                <li className="control__web3__list-item control__web3__list-item__input"><input type="range" min="1" max="50" step="1" value={value} onChange={this.handleChangeGasPrice}/></li>
                                 <li className="control__web3__list-item control__web3__list-item__text">Gas Price is the amount you pay per unit of gas. TX fee = gas
                                     price * gas limit & is paid to miners for including your TX in a block. Higher the gas
                                     price = faster transaction, but more expensive.</li>
@@ -105,7 +120,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setGasPrice: (payload) => dispatch(setGasPrice(payload))
+        setGasPrice: payload => dispatch(setGasPrice(payload)),
+        startLoading: () => dispatch(startLoading()),
+        endLoading: () => dispatch(endLoading())
     }
 };
 
