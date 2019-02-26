@@ -55,33 +55,38 @@ class Apps extends Component {
     };
 
     getApps = async () => {
-        let { address, url } = this.props;
+        const { address, url } = this.props;
         this.props.startLoading();
         try {
-            let response = (await axios({
+            const response = (await axios({
                 method: 'post',
                 url: `${url}/api/get-apps-by-developer`,
                 data: {
                     address: address
                 }
             })).data;
-            let apps = response.result;
+            const apps = response.result;
 
-            // console.log('apps:', apps);
-            let loadedApps = apps.filter(app => !!app.hash);
-            loadedApps.forEach(item=> {
-                item.SERVICE = {
-                    isExtend: false
-                }
-            });
-            // let notLoadedApps = apps.filter(app => app.loadFile === false);
+            if (apps.length !== 0) {
+                // console.log('apps:', apps);
+                const loadedApps = apps.filter(app => !!app.hash);
+                loadedApps.forEach(item=> {
+                    item.SERVICE = {
+                        isExtend: false
+                    }
+                });
+                // let notLoadedApps = apps.filter(app => app.loadFile === false);
 
-            await this.setState({
-                apps: apps,
-                loadedApps: loadedApps,
-                // notLoadedApps: notLoadedApps
-            });
-            this.props.endLoading();
+                await this.setState({
+                    apps: apps,
+                    loadedApps: loadedApps,
+                    // notLoadedApps: notLoadedApps
+                });
+                this.props.endLoading();
+            } else {
+                this.props.history.push('/app-add');
+                this.props.endLoading();
+            }
         } catch (err) {
             this.props.endLoading();
             console.error(err);

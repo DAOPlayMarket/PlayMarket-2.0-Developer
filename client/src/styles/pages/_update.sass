@@ -1,0 +1,819 @@
+.update
+  &__control
+    display: flex
+    align-items: center
+    margin-bottom: 20px
+    &__back
+      border-radius: 12px
+      padding: 0 10px 0 30px
+      background-color: #00e7d5
+      font-family: $FiraSansSemiBold
+      font-weight: 500
+      font-size: 14px
+      color: #fff
+      position: relative
+      height: 26px
+      display: flex
+      align-items: center
+      box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+      transition: .2s opacity ease-in-out
+      &:before
+        content: ''
+        position: absolute
+        top: 3px
+        left: 3px
+        width: 20px
+        height: 20px
+        background-color: #fff
+        border-radius: 50%
+        background-image: url("../images/icons/left-arrow.svg")
+        background-position: center
+        background-size: 50%
+        background-repeat: no-repeat
+      &:hover
+        opacity: .5
+  &__title
+    font-family: $Archive
+    font-weight: 400
+    color: #67777b
+    font-size: 28px
+    margin-bottom: 30px
+    text-align: center
+  &__section-1
+    padding: 35px 60px 50px 30px
+    background-color: #fff
+    position: relative
+    border-radius: 5px 5px 5px 0
+    &:after
+      content: ''
+      position: absolute
+      bottom: -5px
+      left: 0
+      height: 5px
+      width: 40px
+      background-color: #ff4661
+    &__block
+      display: flex
+      margin-bottom: 30px
+      &:last-child
+        margin-bottom: 0
+      &--left
+        width: 144px
+        flex-shrink: 0
+      &--right
+        width: 100%
+        margin-left: 65px
+    &__box
+      //margin-bottom: 50px
+      width: 100%
+      &:last-child
+        margin-bottom: 0
+      &-title
+        font-family: $Archive
+        font-weight: 400
+        font-size: 18px
+        color: #00e7d5
+        margin-bottom: 15px
+    &__logo
+      position: relative
+      width: 100%
+      height: 144px
+      padding: 10px
+      box-sizing: border-box
+      background-color: #f1eeee
+      margin-bottom: 25px
+      &:before
+        content: ''
+        position: absolute
+        z-index: 5
+        top: 0
+        right: 0
+        width: 20px
+        height: 20px
+        border-radius: 50%
+        background-size: 60%
+        background-color: #f1eeee
+        background-image: url("../images/icons/edit.svg")
+        background-position: center
+        background-repeat: no-repeat
+      &__placeholder
+        opacity: 0
+        display: flex
+        position: absolute
+        z-index: 3
+        top: 50%
+        left: 50%
+        transform: translate3d(-50%, -50%, 0)
+        width: 100px
+        height: 100px
+        border-radius: 50%
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        color: #b3bbbd
+        align-items: center
+        text-align: center
+        text-transform: uppercase
+        border: 2px solid #b3bbbd
+        &.visible
+          opacity: 1
+      img
+        max-width: calc(100% - 20px)
+        max-height: calc(100% - 20px)
+        position: absolute
+        z-index: 4
+        top: 50%
+        left: 50%
+        transform: translate3d(-50%, -50%, 0)
+      input[type='file']
+        cursor: pointer
+        opacity: 0
+        position: absolute
+        z-index: 10
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        width: 100%
+        height: 100%
+    &__price
+      input
+        border: 0
+        margin: 0
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        width: 100%
+        border-bottom: 2px solid #b3bbbd
+        padding-bottom: 5px
+    &__select-list
+      &__item
+        margin-bottom: 10px
+        &:last-child
+          margin-bottom: 0
+    &__nameApp
+      margin-bottom: 20px
+      &__title
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        margin-bottom: 5px
+      input
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        border: 0
+        width: 100%
+        border-bottom: 2px solid #b3bbbd
+        padding-bottom: 5px
+        &::placeholder
+          color: #d3d3d3
+    &__type
+      margin-bottom: 20px
+      &__title
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        margin-bottom: 5px
+      &__select-box
+        position: relative
+        input
+          position: absolute
+          padding: 0
+          border: 0
+          margin: 0
+          width: 100%
+          height: 100%
+          top: 0
+          left: 0
+          bottom: 0
+          right: 0
+          opacity: 0
+          z-index: -100
+    &__category
+      &__title
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        margin-bottom: 5px
+      &__select-box
+        position: relative
+        input
+          position: absolute
+          padding: 0
+          border: 0
+          margin: 0
+          width: 100%
+          height: 100%
+          top: 0
+          left: 0
+          bottom: 0
+          right: 0
+          opacity: 0
+          z-index: -100
+    &__slogan
+      margin-bottom: 20px
+      &__title
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        margin-bottom: 10px
+      textarea
+        padding: 0
+        border: 0
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        border-bottom: 2px solid #b3bbbd
+        max-width: 100%
+        width: 100%
+        resize: none
+        padding-bottom: 5px
+        &::placeholder
+          color: #d3d3d3
+    &__shortDescr
+      margin-bottom: 20px
+      &__title
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        margin-bottom: 10px
+      textarea
+        padding: 0
+        border: 0
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        border-bottom: 2px solid #b3bbbd
+        max-width: 100%
+        width: 100%
+        resize: none
+        padding-bottom: 5px
+        &::placeholder
+          color: #d3d3d3
+    &__longDescr
+      &__title
+        font-family: $FiraSans
+        font-weight: 400
+        color: #67777b
+        font-size: 14px
+        margin-bottom: 10px
+      textarea
+        padding: 0
+        border: 0
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        border-bottom: 2px solid #b3bbbd
+        max-width: 100%
+        width: 100%
+        resize: none
+        padding-bottom: 5px
+        &::placeholder
+          color: #d3d3d3
+  &__section-2
+    padding: 60px 60px 0 30px
+    box-sizing: border-box
+    &__title
+      font-family: $Archive
+      font-weight: 400
+      font-size: 18px
+      color: #00e7d5
+      margin-bottom: 15px
+    &__box
+      position: relative
+      width: 100%
+      min-height: 40px
+      padding: 10px
+      background-color: #fff
+      border: 1px dotted #00e7d5
+      border-radius: 5px
+      display: flex
+      align-items: center
+      justify-content: center
+      box-sizing: border-box
+      height: 100px
+      input
+        cursor: pointer
+        opacity: 0
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        width: 100%
+        height: 100%
+      &__preview
+        display: flex
+        justify-content: flex-start
+        align-items: center
+        width: 100%
+        &__img
+          flex-shrink: 0
+          width: 50px
+          height: 50px
+          background-image: url("../images/icons/apk.svg")
+          background-repeat: no-repeat
+          background-size: contain
+          background-position: center
+        &__info-list
+          width: 100%
+          text-align: left
+          margin-left: 20px
+          &__item
+            margin-bottom: 5px
+            font-family: $FiraSans
+            font-weight: 400
+            color: #67777b
+            &:last-child
+              margin-bottom: 0
+        &__placeholder
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 14px
+          color: #67777b
+  &__section-3
+    padding: 30px 60px 0 30px
+    box-sizing: border-box
+    display: flex
+    justify-content: space-between
+    &__title
+      font-family: $Archive
+      font-weight: 400
+      font-size: 18px
+      color: #00e7d5
+      margin-bottom: 15px
+    &__block
+      &--1
+        width: 507px
+      &--2
+        width: 187px
+    &__box
+      position: relative
+      width: 100%
+      height: 170px
+      padding: 0 10px
+      background-color: #fff
+      border: 1px dotted #00e7d5
+      border-radius: 5px
+      display: flex
+      align-items: center
+      box-sizing: border-box
+      &__input
+        position: relative
+        height: 120px
+        width: 64px
+        border: 1px dashed #67777b
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 5px
+        box-sizing: border-box
+        padding: 0 5px
+        &-text
+          font-family: $FiraSans
+          font-weight: 400
+          color: #67777b
+          font-size: 10px
+          text-align: center
+          span
+            font-size: 40px
+            display: block
+            height: 20px
+            margin-bottom: 5px
+            line-height: 20px
+        input
+          opacity: 0
+          cursor: pointer
+          position: absolute
+          top: 0
+          bottom: 0
+          left: 0
+          right: 0
+          width: 100%
+          height: 100%
+      &__preview-list
+        display: flex
+        justify-content: flex-start
+        margin-right: 20px
+        &__item
+          position: relative
+          height: 150px
+          width: 85px
+          display: flex
+          align-items: center
+          justify-content: center
+          margin-right: 15px
+          &:last-child
+            margin-right: 0
+          img
+            max-width: 100%
+            max-height: 100%
+          &__remove
+            opacity: 0
+            position: absolute
+            z-index: 5
+            top: 0
+            bottom: 0
+            left: 0
+            right: 0
+            width: 100%
+            height: 100%
+            cursor: pointer
+            font-size: 0
+            transition: .2s opacity ease-in-out
+            background-color: rgba(0,0,0,.5)
+            background-image: url("../images/icons/delete.svg")
+            background-position: center
+            background-size: 60%
+            background-repeat: no-repeat
+            &:hover
+              opacity: 1
+    &__banner
+      position: relative
+      width: 100%
+      height: 170px
+      padding: 10px
+      background-color: #fff
+      border: 1px dotted #00e7d5
+      border-radius: 5px
+      box-sizing: border-box
+      display: flex
+      align-items: center
+      justify-content: center
+      &__placeholder
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        color: #67777b
+      input
+        opacity: 0
+        cursor: pointer
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        width: 100%
+        height: 100%
+      img
+        max-width: 100%
+        max-height: 100%
+  &__section-4
+    margin-top: 60px
+    padding: 35px 60px 50px 30px
+    background-color: #fff
+    position: relative
+    border-radius: 5px 5px 5px 0
+    &:after
+      content: ''
+      position: absolute
+      bottom: -5px
+      left: 0
+      height: 5px
+      width: 40px
+      background-color: #04ebb4
+    &__typical-block
+      display: flex
+      justify-content: space-between
+      margin-bottom: 35px
+      &--left
+        width: 540px
+      &--right
+      &__title
+        font-family: $FiraSansSemiBold
+        font-weight: 500
+        font-size: 18px
+        color: #67777b
+        margin-bottom: 30px
+      &__description
+        font-family: $FiraSans
+        font-weight: 400
+        font-size: 14px
+        color: #67777b
+        line-height: 18px
+      &__checkbox
+        position: relative
+        input
+          opacity: 0
+          position: absolute
+          top: 0
+          left: 0
+          right: 0
+          bottom: 0
+          border: 0
+          padding: 0
+          margin: 0
+          width: 100%
+          height: 100%
+          z-index: 10
+          cursor: pointer
+        &--zone
+          display: flex
+          align-items: center
+          justify-content: space-around
+          width: 106px
+          height: 30px
+          background-color: #f7f5f5
+          border-radius: 14px
+          position: relative
+          overflow: hidden
+          &[data-trigger='false']
+            div
+              left: 0
+          &[data-trigger='true']
+            div
+              left: calc(100% - 53px)
+          div
+            position: absolute
+            z-index: 3
+            width: 53px
+            height: 100%
+            bottom: 0
+            top: 0
+            background: #00e8d5
+            border-radius: 14px
+            transition: .2s left ease-in-out
+          span
+            display: inline-block
+            text-transform: capitalize
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            color: #b3bbbd
+            z-index: 5
+            &.active
+              color: #fff
+    &__typical-block-text
+      display: flex
+      justify-content: space-between
+      margin-bottom: 35px
+      &--left
+        width: 320px
+      &--right
+      &__title
+        font-family: $FiraSansSemiBold
+        font-weight: 500
+        font-size: 18px
+        color: #67777b
+        margin-bottom: 30px
+      &__list
+        &--item
+          margin-bottom: 20px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSans
+            font-weight: 400
+            color: #67777b
+            font-size: 14px
+            margin-bottom: 5px
+          &__input
+            input
+              width: 100%
+              font-family: $FiraSans
+              font-size: 14px
+              font-weight: 400
+              color: #0f1914
+              margin: 0
+              border: 0
+              padding: 0 0 5px 0
+              border-bottom: 1px solid #00c8ab
+              &::placeholder
+                color: #d3d3d3
+    &__keywords-block
+      margin-bottom: 35px
+      &--left
+        width: 540px
+      &__title
+        font-family: $FiraSansSemiBold
+        font-weight: 500
+        font-size: 18px
+        color: #67777b
+        margin-bottom: 30px
+      &__list
+        overflow: hidden
+        &-item
+          margin: 0 10px 10px 0
+          display: flex
+          align-items: center
+          padding: 0 10px
+          height: 30px
+          background: #67777b
+          border-radius: 14px
+          float: left
+          max-width: 100%
+          box-sizing: border-box
+          &:last-child
+            margin-right: 0
+          &__value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 14px
+            color: #fff
+            max-width: 100%
+            overflow: hidden
+            text-overflow: ellipsis
+          &__remove
+            flex-shrink: 0
+            margin-left: 5px
+            cursor: pointer
+            width: 14px
+            height: 14px
+            background-position: center
+            background-repeat: no-repeat
+            background-size: contain
+            background-image: url("../images/icons/delete.svg")
+        &-placeholder
+          margin-bottom: 10px
+          height: 30px
+          display: flex
+          align-items: center
+          justify-content: flex-start
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 14px
+          color: #67777b
+      &__add
+        margin-top: 10px
+        display: flex
+        &-input
+          font-family: $FiraSans
+          font-size: 14px
+          font-weight: 400
+          color: #0f1914
+          margin: 0
+          border: 0
+          padding: 0 0 5px 0
+          border-bottom: 1px solid #00c8ab
+          width: 320px
+        &-btn
+          font-family: $FiraSansSemiBold
+          font-weight: 500
+          font-size: 14px
+          color: #fff
+          text-transform: capitalize
+          display: flex
+          justify-content: center
+          align-items: center
+          height: 30px
+          padding: 0 10px
+          border-radius: 14px
+          background-color: #00e7d5
+          margin-left: 10px
+          cursor: pointer
+  &__load-block
+    display: flex
+    justify-content: center
+    margin-top: 40px
+    &__btn
+      cursor: pointer
+      font-family: $Archive
+      border: 0
+      font-weight: 400
+      font-size: 16px
+      color: #fff
+      width: auto
+      display: flex
+      align-items: center
+      justify-content: center
+      padding: 0 20px
+      height: 44px
+      border-radius: 22px
+      background-color: #00e7d5
+      box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+  &-popup
+    width: 490px !important
+    padding: 60px 50px 50px !important
+    box-sizing: border-box !important
+    border: 0 !important
+    background-color: #ffffff !important
+    box-shadow: 0 2px 5px 0 #e6e6e6 !important
+    &__main
+      margin-bottom: 30px
+      &__title
+        font-family: $Archive
+        font-size: 28px
+        text-align: center
+        color: #67777b
+      &__list
+        margin-top: 15px
+        &-item
+          margin-bottom: 15px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &__value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+            span
+              color: #00e7d5
+    &__btn-block
+      display: flex
+      justify-content: flex-start
+      align-items: center
+      margin-top: 20px
+      &--center
+        justify-content: center
+      &__btn
+        cursor: pointer
+        border: 0
+        display: flex
+        align-items: center
+        justify-content: center
+        text-transform: uppercase
+        padding: 0 20px
+        height: 44px
+        font-family: $Archive
+        font-weight: 400
+        font-size: 16px
+        color: #fff
+        border-radius: 22px
+        background-color: #00e7d5
+        box-shadow: 0 4px 5px 0 rgba(0, 231, 213, 0.6)
+        &--cancel
+          cursor: pointer
+          margin-left: 40px
+          font-family: $FiraSans
+          font-weight: 400
+          font-size: 16px
+          color: #006f9e
+          border-bottom: 1px solid #006f9e
+    &__registration
+      &__title
+        font-family: $Archive
+        font-size: 28px
+        text-align: center
+        color: #67777b
+        margin-bottom: 10px
+      &__subtitle
+        font-family: $Archive
+        font-size: 14px
+        text-align: center
+        color: #67777b
+        margin-bottom: 30px
+      &__preview-list
+        margin-bottom: 15px
+        padding: 10px
+        box-shadow: 0 2px 5px 0 #e6e6e6
+        &__item
+          margin-bottom: 10px
+          &:last-child
+            margin-bottom: 0
+          &--title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 12px
+            padding-bottom: 5px
+          &--value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 14px
+      &__fee-list
+        margin: 15px 0
+        &__item
+          margin-bottom: 10px
+          &:last-child
+            margin-bottom: 0
+          &--title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &--value
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+      &__list
+        &-item
+          margin-bottom: 15px
+          &:last-child
+            margin-bottom: 0
+          &__title
+            font-family: $FiraSansSemiBold
+            font-weight: 500
+            font-size: 14px
+            padding-bottom: 5px
+          &__input
+            font-family: $FiraSans
+            font-weight: 400
+            font-size: 16px
+            height: 35px
+            border-radius: 2px
+            background-color: #e8e8e8
+            width: 100%
+            border: 0
+            padding: 0 10px
+            box-sizing: border-box
+

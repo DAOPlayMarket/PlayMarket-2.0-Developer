@@ -66,7 +66,10 @@ router.post('/', async (req, res) => {
         await fse.outputJson(path.join(dir, 'config', 'config.json'), config);
 
         const result = await ipfs.upload(dir, 'app');
+
         await ipfsAPI.pin.add(result.hash);
+        console.log('Hash pinned: ' + result.hash);
+
         await del(dir);
 
         res.json({

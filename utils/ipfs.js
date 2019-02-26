@@ -26,6 +26,7 @@ const upload = (dir, headFolderName) => {
                     if (e) {
                         reject(e)
                     }
+                    console.log('Uploaded files multihash: ' + values[values.length-1].hash);
                     resolve({
                         hashType: 1,
                         hash: values[values.length-1].hash

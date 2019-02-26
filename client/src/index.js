@@ -10,7 +10,7 @@ import './styles/main.sass';
 
 import App from './App';
 
-import registerServiceWorker from './registerServiceWorker';
+import * as serviceWorker from './serviceWorker';
 import reducer from './reducers'
 
 const store = createStore(
@@ -19,4 +19,4 @@ const store = createStore(
 );
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
-registerServiceWorker();
+serviceWorker.unregister();

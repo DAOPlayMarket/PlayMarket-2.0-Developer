@@ -1421,47 +1421,47 @@ class IcoAdd extends Component {
                                                                                             <ul className="ico-add__section-2__content__box__members-item__list-item__desc__main__social">
                                                                                                 {!!item.social.googlePlus ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.googlePlus} target="_blank" title="Google+" data-social="googlePlus">Google+</a>
+                                                                                                        <a href={item.social.googlePlus} target="_blank" rel="noopener noreferrer" title="Google+" data-social="googlePlus">Google+</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.facebook ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.facebook} target="_blank" title="Facebook" data-social="facebook">Facebook</a>
+                                                                                                        <a href={item.social.facebook} target="_blank" rel="noopener noreferrer" title="Facebook" data-social="facebook">Facebook</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.linkedin ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.linkedin} target="_blank" title="LinkedIn" data-social="linkedin">LinkedIn</a>
+                                                                                                        <a href={item.social.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn" data-social="linkedin">LinkedIn</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.instagram ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.instagram} target="_blank" title="Instagram" data-social="instagram">Instagram</a>
+                                                                                                        <a href={item.social.instagram} target="_blank" rel="noopener noreferrer" title="Instagram" data-social="instagram">Instagram</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.vk ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.vk} target="_blank" title="VK" data-social="vk">VK</a>
+                                                                                                        <a href={item.social.vk} target="_blank" rel="noopener noreferrer" title="VK" data-social="vk">VK</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.youtube ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.youtube} target="_blank" title="YouTube" data-social="youtube">YouTube</a>
+                                                                                                        <a href={item.social.youtube} target="_blank" rel="noopener noreferrer" title="YouTube" data-social="youtube">YouTube</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.telegram ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.telegram} target="_blank" title="Telegram" data-social="telegram">Telegram</a>
+                                                                                                        <a href={item.social.telegram} target="_blank" rel="noopener noreferrer" title="Telegram" data-social="telegram">Telegram</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.gitHub ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.gitHub} target="_blank" title="GitHub" data-social="gitHub">GitHub</a>
+                                                                                                        <a href={item.social.gitHub} target="_blank" rel="noopener noreferrer" title="GitHub" data-social="gitHub">GitHub</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.twitter ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.twitter} target="_blank" title="Twitter" data-social="twitter">Twitter</a>
+                                                                                                        <a href={item.social.twitter} target="_blank" rel="noopener noreferrer" title="Twitter" data-social="twitter">Twitter</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                             </ul>
@@ -1593,47 +1593,47 @@ class IcoAdd extends Component {
                                                                                             <ul className="ico-add__section-2__content__box__members-item__list-item__desc__main__social">
                                                                                                 {!!item.social.googlePlus ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.googlePlus} target="_blank" title="Google+" data-social="googlePlus">Google+</a>
+                                                                                                        <a href={item.social.googlePlus} target="_blank" rel="noopener noreferrer" title="Google+" data-social="googlePlus">Google+</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.facebook ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.facebook} target="_blank" title="Facebook" data-social="facebook">Facebook</a>
+                                                                                                        <a href={item.social.facebook} target="_blank" rel="noopener noreferrer" title="Facebook" data-social="facebook">Facebook</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.linkedin ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.linkedin} target="_blank" title="LinkedIn" data-social="linkedin">LinkedIn</a>
+                                                                                                        <a href={item.social.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn" data-social="linkedin">LinkedIn</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.instagram ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.instagram} target="_blank" title="Instagram" data-social="instagram">Instagram</a>
+                                                                                                        <a href={item.social.instagram} target="_blank" rel="noopener noreferrer" title="Instagram" data-social="instagram">Instagram</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.vk ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.vk} target="_blank" title="VK" data-social="vk">VK</a>
+                                                                                                        <a href={item.social.vk} target="_blank" rel="noopener noreferrer" title="VK" data-social="vk">VK</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.youtube ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.youtube} target="_blank" title="YouTube" data-social="youtube">YouTube</a>
+                                                                                                        <a href={item.social.youtube} target="_blank" rel="noopener noreferrer" title="YouTube" data-social="youtube">YouTube</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.telegram ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.telegram} target="_blank" title="Telegram" data-social="telegram">Telegram</a>
+                                                                                                        <a href={item.social.telegram} target="_blank" rel="noopener noreferrer" title="Telegram" data-social="telegram">Telegram</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.gitHub ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.gitHub} target="_blank" title="GitHub" data-social="gitHub">GitHub</a>
+                                                                                                        <a href={item.social.gitHub} target="_blank" rel="noopener noreferrer" title="GitHub" data-social="gitHub">GitHub</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                                 {!!item.social.twitter ? (
                                                                                                     <li className="ico-add__section-2__content__box__members-item__list-item__desc__main__social-item">
-                                                                                                        <a href={item.social.twitter} target="_blank" title="Twitter" data-social="twitter">Twitter</a>
+                                                                                                        <a href={item.social.twitter} target="_blank" rel="noopener noreferrer" title="Twitter" data-social="twitter">Twitter</a>
                                                                                                     </li>
                                                                                                 ) : null}
                                                                                             </ul>

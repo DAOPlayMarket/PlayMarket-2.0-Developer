@@ -22,6 +22,7 @@ import Control from './components/Control'
 
 import Apps from './pages/Apps'
 import App from './pages/App'
+import AppUpdate from './pages/AppUpdate'
 import AppUpdateAPK from './pages/AppUpdateAPK'
 import AppAdd from './pages/AppAdd'
 import Auth from './pages/Auth'
@@ -163,6 +164,7 @@ class _App extends Component {
                 <DashboardRoute isAuth={isAuth} exact path='/' component={Apps} />
                 <DashboardRoute isAuth={isAuth} path='/apps' component={Apps} />
                 <DashboardRoute isAuth={isAuth} path='/app/:app_id' component={App} />
+                <DashboardRoute isAuth={isAuth} path='/update/:app_id/' component={AppUpdate} />
                 <DashboardRoute isAuth={isAuth} path='/update-apk/:app_id/' component={AppUpdateAPK} />
                 <DashboardRoute isAuth={isAuth} path='/app-add' component={AppAdd} />
                 <DashboardRoute isAuth={isAuth} path='/ico-add/:app_id' component={IcoAdd} />

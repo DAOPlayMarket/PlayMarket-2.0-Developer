@@ -9,7 +9,7 @@ const clientIPFS = require('ipfs-http-client');
 
 require('dotenv').config({path: path.join(__dirname, '..', '.env')});
 
-global.ipfsAPI = clientIPFS(`${process.env.IPFS_HOST}`, `${process.env.IPFS_PORT}`, {protocol: 'http'});
+global.ipfsAPI = clientIPFS(`${process.env.IPFS_GATEWAY_HOST}`, `${process.env.IPFS_GATEWAY_PORT}`, {protocol: 'http'});
 
 /** GLOBAL VARIABLES **/
 global.lib = require(path.join(__dirname, '..', 'lib'));
@@ -32,7 +32,7 @@ const app = express();
 function startServer() {
     return new Promise ((resolve, reject) => {
         const HOST = process.env.SERVER_HOST || '127.0.0.1';
-        const PORT = process.env.SERVER_PORT || '3001';
+        const PORT = process.env.SERVER_PORT || '3000';
         app.listen(PORT, HOST, () => {
             console.log('Server listening on ' + HOST + ':' + PORT + ' ' + modules.time.timeNow());
             console.log('---------------------------------------------------------------------');

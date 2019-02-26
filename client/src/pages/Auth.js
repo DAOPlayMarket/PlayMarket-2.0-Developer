@@ -87,13 +87,13 @@ class Auth extends Component {
     };
 
     setContractsInfo = async () => {
-        let { contracts } = this.props;
+        const { contracts } = this.props;
         try {
-            let contractsInfo = await getContractsInfo({
+            const contractsInfo = await getContractsInfo({
                 Proxy: contracts.Proxy,
                 ICO: contracts.ICO
             });
-            let contractVersion = web3Utils.hexToAscii(contractsInfo.version).replace(/\u0000/g, '');
+            const contractVersion = web3Utils.hexToAscii(contractsInfo.version).replace(/\u0000/g, '');
             this.props.setContracts({
                 version: contractVersion,
                 PlayMarket: contractsInfo.PlayMarket,
@@ -112,7 +112,7 @@ class Auth extends Component {
 
     handleChangeKeystore = async e => {
         e.persist();
-        let { mode } = this.props;
+        const { mode } = this.props;
         try {
             if (mode !== 'infura') {
                 await setProvider('infura');
@@ -123,23 +123,23 @@ class Auth extends Component {
                 mode: 'keystore'
             });
             await this.resetState();
-            let file = e.target.files[0];
+            const file = e.target.files[0];
             if (file) {
                 this.props.startLoading();
-                let reader = new FileReader();
+                const reader = new FileReader();
                 reader.readAsText(file);
-                reader.onload = async (event) => {
-                    let content = event.target.result;
+                reader.onload = async event => {
+                    const content = event.target.result;
                     try {
-                        let json = JSON.parse(content);
+                        const json = JSON.parse(content);
                         await this.setState({
                             keystore: JSON.stringify(json),
                             accountIsSelected: true,
                             address: '0x' + json.address
                         });
                         try {
-                            let developer = await this.getDeveloper();
-                            let balance = await getBalance(this.state.address);
+                            const developer = await this.getDeveloper();
+                            const balance = await getBalance(this.state.address);
                             await this.setState({
                                 isRegistered: developer.state,
                                 balance: balance,
@@ -275,17 +275,17 @@ class Auth extends Component {
 
     handleSubmitRegistration_1 = async e => {
         e.preventDefault();
-        let { address } = this.state;
-        let { contracts } = this.props;
-        let { name, desc } = this.state.registration.params;
+        const { address } = this.state;
+        const { contracts } = this.props;
+        const { name, desc } = this.state.registration.params;
         this.props.startLoading();
         try {
-            let data = await getData({
+            const data = await getData({
                 contract: contracts.PlayMarket,
                 method: 'addDev',
                 params: [web3Utils.toHex(name), web3Utils.toHex(desc)]
             });
-            let gasLimit = await getGasLimit({
+            const gasLimit = await getGasLimit({
                 contract: contracts.PlayMarket,
                 from: address,
                 data: data,
@@ -415,31 +415,32 @@ class Auth extends Component {
                 <div className="auth-banner">
                     <div className="auth-banner__container">
                         <div className="auth-banner__title">Login to your decentralized developer account</div>
-                        <div className="auth-banner__text-1">Do you want to croudfund your app via build-in ICO
+                        <div className="auth-banner__text-1">Do you want to croudfund your app via build-in STO
                             platform? Or sell your app for cryptocurrency? Want to see through transparent payment
                             transactions via blockchain?
                         </div>
                         <div className="auth-banner__text-2">Distribute your apps on Play Market 2.0 store and increase
                             your downloads and monetisation.
                         </div>
-                        <div className="auth-banner__btn-block">
-                            <div className="auth-banner__btn-block__btn">Distribute your apps on Playmarket 2.0</div>
-                        </div>
-                        <div className="auth-banner__text-3">Its free!</div>
+                        {/*<div className="auth-banner__btn-block">*/}
+                            {/*<div className="auth-banner__btn-block__btn">Distribute your apps on Playmarket 2.0</div>*/}
+                        {/*</div>*/}
+                        {/*<div className="auth-banner__text-3">Its free!</div>*/}
                     </div>
                 </div>
                 <div className="auth-entry">
                     <div className="auth-entry__box">
-                        <div className="auth-entry__keystore">
-                            <input id="keystore" className="auth-entry__keystore--input" type="file" onChange={this.handleChangeKeystore}/>
-                            <div className="auth-entry__keystore--text">Select keystore</div>
-                        </div>
                         <div className="auth-entry__metamask">
-                            <div className="auth-entry__metamask__divider">or</div>
                             <div className="auth-entry__metamask__btn">
                                 <button onClick={this.handleClickMM}>MetaMask</button>
                             </div>
                         </div>
+                        <div className="auth-entry__divider">OR</div>
+                        <div className="auth-entry__keystore">
+                            <input id="keystore" className="auth-entry__keystore--input" type="file" onChange={this.handleChangeKeystore}/>
+                            <div className="auth-entry__keystore--text">Select wallet file</div>
+                        </div>
+                        <div className="auth-entry__keystore--descr">Select "Keystore / JSON File" and enter Your password.<br/>This is NOT a recommended way of accessing a wallet.</div>
                     </div>
                 </div>
                 <Popup className="auth-popup" open={popupOpen} onClose={this.closeModal}>

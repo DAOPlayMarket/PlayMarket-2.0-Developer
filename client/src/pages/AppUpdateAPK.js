@@ -36,10 +36,10 @@ class AppUpdateAPK extends Component {
     };
 
     async componentDidMount(){
-        let { url, idApp } = this.props;
+        const { url, idApp } = this.props;
         await this.props.startLoading();
         try {
-            let response = (await axios({
+            const response = (await axios({
                 method: 'post',
                 url: `${url}/api/get-app-for-developer`,
                 data: {
