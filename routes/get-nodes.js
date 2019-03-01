@@ -26,9 +26,14 @@ router.get('/', async (req, res) => {
                     domain : domain
                 });
             } catch (err) {
-                // console.log('error: can\'t get address info for ' + domain);
+                console.log('error: can\'t get address info for ' + domain);
             }
         }
+        result.sort((a, b) => {
+            if(a.domain < b.domain) { return -1; }
+            if(a.domain > b.domain) { return 1; }
+            return 0;
+        });
         res.json({
             result: result,
             status: 200
