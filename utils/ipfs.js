@@ -4,8 +4,9 @@ const fse = require('fs-extra');
 const pull = require('pull-stream');
 const makeDir = require('make-dir');
 const BN = require('bignumber.js');
+const boolean = require('boolean');
 
-const upload = (dir, headFolderName) => {
+const upload = (dir, headFolderName, pin) => {
     return new Promise(async(resolve, reject) => {
         try {
             let files = await readdir(dir);
@@ -22,14 +23,20 @@ const upload = (dir, headFolderName) => {
             pull(
                 pull.values(arr),
                 stream,
-                pull.collect((e, values) => {
+                pull.collect(async (e, values) => {
                     if (e) {
                         reject(e)
                     }
-                    console.log('Uploaded files multihash: ' + values[values.length-1].hash);
+                    const head_hash = values[values.length-1].hash;
+                    console.log('Uploaded files multihash: ' + head_hash);
+                    if (typeof pin !== 'undefined' && boolean(pin)) {
+                        await ipfsAPI.pin.add(head_hash);
+                        console.log('Hash pinned: ' + head_hash);
+                    }
+
                     resolve({
                         hashType: 1,
-                        hash: values[values.length-1].hash
+                        hash: head_hash
                     });
                 })
             )

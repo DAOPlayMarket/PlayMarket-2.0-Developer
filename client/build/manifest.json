@@ -1,6 +1,6 @@
 {
-  "short_name": "PM2.0 DEV",
-  "name": "Play Market 2.0 Developer module",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,8 +8,8 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0f1914",
+  "theme_color": "#000000",
   "background_color": "#ffffff"
 }

@@ -20,7 +20,6 @@ import Notification from '../components/Notification';
 
 class AppAdd extends Component {
     state = {
-        TEST: '',
         popupOpen: false,
         hashTx: '',
         balance: '',
@@ -78,7 +77,6 @@ class AppAdd extends Component {
         }
     };
 
-
     async componentDidMount(){
         await this.formatterSelectCategories();
     }
@@ -95,7 +93,7 @@ class AppAdd extends Component {
     };
 
     formatterSelectCategories = async () => {
-        let { categories } = this.props;
+        const { categories } = this.props;
         let arr = [];
         categories.forEach(category => {
             arr.push({value: category.id, label: category.name});
@@ -283,7 +281,6 @@ class AppAdd extends Component {
         });
     };
     handleAddKeyword = async e => {
-        e.preventDefault();
         let { keyword } = this.state.SERVICE;
         if (!!keyword.length) {
             await this.setState({
@@ -310,6 +307,12 @@ class AppAdd extends Component {
             ...this.state.registration,
             [name]: e.target.value
         }});
+    };
+    handleKeyPress = async e => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            await this.handleAddKeyword();
+        }
     };
 
     handleSubmitUpload = async e => {
@@ -487,13 +490,13 @@ class AppAdd extends Component {
     };
 
     render(){
-        let { popupOpen, hash, hashType, balance } = this.state;
+        const { popupOpen, hash, hashType, balance } = this.state;
 
-        let { idCTG, subCategory, nameApp, slogan, shortDescr, keywords, youtubeID, email, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
-        let { gallery, logo, banner, keyword, select } = this.state.SERVICE;
+        const { idCTG, subCategory, nameApp, slogan, shortDescr, keywords, youtubeID, email, ageRestrictions, price, publish, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
+        const { gallery, logo, banner, keyword, select } = this.state.SERVICE;
 
-        let { gasPrice, address, mode } = this.props;
-        let { step, gasLimit, password } = this.state.registration;
+        const { gasPrice, address, mode } = this.props;
+        const { step, gasLimit, password } = this.state.registration;
 
         return (
             <div className="app-add">
@@ -666,7 +669,7 @@ class AppAdd extends Component {
                                     }
                                 </ul>
                                 <div className="app-add__section-4__keywords-block__add">
-                                    <input className="app-add__section-4__keywords-block__add-input" type="text" value={keyword} onChange={this.handleChangeKeyword}/>
+                                    <input className="app-add__section-4__keywords-block__add-input" type="text" value={keyword} onChange={this.handleChangeKeyword} onKeyPress={this.handleKeyPress}/>
                                     <div className="app-add__section-4__keywords-block__add-btn" onClick={this.handleAddKeyword}>add</div>
                                 </div>
                             </div>

@@ -17,6 +17,7 @@ import { sendTransaction_MM, getTxParams, getWallet, sendSignedTransaction, getB
 class AppUpdateAPK extends Component {
     state = {
         app: null,
+        config: null,
         popupOpen: false,
         data: {
             apk: null,
@@ -30,25 +31,38 @@ class AppUpdateAPK extends Component {
             success: false
         },
         balance: '',
-        isUpload: true,
+        isUpload: false,
         hashType: '',
         hash: ''
     };
 
     async componentDidMount(){
-        const { url, idApp } = this.props;
+        const { url, idApp, address } = this.props;
         await this.props.startLoading();
         try {
-            const response = (await axios({
+            const app = (await axios({
                 method: 'post',
                 url: `${url}/api/get-app-for-developer`,
                 data: {
                     idApp: idApp
                 }
             })).data;
-            this.setState({
-                app: response.result
+            await this.setState({
+                app: app.result
             });
+
+            const config = (await axios({
+                method: 'get',
+                url: '/api/download',
+                params: {
+                    address: address,
+                    multihash: app.result.hash
+                }
+            })).data;
+            await this.setState({
+                config: config
+            });
+
             await this.props.endLoading();
         } catch (err) {
             await this.props.endLoading();
@@ -94,15 +108,10 @@ class AppUpdateAPK extends Component {
             fd.append("apk", apk);
             fd.append("description", description);
 
-            let obj = {
-                hash: app.hash,
-                hashType: app.hashType
-            };
-
             let response = (await axios({
                 method: 'post',
                 url: '/api/update-apk',
-                headers: {'address': address, data: JSON.stringify(obj)},
+                headers: {'address': address},
                 data: fd
             })).data;
             if (response.status === 200) {
@@ -247,14 +256,14 @@ class AppUpdateAPK extends Component {
     };
 
     render(){
-        const { app, popupOpen, balance, hashType, hash, isUpload, data} = this.state;
+        const { app, config, popupOpen, balance, hashType, hash, isUpload, data} = this.state;
         const { step, gasLimit, success, password } = this.state._;
         const { gasPrice, mode, address } = this.props;
 
         return (
             <div className="update-apk">
                 {
-                    app ? (
+                    app && config ? (
                         <div>
                             <Helmet>
                                 <title>Update APK "{app.nameApp}" | Play Market 2.0 Developer Module</title>

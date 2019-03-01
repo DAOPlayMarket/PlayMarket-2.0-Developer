@@ -141,7 +141,7 @@ class Apps extends Component {
 
         this.props.startLoading();
         try {
-            let data = await getDataByTypes({
+            const data = await getDataByTypes({
                 name: 'setPrice',
                 type: 'function',
                 inputs: [
@@ -160,7 +160,7 @@ class Apps extends Component {
                 ],
                 params: [app.idApp, 0, price * 100]
             });
-            let gasLimit = await getGasLimit({
+            const gasLimit = await getGasLimit({
                 from: address,
                 contract: contracts.PlayMarket,
                 data: data,
@@ -485,7 +485,10 @@ class Apps extends Component {
                                                             {/*<Link to={`/app/${app.idApp}`}>app</Link>*/}
                                                         {/*</li>*/}
                                                         <li className="apps__body__list-item__dropdown__links-item">
-                                                            <Link to={`/update-apk/${app.idApp}`}>update apk</Link>
+                                                            <Link to={`/update/${app.idApp}`}>update</Link>
+                                                        </li>
+                                                        <li className="apps__body__list-item__dropdown__links-item">
+                                                            <Link to={`/update-apk/${app.idApp}`}>update apk only</Link>
                                                         </li>
                                                         {
                                                             !app.icoRelease ? (

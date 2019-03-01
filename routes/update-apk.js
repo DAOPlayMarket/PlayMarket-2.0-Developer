@@ -13,14 +13,14 @@ router.post('/', async (req, res) => {
     console.log(`/update-apk [${req.method}] ${modules.time.timeNow()}`);
     try {
         const address = req.header('address');
-        const payload = JSON.parse(req.header('data'));
+        // const payload = JSON.parse(req.header('data'));
 
         const dir = path.join(lib.dirApp, address);
 
-        await del(dir);
-        await makeDir(dir);
-
-        await ipfs.download(dir, payload.hash);
+        // await del(dir);
+        // await makeDir(dir);
+        //
+        // await ipfs.download(dir, payload.hash);
 
         await del(path.join(dir, 'apk', '**.*'));
 
@@ -65,10 +65,7 @@ router.post('/', async (req, res) => {
 
         await fse.outputJson(path.join(dir, 'config', 'config.json'), config);
 
-        const result = await ipfs.upload(dir, 'app');
-
-        await ipfsAPI.pin.add(result.hash);
-        console.log('Hash pinned: ' + result.hash);
+        const result = await ipfs.upload(dir, 'app', true);
 
         await del(dir);
 
