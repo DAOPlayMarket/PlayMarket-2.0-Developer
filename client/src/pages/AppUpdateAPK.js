@@ -296,7 +296,7 @@ class AppUpdateAPK extends Component {
                                     <section className="update-apk__section">
                                         <div className="update-apk__section__title">Description of changes</div>
                                         <div className="update-apk__section__text">
-                                            <TextareaAutosize required placeholder="New features, more stable" minRows={1} value={data.description} onChange={this.handleChangeDesc}/>
+                                            <TextareaAutosize placeholder="New features, more stable" minRows={1} value={data.description} onChange={this.handleChangeDesc}/>
                                         </div>
                                     </section>
                                 </div>

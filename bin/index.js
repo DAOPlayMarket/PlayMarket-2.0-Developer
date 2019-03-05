@@ -65,7 +65,7 @@ app.use(nocache());
 
 /** STATIC FOLDERS **/
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
-app.use(express.static(path.join(__dirname, '..', 'data')));
+app.use('/data', express.static(path.join(__dirname, '..', 'data')));
 
 /** ROUTES **/
 app.use('/api', require('../routes'));

@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios';
 import {Helmet} from "react-helmet";
-import filesize from 'filesize';
 import Popup from "reactjs-popup";
 import TextareaAutosize from 'react-textarea-autosize';
 import { Link } from 'react-router-dom'
 import {utils as web3Utils} from 'web3';
 import Select from 'react-select';
+import $ from "jquery";
+import filesize from 'filesize';
+import path from 'path';
 
 import { startLoading, endLoading } from '../actions/preloader';
 
@@ -18,13 +20,24 @@ import Notification from '../components/Notification';
 class AppUpdate extends Component {
     state = {
         SERVICE: {
+            logo: null,
             keyword: '',
+            gallery: [],
+            banner: null,
             select: {
                 categories: [],
                 subCategories: [],
                 selectedOptionCategory: null,
                 selectedOptionSubCategory: null
             }
+        },
+        removed_gallery_files: [],
+        changelog_text: '',
+        new_files: {
+            apk: null,
+            gallery: [],
+            logo: null,
+            banner: null,
         },
         app: null,
         config: null,
@@ -66,7 +79,7 @@ class AppUpdate extends Component {
                 }
             })).data;
             await this.setState({
-                config: config
+                config: config.result
             });
 
             await this.formatterSelectCategories();
@@ -205,6 +218,136 @@ class AppUpdate extends Component {
             await this.handleAddKeyword();
         }
     };
+    handleChangeChangelog = async e => {
+        await this.setState({changelog_text: e.target.value});
+    };
+
+    handleChangeLogo = async e => {
+        e.persist();
+        const file = e.target.files.length ? e.target.files[0] : null;
+        if (file) {
+            if (file.type.includes('image')) {
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    await this.setState({
+                        new_files: {...this.state.new_files, logo: file},
+                        SERVICE: {...this.state.SERVICE, logo: {imageBase64: reader.result, name: file.name}}
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $(e.target).val('');
+                await this.setState({
+                    new_files: {...this.state.new_files, logo: null},
+                    SERVICE: {...this.state.SERVICE, logo: null}
+                });
+                Notification('error', 'Invalid image file');
+            }
+        } else {
+            await this.setState({
+                new_files: {...this.state.new_files, logo: null},
+                SERVICE: {...this.state.SERVICE, logo: null}
+            });
+        }
+    };
+    handleChangeBanner = async e => {
+        e.persist();
+        const file = e.target.files.length ? e.target.files[0] : null;
+        if (file) {
+            if (file.type.includes('image')) {
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    await this.setState({
+                        new_files: {...this.state.new_files, banner: file},
+                        SERVICE: {...this.state.SERVICE, banner: {imageBase64: reader.result, name: file.name}}
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                await this.setState({
+                    new_files: {...this.state.new_files, banner: null},
+                    SERVICE: {...this.state.SERVICE, banner: null}
+                });
+                Notification('error', 'Invalid image file');
+            }
+        } else {
+            await this.setState({
+                new_files: {...this.state.new_files, banner: null},
+                SERVICE: {...this.state.SERVICE, banner: null}
+            });
+        }
+    };
+    handleChangeAPK = async e => {
+        const file = e.target.files.length ? e.target.files[0] : null;
+        if (file) {
+            if (file.type === 'application/vnd.android.package-archive') {
+                this.setState({
+                    new_files: {...this.state.new_files, apk: file}
+                });
+            } else {
+                $(e.target).val('');
+                this.setState({
+                    new_files: {...this.state.new_files, apk: null}
+                });
+                Notification('error', 'Invalid application file');
+            }
+        } else {
+            this.setState({
+                new_files: {...this.state.new_files, apk: null}
+            });
+        }
+    };
+    handleChangeGallery = async e => {
+        e.persist();
+        const file = e.target.files.length ? e.target.files[0] : null;
+        if (file) {
+            if (file.type.includes('image')) {
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    await this.setState({
+                        new_files: {...this.state.new_files, gallery: [...this.state.new_files.gallery, file]},
+                        SERVICE: {...this.state.SERVICE, gallery: [...this.state.SERVICE.gallery, {imageBase64: reader.result, name: file.name}]}
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                Notification('error', 'Invalid image file');
+            }
+        }
+        $(e.target).val('');
+    };
+    handleRemoveGalleryItemOLD = file => async e => {
+        e.preventDefault();
+        const { gallery } = this.state.app.files.images;
+
+        await this.setState({
+            removed_gallery_files: [...this.state.removed_gallery_files, file],
+            app: {
+                ...this.state.app,
+                files: {
+                    ...this.state.app.files,
+                    images: {
+                        ...this.state.app.files.images,
+                        gallery: gallery.filter(el => el !== file)
+                    }
+                }
+            }
+        });
+    };
+    handleRemoveGalleryItem = file => async e => {
+        const { gallery } = this.state.SERVICE;
+
+        await this.setState({
+            SERVICE: {
+                ...this.state.SERVICE,
+                gallery: gallery.filter(el => el.name !== file),
+            },
+            new_files: {
+                ...this.state.new_files,
+                gallery:  this.state.new_files.gallery.filter(el => el.name !== file)
+            }
+        });
+    };
 
     handleSubmitUpload = async e => {
         e.preventDefault();
@@ -212,6 +355,8 @@ class AppUpdate extends Component {
         try {
             const { address, contracts, idApp } = this.props;
             const { nameApp, idCTG, subCategory, slogan, shortDescr, keywords, youtubeID, email, ageRestrictions, advertising, forChildren, urlApp, privacyPolicy, longDescr } = this.state.app;
+            const { logo, apk, banner, gallery } = this.state.new_files;
+            const { removed_gallery_files, changelog_text } = this.state;
 
             let fd = new FormData();
 
@@ -231,6 +376,16 @@ class AppUpdate extends Component {
             fd.append("urlApp", urlApp);
             fd.append("privacyPolicy", privacyPolicy);
             fd.append("longDescr", longDescr);
+
+            fd.append("apk", apk);
+            fd.append("logo", logo, logo ? logo.name : null);
+            fd.append("banner", banner, banner ? banner.name : null);
+            for (let i = 0; i < gallery.length; i++) {
+                fd.append("gallery", gallery[i], gallery[i].name);
+            }
+
+            fd.append("removed_gallery_files", JSON.stringify(removed_gallery_files));
+            fd.append("changelog_text", changelog_text);
 
             const response = (await axios({
                 method: 'post',
@@ -380,10 +535,11 @@ class AppUpdate extends Component {
     };
 
     render(){
-        const { app, config, popupOpen, isUpload, balance, hashType, hash }  = this.state;
-        const { keyword, select } = this.state.SERVICE;
+        const { app, config, popupOpen, isUpload, balance, hashType, hash, changelog_text } = this.state;
+        const { keyword, select, logo, banner, gallery } = this.state.SERVICE;
         const { step, gasLimit, success, password } = this.state._;
         const { gasPrice, mode, address } = this.props;
+        const { apk } = this.state.new_files;
 
         return (
             <div>
@@ -391,7 +547,7 @@ class AppUpdate extends Component {
                     app && config ? (
                         <div className="app-add">
                             <Helmet>
-                                <title>Add new application | Play Market 2.0 Developer Module</title>
+                                <title>Update application | Play Market 2.0 Developer Module</title>
                             </Helmet>
                             <div className="app-add__control">
                                 <Link className="app-add__control__back" to="/apps">Applications</Link>
@@ -401,25 +557,18 @@ class AppUpdate extends Component {
                                 <section className="app-add__section-1">
                                     <div className="app-add__section-1__block">
                                         <div className="app-add__section-1__block--left">
-                                            {/*<div className="app-add__section-1__box">*/}
-                                                {/*<div className="app-add__section-1__box-title">Logo</div>*/}
-                                                {/*<div className="app-add__section-1__logo">*/}
-                                                    {/*/!*{logo ? (<img src={logo.imageBase64} alt="PREVIEW"/>) : null}*!/*/}
-                                                    {/*/!*<div*!/*/}
-                                                    {/*/!*className={"app-add__section-1__logo__placeholder " + (logo ? '' : 'visible')}>*!/*/}
-                                                    {/*/!*no image available*!/*/}
-                                                    {/*/!*</div>*!/*/}
-                                                    {/*<input required type="file" accept=".png, .jpg, .jpeg"*/}
-                                                           {/*onChange={this.handleChangeLogo}/>*/}
-                                                {/*</div>*/}
-                                            {/*</div>*/}
-                                            {/*<div className="app-add__section-1__box">*/}
-                                                {/*<div className="app-add__section-1__box-title">Price</div>*/}
-                                                {/*<div className="app-add__section-1__price">*/}
-                                                    {/*<input required type="number" min="0" name='price' value={app.price}*/}
-                                                           {/*onChange={this.handleChangeText}/>*/}
-                                                {/*</div>*/}
-                                            {/*</div>*/}
+                                            <div className="app-add__section-1__box">
+                                                <div className="app-add__section-1__box-title">Logo</div>
+                                                <div className="app-add__section-1__logo">
+                                                    {
+                                                        logo ? (
+                                                            <img src={logo.imageBase64} alt="PREVIEW"/>
+                                                        ) : <img src={'/data/tmp/app/' + address + '/' + app.files.images.logo} alt="PREVIEW"/>
+                                                    }
+                                                    <div className={"app-add__section-1__logo__placeholder " + (app.files.images.logo ? '' : 'visible')}>no image available</div>
+                                                    <input type="file" accept=".png, .jpg, .jpeg" onChange={this.handleChangeLogo}/>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="app-add__section-1__block--right">
                                             <div className="app-add__section-1__box">
@@ -469,6 +618,103 @@ class AppUpdate extends Component {
                                                     minRows={1} name='longDescr' value={app.longDescr}
                                                     onChange={this.handleChangeText}/>
                                             </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section className="app-add__section-2">
+                                    <div className="app-add__section-2__title">Application file</div>
+                                    <div className="app-add__section-2__box">
+                                        {
+                                            apk ? (
+                                                <div className="app-add__section-2__box__preview">
+                                                    <div className="app-add__section-2__box__preview__img"></div>
+                                                    <ul className="app-add__section-2__box__preview__info-list">
+                                                        <li className="app-add__section-2__box__preview__info-list__item">Name: <span>{apk.name}</span></li>
+                                                        <li className="app-add__section-2__box__preview__info-list__item">Size: <span>{filesize(apk.size)}</span></li>
+                                                    </ul>
+                                                </div>
+                                            ) : (
+                                                <div className="app-add__section-2__box__preview">
+                                                    <div className="app-add__section-2__box__preview__img"></div>
+                                                    <ul className="app-add__section-2__box__preview__info-list">
+                                                        <li className="app-add__section-2__box__preview__info-list__item">Name: <span>{path.basename(app.files.apk)}</span></li>
+                                                        <li className="app-add__section-2__box__preview__info-list__item">Size: <span>{filesize(app.size)}</span></li>
+                                                        {/*<li className="app-add__section-2__box__preview__info-list__item">Size: <span>{filesize(app.files.apk.size)}</span></li>*/}
+                                                    </ul>
+                                                </div>
+                                            )
+                                        }
+                                        <input type="file" name="apk" accept=".apk" onChange={this.handleChangeAPK}/>
+                                    </div>
+                                    {
+                                        apk ? (
+                                            <section className="update__section-apk">
+                                                <div className="update__section-apk__text">
+                                                    <div className="update__section-apk__text__title">Description of changes</div>
+                                                    <TextareaAutosize placeholder="New features, more stable" minRows={1} value={changelog_text} onChange={this.handleChangeChangelog}/>
+                                                </div>
+                                            </section>
+                                        ) : null
+                                    }
+                                </section>
+                                <section className="app-add__section-3">
+                                    <div className="app-add__section-3__block app-add__section-3__block--1">
+                                        <div className="app-add__section-3__title">Gallery</div>
+                                        <div className="app-add__section-3__box">
+                                            {
+                                                app.files.images.gallery.length + gallery.length > 0 ? (
+                                                    <ul className="app-add__section-3__box__preview-list">
+                                                        {
+                                                            app.files.images.gallery.length ? (
+                                                                app.files.images.gallery.map((file, index) => {
+                                                                    return (
+                                                                        <li className="app-add__section-3__box__preview-list__item" key={index} >
+                                                                            <div className="app-add__section-3__box__preview-list__item__remove" onClick={this.handleRemoveGalleryItemOLD(file)} title="Remove image">Delete</div>
+                                                                            <img src={'/data/tmp/app/' + address + '/' + file} title={path.basename(file)} alt="PREVIEW"/>
+                                                                        </li>
+                                                                    )
+                                                                })
+                                                            ) : null
+                                                        }
+                                                        {
+                                                            gallery.length ? (
+                                                                gallery.map((file, index) => {
+                                                                    return (
+                                                                        <li className="app-add__section-3__box__preview-list__item" key={index} >
+                                                                            <div className="app-add__section-3__box__preview-list__item__remove" onClick={this.handleRemoveGalleryItem(file.name)} title="Remove image">Delete</div>
+                                                                            <img src={file.imageBase64} title={file.name} alt="PREVIEW"/>
+                                                                        </li>
+                                                                    )
+                                                                })
+                                                            ) : null
+                                                        }
+                                                    </ul>
+                                                ) : null
+                                            }
+                                            {
+                                                app.files.images.gallery.length + gallery.length < 5 ? (
+                                                    <div className="app-add__section-3__box__input">
+                                                        <div className="app-add__section-3__box__input-text"><span>+</span>Add image</div>
+                                                        <input type="file" accept=".png, .jpg, .jpeg" onChange={this.handleChangeGallery}/>
+                                                    </div>
+                                                ) : null
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className="app-add__section-3__block app-add__section-3__block--2">
+                                        <div className="app-add__section-3__title">Banner</div>
+                                        <div className="app-add__section-3__banner">
+                                            {
+                                                banner ? (
+                                                    <img src={banner.imageBase64} alt="PREVIEW"/>
+                                                ) : (
+                                                    app.files.images.banner ?
+                                                        (
+                                                            <img src={'/data/tmp/app/' + address + '/' + app.files.images.banner} alt="PREVIEW"/>
+                                                        ) : <div className="app-add__section-3__banner__placeholder">Select horizontal image</div>
+                                                )
+                                            }
+                                            <input type="file" accept=".png, .jpg, .jpeg" onChange={this.handleChangeBanner}/>
                                         </div>
                                     </div>
                                 </section>

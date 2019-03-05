@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 const Notification = (type, text) => {
     const options = {
-        autoClose: 5000,
+        autoClose: 10000,
         position: toast.POSITION.BOTTOM_RIGHT
     };
     toast[type](text, options);
