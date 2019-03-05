@@ -638,8 +638,11 @@ class AppUpdate extends Component {
                                                     <div className="app-add__section-2__box__preview__img"></div>
                                                     <ul className="app-add__section-2__box__preview__info-list">
                                                         <li className="app-add__section-2__box__preview__info-list__item">Name: <span>{path.basename(app.files.apk)}</span></li>
-                                                        <li className="app-add__section-2__box__preview__info-list__item">Size: <span>{filesize(app.size)}</span></li>
-                                                        {/*<li className="app-add__section-2__box__preview__info-list__item">Size: <span>{filesize(app.files.apk.size)}</span></li>*/}
+                                                        {
+                                                            typeof app.size !== 'undefined' ? (
+                                                                <li className="app-add__section-2__box__preview__info-list__item">Size: <span>{filesize(app.size)}</span></li>
+                                                            ) : null
+                                                        }
                                                     </ul>
                                                 </div>
                                             )

@@ -35,7 +35,7 @@ class Control extends Component {
 
         return (
             <div className="control">
-                {/*<NavLink to='/update/0'>Update</NavLink>*/}
+                {/*<NavLink to='/update/434'>Update</NavLink>*/}
                 <div className="control__logo"></div>
                 <div className="control__web3">
                     <div className="control__web3-title">Blockchain</div>
