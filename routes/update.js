@@ -168,26 +168,24 @@ function formidablePromise(req, data) {
                         file.path = path.join(form.uploadDir, 'images', 'logo', Date.now().toString());
                 })
                 .on('file', (field, file) => {
+                    const apk_path = path.join(file.path, '..', file.name);
+                    const image_path = path.join(file.path, '..', file.hash + path.extname(file.name));
                     if (field === 'apk') {
                         sizeAPK = file.size;
-                        const new_path = path.join(file.path, '..', file.name);
-                        fse.renameSync(file.path, new_path);
-                        files.apk = path.relative(form.uploadDir, new_path).replace(/\\/g, "\/");
+                        fse.renameSync(file.path, apk_path);
+                        files.apk = path.relative(form.uploadDir, apk_path).replace(/\\/g, "\/");
                     }
                     if (field === 'logo') {
-                        const new_path = path.join(file.path, '..', file.hash + path.extname(file.name));
-                        fse.renameSync(file.path, new_path);
-                        files.images.logo = path.relative(form.uploadDir, new_path).replace(/\\/g, "\/");
+                        fse.renameSync(file.path, image_path);
+                        files.images.logo = path.relative(form.uploadDir, image_path).replace(/\\/g, "\/");
                     }
                     if (field === 'gallery') {
-                        const new_path = path.join(file.path, '..', file.hash + path.extname(file.name));
-                        fse.renameSync(file.path, new_path);
-                        files.images.gallery.push(path.relative(form.uploadDir, new_path).replace(/\\/g, "\/"));
+                        fse.renameSync(file.path, image_path);
+                        files.images.gallery.push(path.relative(form.uploadDir, image_path).replace(/\\/g, "\/"));
                     }
                     if (field === 'banner') {
-                        const new_path = path.join(file.path, '..', file.hash + path.extname(file.name));
-                        fse.renameSync(file.path, new_path);
-                        files.images.banner = path.relative(form.uploadDir, new_path).replace(/\\/g, "\/");
+                        fse.renameSync(file.path, image_path);
+                        files.images.banner = path.relative(form.uploadDir, image_path).replace(/\\/g, "\/");
                     }
                 })
                 .on('end', () => {
