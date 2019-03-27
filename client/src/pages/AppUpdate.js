@@ -222,6 +222,13 @@ class AppUpdate extends Component {
         await this.setState({changelog_text: e.target.value});
     };
 
+    openModal = async () => {
+        await this.setState({ popupOpen: true });
+    };
+    closeModal = async () => {
+        await this.setState({ popupOpen: false });
+    };
+
     handleChangeLogo = async e => {
         e.persist();
         const file = e.target.files.length ? e.target.files[0] : null;
@@ -408,8 +415,8 @@ class AppUpdate extends Component {
                     });
                     const balance = await getBalance(address);
                     await this.setState({
-                        registration: {
-                            ...this.state.registration,
+                        _: {
+                            ...this.state._,
                             step: 1,
                             data: data,
                             gasLimit: gasLimit
@@ -854,7 +861,7 @@ class AppUpdate extends Component {
                                                 {
                                                     success ? (
                                                         <form className="update-apk-popup__registration" onSubmit={this.handleSubmitRegistration_3}>
-                                                            <h3 className="update-apk-popup__registration__title">app registration</h3>
+                                                            <h3 className="update-apk-popup__registration__title">app update</h3>
                                                             <div className="update-apk-popup__registration__subtitle">Your application is successfully updated!<br/>After moderation new version will appear in platform.</div>
                                                             <div className="update-apk-popup__btn-block update-apk-popup__btn-block--center">
                                                                 <button className="update-apk-popup__btn-block__btn">OK</button>
